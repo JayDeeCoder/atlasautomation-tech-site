@@ -1,0 +1,1739 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AAG.ai — Atlas Automation Group</title>
+  <meta name="description" content="Atlas Automation Group deploys AI-powered automation systems for local businesses — review engines, follow-up flows, AI agents, and full client operations on autopilot." />
+  <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+  <style>
+    iconify-icon { display: block; line-height: 1; }
+    .icon-tile iconify-icon { color: inherit; }
+    :root {
+      --bg: #080d1a;
+      --surface: #0d1428;
+      --card: #111c36;
+      --card2: #0f1830;
+      --muted: #8fa5d0;
+      --text: #eef3ff;
+      --dim: #c8d5ee;
+      --brand: #00e5c8;
+      --brand2: #4ea8ff;
+      --brand3: #7c5cff;
+      --line: #1e2d50;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; }
+
+    /* ── LAYOUT ── */
+    .wrap { width: min(1120px, 90%); margin: 0 auto; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(14px);
+      background: rgba(8,13,26,.82);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; gap: 16px; flex-wrap: wrap;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--brand), var(--brand3));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 14px; color: #041222; letter-spacing: -0.5px;
+    }
+    .logo-text { font-weight: 800; font-size: 17px; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .nav-links { display: flex; gap: 22px; align-items: center; }
+    .nav-links a { font-size: 13px; font-weight: 600; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      border: 0; border-radius: 9px; padding: 10px 18px;
+      font-weight: 700; font-size: 13px; cursor: pointer;
+      text-decoration: none; display: inline-block; transition: filter .2s, transform .1s;
+    }
+    .btn:hover { filter: brightness(1.12); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary {
+      background: linear-gradient(110deg, var(--brand), var(--brand2));
+      color: #041222;
+    }
+    .btn-ghost {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+    .btn-lg { padding: 14px 28px; font-size: 15px; border-radius: 12px; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 90px 0 70px;
+      background:
+        radial-gradient(ellipse 900px 500px at 10% -20%, rgba(0,229,200,.06) 0, transparent 65%),
+        radial-gradient(ellipse 700px 400px at 85% 10%, rgba(78,168,255,.07) 0, transparent 60%),
+        radial-gradient(ellipse 400px 300px at 50% 80%, rgba(124,92,255,.05) 0, transparent 65%);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,229,200,.08); border: 1px solid rgba(0,229,200,.2);
+      border-radius: 999px; padding: 6px 14px; font-size: 12px;
+      color: var(--brand); font-weight: 700; margin-bottom: 22px; letter-spacing: .3px;
+    }
+    .hero-badge span { background: var(--brand); width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    h1 { font-size: clamp(2.2rem, 5.5vw, 3.8rem); line-height: 1.08; margin: 0 0 20px; letter-spacing: -1px; }
+    h1 .accent { background: linear-gradient(100deg, var(--brand), var(--brand2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-lead {
+      color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem);
+      max-width: 660px; margin: 0 auto 32px;
+    }
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
+    .hero-trust { margin-top: 20px; color: var(--muted); font-size: 12px; display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+    .hero-trust span::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+
+    /* ── SECTION ── */
+    section { padding: 72px 0; }
+    .section-label {
+      font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--brand); margin-bottom: 10px;
+    }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin: 0 0 14px; letter-spacing: -0.5px; }
+    h3 { font-size: 1.1rem; margin: 0 0 8px; }
+    p { margin: 0 0 14px; color: var(--dim); }
+
+    /* ── CARDS ── */
+    .card {
+      background: linear-gradient(160deg, rgba(255,255,255,.025) 0%, transparent 50%), var(--card);
+      border: 1px solid var(--line); border-radius: 16px; padding: 24px;
+    }
+    .card-glow { box-shadow: 0 0 0 1px rgba(0,229,200,.12) inset, 0 8px 32px rgba(0,229,200,.04); }
+
+    /* ── GRID ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 620px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 820px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+
+    /* ── ICON TILE ── */
+    .icon-tile { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; flex-shrink: 0; }
+    .i-teal { background: rgba(0,229,200,.12); }
+    .i-blue { background: rgba(78,168,255,.12); }
+    .i-purple { background: rgba(124,92,255,.12); }
+    .i-gold { background: rgba(245,158,11,.12); }
+    .i-pink { background: rgba(244,114,182,.12); }
+    .i-green { background: rgba(34,197,94,.12); }
+
+    /* ── AGENTS SECTION ── */
+    .agent-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 500px) { .agent-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 860px) { .agent-grid { grid-template-columns: repeat(3, 1fr); } }
+    .agent-card {
+      background: var(--card2); border: 1px solid var(--line); border-radius: 14px;
+      padding: 20px; position: relative; overflow: hidden;
+      transition: border-color .25s, transform .2s;
+    }
+    .agent-card:hover { border-color: rgba(0,229,200,.3); transform: translateY(-3px); }
+    .agent-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,229,200,.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .agent-emoji { font-size: 28px; margin-bottom: 10px; }
+    .agent-name { font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+    .agent-role { font-size: 12px; color: var(--brand); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .agent-desc { font-size: 13px; color: var(--muted); }
+
+    /* ── PRICING ── */
+    .pricing-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+    .plan-card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+      padding: 28px; position: relative; display: flex; flex-direction: column; gap: 6px;
+    }
+    .plan-card.popular {
+      border-color: rgba(0,229,200,.35);
+      box-shadow: 0 0 0 1px rgba(0,229,200,.1) inset, 0 0 40px rgba(0,229,200,.06);
+    }
+    .plan-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(90deg, var(--brand), var(--brand2)); color: #041222;
+      font-size: 11px; font-weight: 800; letter-spacing: .5px; border-radius: 999px;
+      padding: 4px 14px; text-transform: uppercase;
+    }
+    .plan-name { font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+    .plan-price { font-size: 2.8rem; font-weight: 900; letter-spacing: -1.5px; line-height: 1; margin: 8px 0 4px; }
+    .plan-price sup { font-size: 1.2rem; vertical-align: top; margin-top: 8px; font-weight: 700; }
+    .plan-price sub { font-size: 1rem; font-weight: 500; color: var(--muted); }
+    .plan-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+    .plan-features { list-style: none; margin: 0 0 20px; padding: 0; flex: 1; }
+    .plan-features li { font-size: 13px; color: var(--dim); padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.04); display: flex; gap: 8px; align-items: flex-start; }
+    .plan-features li::before { content: "✓"; color: var(--ok); font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+    .plan-setup { font-size: 12px; color: var(--muted); margin-top: 12px; text-align: center; }
+
+    /* ── SETUP SECTION ── */
+    .setup-options { display: grid; gap: 14px; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .setup-options { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .setup-options { grid-template-columns: repeat(3, 1fr); } }
+    .setup-card { background: var(--card2); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+    .setup-price { font-size: 1.8rem; font-weight: 900; color: var(--brand); letter-spacing: -1px; margin: 6px 0; }
+
+    /* ── PROCESS ── */
+    .steps-v { display: grid; gap: 0; }
+    .step-item { display: flex; gap: 18px; align-items: flex-start; padding: 24px 0; border-bottom: 1px solid var(--line); }
+    .step-item:last-child { border-bottom: 0; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 15px; color: #041222;
+    }
+    .step-body h3 { margin: 0 0 6px; }
+    .step-body p { margin: 0; font-size: 14px; }
+
+    /* ── INDUSTRIES ── */
+    .industry-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .industry-pill {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 999px;
+      padding: 8px 16px; font-size: 13px; font-weight: 600; color: var(--dim);
+      transition: border-color .2s, color .2s;
+    }
+    .industry-pill:hover { border-color: var(--brand); color: var(--brand); }
+
+    /* ── FORM TABS ── */
+    .form-tabs { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+    .form-tab {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line);
+      border-radius: 999px; padding: 10px 22px; font-size: 14px; font-weight: 700;
+      color: var(--muted); cursor: pointer; transition: all .2s;
+    }
+    .form-tab:hover { border-color: var(--brand); color: var(--text); }
+    .form-tab.active { background: rgba(0,229,200,.1); border-color: rgba(0,229,200,.35); color: var(--brand); }
+
+    /* ── INQUIRY FORM ── */
+    .form-section {
+      background: radial-gradient(ellipse 800px 500px at 50% 50%, rgba(0,229,200,.06) 0%, transparent 65%);
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    }
+    .form-wrap { max-width: 680px; margin: 0 auto; }
+    .form-grid { display: grid; gap: 14px; }
+    .form-row { display: grid; gap: 14px; grid-template-columns: 1fr; }
+    @media (min-width: 500px) { .form-row { grid-template-columns: 1fr 1fr; } }
+    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--dim); }
+    input, select, textarea {
+      width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px 14px; color: var(--text); font-size: 14px;
+      font-family: inherit; outline: none; transition: border-color .2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--brand); background: rgba(0,229,200,.04); }
+    select option { background: #111c36; }
+    textarea { resize: vertical; min-height: 100px; }
+    .form-submit { margin-top: 6px; text-align: center; }
+    .form-note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+    /* ── ONBOARD CTA ── */
+    .onboard-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .onboard-grid { grid-template-columns: 1fr 1fr; } }
+    .onboard-card {
+      background: var(--card2); border: 1px solid var(--line); border-radius: 16px;
+      padding: 28px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start;
+    }
+    .onboard-tag { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+    .tag-client { background: rgba(0,229,200,.1); color: var(--brand); border: 1px solid rgba(0,229,200,.2); }
+    .tag-partner { background: rgba(124,92,255,.1); color: #a78bff; border: 1px solid rgba(124,92,255,.2); }
+
+    /* ── CLIENT PORTAL ── */
+    .portal-shell {
+      position: relative; border-radius: 20px; overflow: hidden;
+      margin-top: 48px;
+      background: linear-gradient(160deg, #0d1628 0%, #090e1c 100%);
+      border: 1px solid rgba(255,255,255,.07);
+      box-shadow: 0 0 0 1px rgba(0,229,200,.06) inset,
+                  0 32px 80px rgba(0,0,0,.6),
+                  0 0 120px rgba(0,229,200,.04);
+    }
+    .portal-shell::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background: radial-gradient(ellipse 600px 300px at 70% -10%, rgba(0,229,200,.05) 0%, transparent 65%),
+                  radial-gradient(ellipse 400px 300px at 10% 90%, rgba(124,92,255,.05) 0%, transparent 60%);
+    }
+    .portal-chrome {
+      background: rgba(0,0,0,.45); border-bottom: 1px solid rgba(255,255,255,.06);
+      padding: 11px 18px; display: flex; align-items: center; gap: 10px;
+      backdrop-filter: blur(8px);
+    }
+    .chrome-dots { display:flex; gap:6px; }
+    .chrome-dot { width:11px; height:11px; border-radius:50%; }
+    .cd-r{background:#ff5f57;} .cd-y{background:#febc2e;} .cd-g{background:#28c840;}
+    .chrome-bar {
+      flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07);
+      border-radius:7px; padding:5px 14px; font-size:11px; color:rgba(255,255,255,.35);
+      display:flex; align-items:center; gap:8px; max-width:300px; margin:0 auto;
+    }
+    .chrome-lock { color:var(--brand); font-size:10px; }
+    .live-badge {
+      display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700;
+      color:var(--brand); background:rgba(0,229,200,.08); border:1px solid rgba(0,229,200,.2);
+      border-radius:999px; padding:4px 10px; margin-left:auto;
+    }
+    .live-dot {
+      width:7px; height:7px; border-radius:50%; background:var(--brand);
+      animation: livePulse 1.6s ease-in-out infinite;
+    }
+    @keyframes livePulse {
+      0%,100%{box-shadow:0 0 0 0 rgba(0,229,200,.6);}
+      50%{box-shadow:0 0 0 5px rgba(0,229,200,0);}
+    }
+    /* dashboard layout */
+    .portal-layout { display:grid; grid-template-columns: 190px 1fr; min-height:480px; }
+    @media(max-width:600px){ .portal-layout{grid-template-columns:1fr;} .portal-sidebar-v2{display:none;} }
+    .portal-sidebar-v2 {
+      background:rgba(0,0,0,.25); border-right:1px solid rgba(255,255,255,.05);
+      padding:20px 14px; display:flex; flex-direction:column; gap:4px;
+    }
+    .sidebar-logo { font-size:13px; font-weight:800; color:var(--text); padding:4px 8px; margin-bottom:12px; letter-spacing:-.2px; }
+    .sidebar-logo span { color:var(--brand); }
+    .pnav {
+      display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:9px;
+      font-size:12px; font-weight:600; color:var(--muted); cursor:pointer;
+      transition:all .15s;
+    }
+    .pnav.active { background:rgba(0,229,200,.1); color:var(--brand); }
+    .pnav:hover:not(.active){ background:rgba(255,255,255,.04); color:var(--text); }
+    .pnav-spacer { flex:1; }
+    .pnav-agent {
+      display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px;
+      font-size:11px; font-weight:600; color:var(--muted); margin-top:4px;
+    }
+    .agent-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-on{ background:#4ade80; animation:livePulse 2s ease-in-out infinite; }
+    .dot-idle{ background:#fbbf24; }
+    /* main dashboard */
+    .portal-main-v2 { padding:24px; overflow:hidden; }
+    .pdash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+    .pdash-title { font-size:15px; font-weight:800; }
+    .pdash-period { font-size:11px; color:var(--muted); background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:6px; padding:4px 10px; }
+    /* stat cards */
+    .pstat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:18px; }
+    @media(min-width:700px){ .pstat-grid{grid-template-columns:repeat(4,1fr);} }
+    .pstat {
+      background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);
+      border-radius:12px; padding:14px 16px; position:relative; overflow:hidden;
+    }
+    .pstat::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+      background:var(--stat-color, var(--brand)); opacity:.4;
+    }
+    .pstat-val { font-size:1.7rem; font-weight:900; color:var(--stat-color,var(--brand)); letter-spacing:-1px; }
+    .pstat-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+    .pstat-delta { font-size:10px; font-weight:700; color:#4ade80; margin-top:4px; }
+    /* chart */
+    .pchart-wrap {
+      background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.05);
+      border-radius:14px; padding:16px; margin-bottom:14px;
+    }
+    .pchart-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+    .pchart-title { font-size:12px; font-weight:700; }
+    .pchart-legend { display:flex; gap:14px; }
+    .pchart-leg-item { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:5px; }
+    .pchart-leg-dot { width:8px; height:8px; border-radius:50%; }
+    .chart-svg { width:100%; height:90px; overflow:visible; }
+    .chart-line { fill:none; stroke:var(--brand); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .chart-line-2 { fill:none; stroke:var(--brand2); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; opacity:.6; }
+    .chart-area { fill:url(#areaGrad); opacity:.3; }
+    .chart-line { stroke-dasharray:600; stroke-dashoffset:600; animation:drawLine 1.8s ease forwards .4s; }
+    .chart-line-2 { stroke-dasharray:600; stroke-dashoffset:600; animation:drawLine 1.8s ease forwards .7s; }
+    @keyframes drawLine { to{ stroke-dashoffset:0; } }
+    /* campaign bars */
+    .pcampaigns { display:grid; gap:10px; margin-bottom:14px; }
+    .pcampaign { background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.05); border-radius:10px; padding:12px 14px; }
+    .pcampaign-head { display:flex; justify-content:space-between; margin-bottom:8px; font-size:12px; }
+    .pcampaign-name { font-weight:700; color:var(--text); display:flex; align-items:center; gap:7px; }
+    .pcampaign-stat { color:var(--muted); }
+    .pbar-track { height:5px; background:rgba(255,255,255,.06); border-radius:999px; overflow:hidden; }
+    .pbar-fill { height:100%; border-radius:999px; width:0%; transition:width 1.4s cubic-bezier(.4,0,.2,1); }
+    /* activity feed */
+    .pactivity { background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.05); border-radius:14px; padding:14px; }
+    .pactivity-title { font-size:12px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .pfeed { display:flex; flex-direction:column; gap:0; }
+    .pfeed-item {
+      display:flex; align-items:flex-start; gap:10px; padding:9px 0;
+      border-bottom:1px solid rgba(255,255,255,.04); font-size:12px;
+      opacity:0; transform:translateX(-8px);
+      animation:feedIn .4s ease forwards;
+    }
+    .pfeed-item:last-child{border-bottom:0;}
+    @keyframes feedIn{to{opacity:1;transform:translateX(0);}}
+    .pfeed-icon { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pfeed-body { flex:1; }
+    .pfeed-event { font-weight:600; color:var(--text); }
+    .pfeed-time { font-size:11px; color:var(--muted); margin-top:2px; }
+    /* two-column bottom */
+    .pbottom { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:680px){ .pbottom{grid-template-columns:1fr;} }
+
+    /* ── FAQ ── */
+    .faq-list { display: grid; gap: 8px; }
+    .faq-item { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card2); }
+    .faq-q { width: 100%; text-align: left; background: none; border: 0; color: var(--text); padding: 16px 20px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-q::after { content: "+"; font-size: 20px; color: var(--brand); font-weight: 400; transition: transform .2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { display: none; padding: 0 20px 16px; color: var(--muted); font-size: 14px; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── FINAL CTA ── */
+    .final-cta {
+      text-align: center; padding: 100px 0;
+      background:
+        radial-gradient(ellipse 700px 400px at 50% 50%, rgba(0,229,200,.05) 0%, transparent 65%);
+    }
+    .final-cta h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); max-width: 700px; margin: 0 auto 18px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 0;
+      background: var(--surface);
+    }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-copy { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── DIVIDER ── */
+    .divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+    /* ── UTILITIES ── */
+    .text-center { text-align: center; }
+    .text-brand { color: var(--brand); }
+    .text-muted { color: var(--muted); }
+    .mt-8 { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-wrap { overflow-x: auto; }
+    .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+    .compare-table thead th { padding: 14px 18px; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; background: rgba(0,0,0,.3); }
+    .compare-feature { text-align: left; border-radius: 12px 0 0 0; color: var(--muted); min-width: 180px; }
+    .compare-diy { text-align: center; color: var(--muted); min-width: 200px; }
+    .compare-aag { text-align: center; color: var(--brand); background: rgba(0,229,200,.06); border-radius: 0 12px 0 0; min-width: 200px; }
+    .compare-table tbody tr { border-bottom: 1px solid var(--line); }
+    .compare-table tbody td { padding: 13px 18px; border-bottom: 1px solid var(--line); color: var(--dim); }
+    .compare-table tbody tr:last-child td { border-bottom: 0; }
+    .compare-table tbody tr:hover td { background: rgba(255,255,255,.02); }
+    .diy-cell { text-align: center; color: #f87171; }
+    .aag-cell { text-align: center; color: var(--ok); font-weight: 700; background: rgba(0,229,200,.04); }
+
+    /* ── USE CASES GRID ── */
+    .usecase-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (min-width: 540px) { .usecase-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 860px) { .usecase-grid { grid-template-columns: repeat(4, 1fr); } }
+    .usecase-item { background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--dim); display: flex; align-items: center; gap: 9px; transition: border-color .2s, color .2s; }
+    .usecase-item:hover { border-color: rgba(0,229,200,.25); color: var(--text); }
+    .usecase-item span { font-size: 17px; flex-shrink: 0; }
+
+    /* ── WIZARD ── */
+    .wizard { max-width:680px; margin:0 auto; }
+    .wizard-steps { display:flex; align-items:center; justify-content:center; gap:0; margin-bottom:36px; }
+    .wstep { display:flex; flex-direction:column; align-items:center; gap:5px; }
+    .wstep-num {
+      width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+      font-size:13px; font-weight:800; background:rgba(255,255,255,.06); color:var(--muted);
+      border:1px solid var(--line); transition:all .3s;
+    }
+    .wstep.active .wstep-num { background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#041222; border-color:transparent; }
+    .wstep.done .wstep-num { background:rgba(0,229,200,.15); color:var(--brand); border-color:rgba(0,229,200,.3); }
+    .wstep-label { font-size:11px; font-weight:700; color:var(--muted); transition:color .3s; }
+    .wstep.active .wstep-label { color:var(--brand); }
+    .wstep.done .wstep-label { color:var(--dim); }
+    .wstep-line { flex:1; height:1px; background:var(--line); min-width:40px; max-width:80px; transition:background .3s; }
+    .wstep-line.done { background:rgba(0,229,200,.3); }
+    /* panels */
+    .wpanel { display:none; animation:wpanelIn .3s ease; }
+    .wpanel.active { display:block; }
+    @keyframes wpanelIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+    .wpanel-title { font-size:1.1rem; font-weight:800; margin-bottom:18px; }
+    .wizard-note { font-size:12px; color:var(--muted); margin-top:14px; text-align:center; }
+    .wizard-nav { display:flex; justify-content:flex-end; gap:10px; margin-top:24px; }
+    /* plan cards */
+    .wplan-grid { display:grid; gap:12px; grid-template-columns:1fr; }
+    @media(min-width:520px){ .wplan-grid{grid-template-columns:repeat(3,1fr);} }
+    .wplan-card {
+      background:var(--card2); border:2px solid var(--line); border-radius:14px;
+      padding:18px; cursor:pointer; position:relative; transition:all .2s; text-align:center;
+    }
+    .wplan-card:hover { border-color:rgba(0,229,200,.3); transform:translateY(-2px); }
+    .wplan-card.selected { border-color:var(--brand); background:rgba(0,229,200,.06); box-shadow:0 0 0 1px rgba(0,229,200,.15) inset; }
+    .wplan-card.popular { border-color:rgba(0,229,200,.25); }
+    .wplan-badge { position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,var(--brand),var(--brand2)); color:#041222; font-size:10px; font-weight:800; border-radius:999px; padding:3px 12px; }
+    .wplan-name { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:6px; }
+    .wplan-price { font-size:1.6rem; font-weight:900; letter-spacing:-1px; }
+    .wplan-price span { font-size:.9rem; font-weight:500; color:var(--muted); }
+    .wplan-desc { font-size:11px; color:var(--muted); margin-top:6px; line-height:1.5; }
+    /* channel cards */
+    .wchannel-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    @media(min-width:500px){ .wchannel-grid{grid-template-columns:repeat(4,1fr);} }
+    .wchannel-card {
+      background:var(--card2); border:2px solid var(--line); border-radius:14px;
+      padding:18px 12px; text-align:center; cursor:pointer; transition:all .2s;
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+    }
+    .wchannel-card:not(.disabled):hover { border-color:rgba(0,229,200,.3); transform:translateY(-2px); }
+    .wchannel-card.selected { border-color:var(--brand); background:rgba(0,229,200,.06); }
+    .wchannel-card.disabled { cursor:not-allowed; opacity:.6; }
+    .wchannel-name { font-size:13px; font-weight:700; }
+    .wchannel-status { font-size:10px; font-weight:700; border-radius:999px; padding:3px 8px; }
+    .wchannel-status.ready { background:rgba(0,229,200,.1); color:var(--brand); border:1px solid rgba(0,229,200,.2); }
+    .wchannel-status.coming { background:rgba(255,255,255,.05); color:var(--muted); border:1px solid var(--line); }
+    /* setup cards */
+    .wsetup-grid { display:grid; gap:10px; grid-template-columns:1fr 1fr; }
+    @media(max-width:480px){ .wsetup-grid{grid-template-columns:1fr;} }
+    .wsetup-card {
+      background:var(--card2); border:2px solid var(--line); border-radius:14px;
+      padding:18px; cursor:pointer; transition:all .2s; display:flex; flex-direction:column; gap:6px;
+    }
+    .wsetup-card:hover { border-color:rgba(0,229,200,.25); transform:translateY(-2px); }
+    .wsetup-card.selected { border-color:var(--brand); background:rgba(0,229,200,.05); }
+    .wsetup-name { font-size:14px; font-weight:800; }
+    .wsetup-desc { font-size:12px; color:var(--muted); line-height:1.5; }
+    .wsetup-tag { font-size:11px; font-weight:800; margin-top:4px; }
+    /* summary pill */
+    .wsummary {
+      display:flex; flex-wrap:wrap; gap:8px; margin-bottom:4px;
+    }
+    .wsummary-chip {
+      background:rgba(0,229,200,.08); border:1px solid rgba(0,229,200,.2);
+      border-radius:999px; padding:5px 12px; font-size:12px; font-weight:700; color:var(--brand);
+      display:flex; align-items:center; gap:6px;
+    }
+
+    .btn:disabled { opacity:.45; cursor:not-allowed; transform:none !important; filter:none !important; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--card); border: 1px solid rgba(0,229,200,.3); border-radius: 12px;
+      padding: 14px 24px; font-size: 14px; font-weight: 600; color: var(--brand);
+      box-shadow: 0 8px 32px rgba(0,0,0,.4); transition: transform .3s ease; z-index: 999;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+
+    /* ── MOBILE NAV COLLAPSE ── */
+    @media (max-width: 600px) { .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="#">
+      <div class="logo-mark">AAG</div>
+      <div>
+        <div class="logo-text">AAG.ai</div>
+        <div class="logo-sub">Atlas Automation Group</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#agents">Agents</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#client-portal">Client Portal</a>
+      <a href="#inquiry">Contact</a>
+    </div>
+    <div>
+      <a href="#inquiry" class="btn btn-primary">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="wrap">
+    <div style="text-align:center">
+    <div class="hero-badge" style="display:inline-flex"><span></span> AI Operations — Live in 48 Hours</div></div>
+    <h1 style="text-align:center">Your Business, Running<br/><span class="accent">on Autopilot.</span></h1>
+    <p class="hero-lead">Atlas Automation Group installs and runs a full AI agent team for your business — follow-up, outreach, content, and operations. No code, no servers, no headaches.</p>
+    <div class="hero-ctas">
+      <a href="#inquiry" class="btn btn-primary btn-lg">Book Free Strategy Call</a>
+      <a href="#compare" class="btn btn-ghost btn-lg">See the Difference</a>
+    </div>
+    <div class="hero-trust">
+      <span>No technical skills needed</span>
+      <span>Live in 48–72 hours</span>
+      <span>Cancel anytime</span>
+      <span>Transparent reporting</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIY VS AAG COMPARISON ── -->
+<section id="compare" style="padding:64px 0;">
+  <div class="wrap">
+    <div class="section-label text-center">Why AAG</div>
+    <h2 class="text-center">DIY vs. AAG — real talk</h2>
+    <p class="text-center" style="max-width:520px;margin:0 auto 24px;">Building your own automation stack takes months and a technical team. We deploy it in 48 hours.</p>
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:999px;padding:8px 18px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;animation:pulse 1.8s ease-in-out infinite;display:inline-block;"></span>
+        <span style="font-size:13px;color:#fcd34d;font-weight:700;">Only 8 client spots available this month</span>
+      </div>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="compare-feature">What you need</th>
+            <th class="compare-diy">DIY / Hiring In-House</th>
+            <th class="compare-aag">AAG</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Time to go live</td>
+            <td class="diy-cell">3–6 months</td>
+            <td class="aag-cell">✓ 48–72 hours</td>
+          </tr>
+          <tr>
+            <td>Technical knowledge required</td>
+            <td class="diy-cell">Yes — devs, APIs, servers</td>
+            <td class="aag-cell">✓ None</td>
+          </tr>
+          <tr>
+            <td>Monthly cost (realistic)</td>
+            <td class="diy-cell">$5k–$15k+ (staff + tools)</td>
+            <td class="aag-cell">✓ Flat monthly rate</td>
+          </tr>
+          <tr>
+            <td>AI agent team</td>
+            <td class="diy-cell">Build from scratch</td>
+            <td class="aag-cell">✓ 9 agents, pre-configured</td>
+          </tr>
+          <tr>
+            <td>Follow-up automation</td>
+            <td class="diy-cell">Manual or expensive SaaS</td>
+            <td class="aag-cell">✓ Included &amp; managed</td>
+          </tr>
+          <tr>
+            <td>Content production</td>
+            <td class="diy-cell">Freelancers + long briefs</td>
+            <td class="aag-cell">✓ AI-generated, on-brand</td>
+          </tr>
+          <tr>
+            <td>Ongoing optimisation</td>
+            <td class="diy-cell">Your problem</td>
+            <td class="aag-cell">✓ We handle it monthly</td>
+          </tr>
+          <tr>
+            <td>Mission Control dashboard</td>
+            <td class="diy-cell">Build it yourself</td>
+            <td class="aag-cell">✓ Live on day one</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-label">What we deploy</div>
+    <h2>Automation systems that run<br/>while you sleep</h2>
+    <p style="max-width:600px;">We install and manage AI-powered workflows for local businesses — everything from follow-up and reviews to full content operations.</p>
+
+    <div class="grid-3 mt-32">
+      <div class="card">
+        <div class="icon-tile i-teal"><iconify-icon icon="ph:star-duotone" width="22" style="color:var(--brand)"></iconify-icon></div>
+        <h3>Review Engine</h3>
+        <p>Automatically send happy customers to your Google review page. Build 5-star reputation on autopilot.</p>
+      </div>
+      <div class="card">
+        <div class="icon-tile i-blue"><iconify-icon icon="ph:arrows-clockwise-duotone" width="22" style="color:var(--brand2)"></iconify-icon></div>
+        <h3>Win-Back Campaigns</h3>
+        <p>Re-engage inactive customers (45+ days) with personalised messages. Recover lost revenue without ad spend.</p>
+      </div>
+      <div class="card">
+        <div class="icon-tile i-purple"><iconify-icon icon="ph:calendar-check-duotone" width="22" style="color:#a78bff"></iconify-icon></div>
+        <h3>Appointment Flows</h3>
+        <p>Confirmation texts, reminder sequences, and no-show follow-up. Cut your no-show rate in half.</p>
+      </div>
+      <div class="card">
+        <div class="icon-tile i-gold"><iconify-icon icon="ph:phone-incoming-duotone" width="22" style="color:#fbbf24"></iconify-icon></div>
+        <h3>Missed Call Recovery</h3>
+        <p>Every missed call gets an instant text reply. Never lose a warm lead because you were busy.</p>
+      </div>
+      <div class="card">
+        <div class="icon-tile i-pink"><iconify-icon icon="ph:pencil-simple-duotone" width="22" style="color:#f472b6"></iconify-icon></div>
+        <h3>AI Social Content</h3>
+        <p>Your brand voice, on schedule. AI-drafted posts tailored to your business, ready to publish.</p>
+      </div>
+      <div class="card">
+        <div class="icon-tile i-green"><iconify-icon icon="ph:flow-arrow-duotone" width="22" style="color:#4ade80"></iconify-icon></div>
+        <h3>n8n Workflow Automation</h3>
+        <p>Custom multi-step automations connecting your CRM, socials, email, and SMS into one seamless pipeline.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── USE CASES ── -->
+<section style="padding:0 0 72px;">
+  <div class="wrap">
+    <div class="section-label">What your agents handle</div>
+    <h2>Everything on your plate,<br/>handled automatically</h2>
+    <div class="usecase-grid mt-32">
+      <div class="usecase-item"><iconify-icon icon="ph:star-duotone" width="18" style="color:var(--brand);flex-shrink:0"></iconify-icon>Review requests</div>
+      <div class="usecase-item"><iconify-icon icon="ph:chat-circle-dots-duotone" width="18" style="color:var(--brand2);flex-shrink:0"></iconify-icon>Customer follow-up</div>
+      <div class="usecase-item"><iconify-icon icon="ph:calendar-check-duotone" width="18" style="color:#a78bff;flex-shrink:0"></iconify-icon>Appointment reminders</div>
+      <div class="usecase-item"><iconify-icon icon="ph:phone-incoming-duotone" width="18" style="color:#fbbf24;flex-shrink:0"></iconify-icon>Missed call recovery</div>
+      <div class="usecase-item"><iconify-icon icon="ph:arrows-clockwise-duotone" width="18" style="color:var(--brand);flex-shrink:0"></iconify-icon>Win-back campaigns</div>
+      <div class="usecase-item"><iconify-icon icon="ph:pencil-simple-duotone" width="18" style="color:#f472b6;flex-shrink:0"></iconify-icon>Social media drafts</div>
+      <div class="usecase-item"><iconify-icon icon="ph:envelope-simple-duotone" width="18" style="color:var(--brand2);flex-shrink:0"></iconify-icon>Email sequences</div>
+      <div class="usecase-item"><iconify-icon icon="ph:robot-duotone" width="18" style="color:var(--brand);flex-shrink:0"></iconify-icon>DM automation</div>
+      <div class="usecase-item"><iconify-icon icon="ph:chart-bar-duotone" width="18" style="color:#4ade80;flex-shrink:0"></iconify-icon>Performance reports</div>
+      <div class="usecase-item"><iconify-icon icon="ph:magnifying-glass-duotone" width="18" style="color:#a78bff;flex-shrink:0"></iconify-icon>Competitor research</div>
+      <div class="usecase-item"><iconify-icon icon="ph:file-text-duotone" width="18" style="color:#fbbf24;flex-shrink:0"></iconify-icon>Contract drafts</div>
+      <div class="usecase-item"><iconify-icon icon="ph:funnel-duotone" width="18" style="color:var(--brand2);flex-shrink:0"></iconify-icon>Lead screening</div>
+      <div class="usecase-item"><iconify-icon icon="ph:calendar-dots-duotone" width="18" style="color:var(--brand);flex-shrink:0"></iconify-icon>Weekly planning</div>
+      <div class="usecase-item"><iconify-icon icon="ph:lightbulb-duotone" width="18" style="color:#fbbf24;flex-shrink:0"></iconify-icon>Content ideas</div>
+      <div class="usecase-item"><iconify-icon icon="ph:megaphone-simple-duotone" width="18" style="color:#f472b6;flex-shrink:0"></iconify-icon>Promo campaigns</div>
+      <div class="usecase-item"><iconify-icon icon="ph:brain-duotone" width="18" style="color:#a78bff;flex-shrink:0"></iconify-icon>Strategy briefs</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── AGENTS ── -->
+<section id="agents">
+  <div class="wrap">
+    <div class="section-label">The Team</div>
+    <h2>Meet your AI agents</h2>
+    <p style="max-width: 640px;">Every AAG client gets access to a coordinated team of specialised AI agents — each with a defined role, working in parallel, 24/7.</p>
+
+    <div class="agent-grid mt-32">
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:globe-hemisphere-west-duotone" width="30" style="color:var(--brand)"></iconify-icon></div>
+        <div class="agent-name">Atlas</div>
+        <div class="agent-role">Chief of Staff</div>
+        <div class="agent-desc">Strategy partner and orchestrator. Coordinates the full agent team, tracks your goals, and drives execution.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:sparkle-duotone" width="30" style="color:#f472b6"></iconify-icon></div>
+        <div class="agent-name">Simma</div>
+        <div class="agent-role">Creative Director</div>
+        <div class="agent-desc">Brand voice, content strategy, and creative direction. Runs your content operation end-to-end.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:paint-brush-duotone" width="30" style="color:#a78bff"></iconify-icon></div>
+        <div class="agent-name">Pixel</div>
+        <div class="agent-role">Visual AI</div>
+        <div class="agent-desc">AI image direction, visual identity, and brand assets. Your always-on graphic designer.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:microphone-stage-duotone" width="30" style="color:var(--brand2)"></iconify-icon></div>
+        <div class="agent-name">Echo</div>
+        <div class="agent-role">Copy + Voice AI</div>
+        <div class="agent-desc">Captions, DM scripts, email sequences, and brand voice. Words that convert.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:film-reel-duotone" width="30" style="color:#fb923c"></iconify-icon></div>
+        <div class="agent-name">Luma</div>
+        <div class="agent-role">Motion AI</div>
+        <div class="agent-desc">Short-form video direction, clip sequencing, and reels content. Scroll-stopping motion, always ready.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:brain-duotone" width="30" style="color:#a78bff"></iconify-icon></div>
+        <div class="agent-name">Orion</div>
+        <div class="agent-role">Planner</div>
+        <div class="agent-desc">Architecture, task decomposition, and project planning. Turns big goals into executable steps.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:wrench-duotone" width="30" style="color:#fbbf24"></iconify-icon></div>
+        <div class="agent-name">Forge</div>
+        <div class="agent-role">Backend Engineer</div>
+        <div class="agent-desc">APIs, data pipelines, and server-side systems. Builds the plumbing your automations run on.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:shield-check-duotone" width="30" style="color:#4ade80"></iconify-icon></div>
+        <div class="agent-name">Sentinel</div>
+        <div class="agent-role">QA + Review</div>
+        <div class="agent-desc">Code review, risk checks, and quality assurance. Nothing ships without Sentinel's sign-off.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji"><iconify-icon icon="ph:stethoscope-duotone" width="30" style="color:var(--brand)"></iconify-icon></div>
+        <div class="agent-name">Doctor</div>
+        <div class="agent-role">Systems Diagnosis</div>
+        <div class="agent-desc">Recovery, routing fixes, and operator support. When something breaks, Doctor finds and fixes it fast.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── PRICING ── -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-label">Pricing</div>
+    <h2 class="text-center">Simple, transparent pricing</h2>
+    <p class="text-center" style="max-width:520px;margin:0 auto 40px;">Pick the plan that fits your business. Upgrade anytime. No contracts. No surprises.</p>
+
+    <div class="pricing-grid">
+      <!-- Starter -->
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><sup>$</sup>499<sub>/mo</sub></div>
+        <div class="plan-desc">Perfect for solo operators and small shops getting started with automation.</div>
+        <ul class="plan-features">
+          <li>Review request campaigns</li>
+          <li>Basic win-back texts</li>
+          <li>Missed call follow-up</li>
+          <li>Monthly performance summary</li>
+          <li>Email support</li>
+        </ul>
+        <a href="#inquiry" class="btn btn-ghost" style="text-align:center;width:100%;">Get Started</a>
+        <div class="plan-setup">+ $199 one-time setup fee</div>
+      </div>
+
+      <!-- Growth (Popular) -->
+      <div class="plan-card popular">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name" style="margin-top:12px;">Growth</div>
+        <div class="plan-price"><sup>$</sup>997<sub>/mo</sub></div>
+        <div class="plan-desc">For businesses ready to systematically increase repeat revenue and bookings.</div>
+        <ul class="plan-features">
+          <li>Everything in Starter</li>
+          <li>Appointment reminder flows</li>
+          <li>Advanced audience segmentation</li>
+          <li>Win-back campaign optimisation</li>
+          <li>Bi-weekly performance report</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#inquiry" class="btn btn-primary" style="text-align:center;width:100%;">Get Started</a>
+        <div class="plan-setup">+ $199 one-time setup fee</div>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><sup>$</sup>1,997<sub>/mo</sub></div>
+        <div class="plan-desc">Full AI ops stack — content, outreach, automations, and monthly strategy.</div>
+        <ul class="plan-features">
+          <li>Everything in Growth</li>
+          <li>AI social content package</li>
+          <li>Custom workflow automations</li>
+          <li>n8n pipeline builds</li>
+          <li>Monthly strategy call</li>
+          <li>Fastest support lane</li>
+        </ul>
+        <a href="#inquiry" class="btn btn-ghost" style="text-align:center;width:100%;">Get Started</a>
+        <div class="plan-setup">Setup waived with 3-month prepay</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXECUTIVE SETUP ── -->
+<section>
+  <div class="wrap">
+    <div class="section-label">One-Time Setup</div>
+    <h2>Executive Setup Packages</h2>
+    <p style="max-width:580px;">Need a fully installed AI operations system? We build and configure everything from scratch — your own AI command centre, ready to run.</p>
+
+    <div class="setup-options mt-32">
+      <div class="setup-card">
+        <div class="icon-tile i-blue"><iconify-icon icon="ph:cloud-duotone" width="22" style="color:var(--brand2)"></iconify-icon></div>
+        <h3>Hosted Setup</h3>
+        <div class="setup-price">$3,000</div>
+        <p style="font-size:13px;margin:0;">Full setup hosted on our infrastructure. Remote access, managed maintenance.</p>
+      </div>
+      <div class="setup-card">
+        <div class="icon-tile i-purple"><iconify-icon icon="ph:laptop-duotone" width="22" style="color:#a78bff"></iconify-icon></div>
+        <h3>Mac Mini Setup — Remote</h3>
+        <div class="setup-price">$5,000</div>
+        <p style="font-size:13px;margin:0;">Your own Mac Mini running locally. Configured and deployed remotely by our team.</p>
+      </div>
+      <div class="setup-card">
+        <div class="icon-tile i-teal"><iconify-icon icon="ph:handshake-duotone" width="22" style="color:var(--brand)"></iconify-icon></div>
+        <h3>Mac Mini Setup — In Person</h3>
+        <div class="setup-price">$6,000</div>
+        <p style="font-size:13px;margin:0;">White-glove, in-person setup in Los Angeles. We come to you. Done in a day.</p>
+      </div>
+    </div>
+    <p class="text-muted mt-16" style="font-size:13px;">Additional agents: <strong style="color:var(--text)">+$1,500 each</strong></p>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── HOW IT WORKS ── -->
+<section>
+  <div class="wrap">
+    <div class="section-label">Process</div>
+    <h2>Up and running in 3 steps</h2>
+    <div class="steps-v mt-24">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Strategy Call (15 min)</h3>
+          <p>We map your biggest follow-up gaps, identify quick wins, and choose the right plan for your business. Free, no pressure.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Setup + Go Live (48–72 hrs)</h3>
+          <p>We connect your workflows, configure your agents, and launch automations. You review and approve before anything goes live.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Optimise Monthly</h3>
+          <p>Monthly performance review, campaign tuning, and strategy updates. We track results and continuously improve your system.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── INDUSTRIES ── -->
+<section>
+  <div class="wrap">
+    <div class="section-label">Industries</div>
+    <h2>Built for local service businesses</h2>
+    <p>We specialise in industries where repeat business and reviews drive revenue.</p>
+    <div class="industry-pills">
+      <span class="industry-pill">🔧 Auto Shops</span>
+      <span class="industry-pill">💇 Salons &amp; Barbers</span>
+      <span class="industry-pill">💆 Spas &amp; Medspas</span>
+      <span class="industry-pill">🍽️ Restaurants</span>
+      <span class="industry-pill">💪 Gyms &amp; Studios</span>
+      <span class="industry-pill">🦷 Dental Offices</span>
+      <span class="industry-pill">🏡 Real Estate</span>
+      <span class="industry-pill">🧹 Home Services</span>
+      <span class="industry-pill">🐾 Pet Services</span>
+      <span class="industry-pill">💊 Health &amp; Wellness</span>
+      <span class="industry-pill">📸 Photography</span>
+      <span class="industry-pill">+ Any Local Service</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── CLIENT PORTAL PREVIEW ── -->
+<section id="client-portal">
+  <div class="wrap">
+    <div class="section-label">Client Portal</div>
+    <h2>Full visibility into your automation</h2>
+    <p style="max-width:600px;">Every AAG client gets access to a live dashboard — see your agent activity, campaign performance, and upcoming tasks in real time.</p>
+
+    <div class="onboard-grid mt-24">
+      <div class="onboard-card">
+        <div class="onboard-tag tag-client">For Clients</div>
+        <h3>Client Dashboard</h3>
+        <p style="font-size:14px;margin:0 0 14px;">Live view of your campaign performance, active automations, and upcoming touchpoints. Know exactly what's running.</p>
+        <a href="#inquiry" class="btn btn-primary">Request Access</a>
+      </div>
+      <div class="onboard-card">
+        <div class="onboard-tag tag-partner">For Partners</div>
+        <h3>Installer Partner Portal</h3>
+        <p style="font-size:14px;margin:0 0 14px;">Manage your referred clients, track MRR, and access AAG's full installer toolkit. Partner terms shared during onboarding.</p>
+        <a href="#inquiry" class="btn btn-ghost">Become a Partner</a>
+      </div>
+    </div>
+
+    <!-- Premium Dashboard Mockup -->
+    <div class="portal-shell" id="portalShell">
+
+      <!-- Browser Chrome -->
+      <div class="portal-chrome">
+        <div class="chrome-dots">
+          <div class="chrome-dot cd-r"></div>
+          <div class="chrome-dot cd-y"></div>
+          <div class="chrome-dot cd-g"></div>
+        </div>
+        <div class="chrome-bar">
+          <span class="chrome-lock"><iconify-icon icon="ph:lock-simple-fill" width="11"></iconify-icon></span>
+          client.aag.ai / dashboard
+        </div>
+        <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+      </div>
+
+      <!-- Dashboard Layout -->
+      <div class="portal-layout">
+
+        <!-- Sidebar -->
+        <div class="portal-sidebar-v2">
+          <div class="sidebar-logo"><span>AAG</span>.ai</div>
+          <div class="pnav active">
+            <iconify-icon icon="ph:squares-four-duotone" width="15"></iconify-icon>Dashboard
+          </div>
+          <div class="pnav">
+            <iconify-icon icon="ph:megaphone-simple-duotone" width="15"></iconify-icon>Campaigns
+          </div>
+          <div class="pnav">
+            <iconify-icon icon="ph:robot-duotone" width="15"></iconify-icon>Agents
+          </div>
+          <div class="pnav">
+            <iconify-icon icon="ph:chart-bar-duotone" width="15"></iconify-icon>Reports
+          </div>
+          <div class="pnav">
+            <iconify-icon icon="ph:gear-duotone" width="15"></iconify-icon>Settings
+          </div>
+          <div class="pnav-spacer"></div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2);padding:4px 10px;margin-top:8px;">Active Agents</div>
+          <div class="pnav-agent"><div class="agent-dot dot-on"></div>Atlas</div>
+          <div class="pnav-agent"><div class="agent-dot dot-on"></div>Simma</div>
+          <div class="pnav-agent"><div class="agent-dot dot-idle"></div>Echo</div>
+          <div class="pnav-agent"><div class="agent-dot dot-on"></div>Forge</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="portal-main-v2">
+          <div class="pdash-header">
+            <div class="pdash-title">Overview — March 2026</div>
+            <div class="pdash-period">Last 30 days ▾</div>
+          </div>
+
+          <!-- Stats -->
+          <div class="pstat-grid">
+            <div class="pstat" style="--stat-color:var(--brand)">
+              <div class="pstat-val" data-target="248">0</div>
+              <div class="pstat-lbl">Reviews Sent</div>
+              <div class="pstat-delta">↑ 18% vs last month</div>
+            </div>
+            <div class="pstat" style="--stat-color:var(--brand2)">
+              <div class="pstat-val" data-target="41">0</div>
+              <div class="pstat-lbl">Win-Backs</div>
+              <div class="pstat-delta">↑ 9 new this week</div>
+            </div>
+            <div class="pstat" style="--stat-color:#a78bff">
+              <div class="pstat-val" data-target="93" data-suffix="%">0%</div>
+              <div class="pstat-lbl">Delivery Rate</div>
+              <div class="pstat-delta">↑ 2pts</div>
+            </div>
+            <div class="pstat" style="--stat-color:#4ade80">
+              <div class="pstat-val" data-target="4200" data-prefix="$" data-k="1">$0</div>
+              <div class="pstat-lbl">Recovered Rev.</div>
+              <div class="pstat-delta">↑ $820 this week</div>
+            </div>
+          </div>
+
+          <!-- SVG Sparkline Chart -->
+          <div class="pchart-wrap">
+            <div class="pchart-head">
+              <div class="pchart-title">Campaign Activity — 30 days</div>
+              <div class="pchart-legend">
+                <div class="pchart-leg-item"><div class="pchart-leg-dot" style="background:var(--brand)"></div>Outreach</div>
+                <div class="pchart-leg-item"><div class="pchart-leg-dot" style="background:var(--brand2)"></div>Responses</div>
+              </div>
+            </div>
+            <svg class="chart-svg" viewBox="0 0 540 90" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00e5c8" stop-opacity=".35"/>
+                  <stop offset="100%" stop-color="#00e5c8" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Area fill -->
+              <path class="chart-area" d="M0,72 C40,65 80,50 120,48 C160,46 200,55 240,40 C280,25 320,32 360,22 C400,12 440,18 480,10 L520,6 L540,6 L540,90 L0,90 Z"/>
+              <!-- Main line -->
+              <path class="chart-line" d="M0,72 C40,65 80,50 120,48 C160,46 200,55 240,40 C280,25 320,32 360,22 C400,12 440,18 480,10 L520,6"/>
+              <!-- Secondary line -->
+              <path class="chart-line-2" d="M0,80 C40,76 80,72 120,68 C160,64 200,70 240,60 C280,50 320,56 360,48 C400,40 440,44 480,38 L520,34"/>
+              <!-- Data dots -->
+              <circle cx="120" cy="48" r="3" fill="var(--brand)" opacity="0" style="animation:fadeIn .3s ease forwards 1.4s"><animate attributeName="opacity" from="0" to="1" dur=".3s" begin="1.4s" fill="freeze"/></circle>
+              <circle cx="240" cy="40" r="3" fill="var(--brand)" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".3s" begin="1.6s" fill="freeze"/></circle>
+              <circle cx="360" cy="22" r="3" fill="var(--brand)" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".3s" begin="1.8s" fill="freeze"/></circle>
+              <circle cx="520" cy="6" r="3.5" fill="var(--brand)" opacity="0" style="filter:drop-shadow(0 0 4px var(--brand))"><animate attributeName="opacity" from="0" to="1" dur=".3s" begin="2s" fill="freeze"/></circle>
+            </svg>
+          </div>
+
+          <!-- Bottom: Campaigns + Activity Feed -->
+          <div class="pbottom">
+
+            <!-- Campaign Progress -->
+            <div class="pcampaigns">
+              <div class="pcampaign">
+                <div class="pcampaign-head">
+                  <div class="pcampaign-name">
+                    <iconify-icon icon="ph:star-duotone" width="13" style="color:var(--brand)"></iconify-icon>
+                    Review Campaign
+                  </div>
+                  <div class="pcampaign-stat" style="color:#4ade80;font-weight:700;">Active</div>
+                </div>
+                <div class="pbar-track"><div class="pbar-fill" style="background:linear-gradient(90deg,var(--brand),var(--brand2));--target-w:82%"></div></div>
+                <div style="font-size:10px;color:var(--muted);margin-top:5px;">82% open rate · 248 sent</div>
+              </div>
+              <div class="pcampaign">
+                <div class="pcampaign-head">
+                  <div class="pcampaign-name">
+                    <iconify-icon icon="ph:arrows-clockwise-duotone" width="13" style="color:var(--brand2)"></iconify-icon>
+                    Win-Back Flow
+                  </div>
+                  <div class="pcampaign-stat" style="color:#4ade80;font-weight:700;">Running</div>
+                </div>
+                <div class="pbar-track"><div class="pbar-fill" style="background:linear-gradient(90deg,var(--brand2),#a78bff);--target-w:61%"></div></div>
+                <div style="font-size:10px;color:var(--muted);margin-top:5px;">61% response rate · 41 re-engaged</div>
+              </div>
+              <div class="pcampaign">
+                <div class="pcampaign-head">
+                  <div class="pcampaign-name">
+                    <iconify-icon icon="ph:pencil-simple-duotone" width="13" style="color:#f472b6"></iconify-icon>
+                    AI Content Queue
+                  </div>
+                  <div class="pcampaign-stat" style="color:#fbbf24;font-weight:700;">3 drafts ready</div>
+                </div>
+                <div class="pbar-track"><div class="pbar-fill" style="background:linear-gradient(90deg,#f472b6,#a78bff);--target-w:45%"></div></div>
+                <div style="font-size:10px;color:var(--muted);margin-top:5px;">Awaiting approval · Next post in 2h</div>
+              </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="pactivity">
+              <div class="pactivity-title">
+                <iconify-icon icon="ph:activity-duotone" width="14" style="color:var(--brand)"></iconify-icon>
+                Live Activity
+              </div>
+              <div class="pfeed" id="activityFeed">
+                <div class="pfeed-item" style="animation-delay:.1s">
+                  <div class="pfeed-icon" style="background:rgba(0,229,200,.1)"><iconify-icon icon="ph:star-duotone" width="14" style="color:var(--brand)"></iconify-icon></div>
+                  <div class="pfeed-body">
+                    <div class="pfeed-event">Review request sent to Maria T.</div>
+                    <div class="pfeed-time">2 min ago · Atlas</div>
+                  </div>
+                </div>
+                <div class="pfeed-item" style="animation-delay:.25s">
+                  <div class="pfeed-icon" style="background:rgba(78,168,255,.1)"><iconify-icon icon="ph:phone-incoming-duotone" width="14" style="color:var(--brand2)"></iconify-icon></div>
+                  <div class="pfeed-body">
+                    <div class="pfeed-event">Missed call → follow-up text sent</div>
+                    <div class="pfeed-time">8 min ago · Atlas</div>
+                  </div>
+                </div>
+                <div class="pfeed-item" style="animation-delay:.4s">
+                  <div class="pfeed-icon" style="background:rgba(244,114,182,.1)"><iconify-icon icon="ph:pencil-simple-duotone" width="14" style="color:#f472b6"></iconify-icon></div>
+                  <div class="pfeed-body">
+                    <div class="pfeed-event">Social post drafted by Echo</div>
+                    <div class="pfeed-time">22 min ago · Echo</div>
+                  </div>
+                </div>
+                <div class="pfeed-item" style="animation-delay:.55s">
+                  <div class="pfeed-icon" style="background:rgba(167,139,255,.1)"><iconify-icon icon="ph:arrows-clockwise-duotone" width="14" style="color:#a78bff"></iconify-icon></div>
+                  <div class="pfeed-body">
+                    <div class="pfeed-event">Win-back: James R. re-booked</div>
+                    <div class="pfeed-time">41 min ago · Simma</div>
+                  </div>
+                </div>
+                <div class="pfeed-item" style="animation-delay:.7s">
+                  <div class="pfeed-icon" style="background:rgba(74,222,128,.1)"><iconify-icon icon="ph:check-circle-duotone" width="14" style="color:#4ade80"></iconify-icon></div>
+                  <div class="pfeed-body">
+                    <div class="pfeed-event">Monthly report generated</div>
+                    <div class="pfeed-time">1 hr ago · Orion</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── FORMS ── -->
+<section class="form-section" id="inquiry">
+  <div class="wrap form-wrap">
+
+    <!-- Tab Toggle -->
+    <div class="form-tabs">
+      <button class="form-tab active" onclick="switchTab('business', this)">🏢 I'm a Business</button>
+      <button class="form-tab" onclick="switchTab('agent', this)">🤝 I Want to Sell AAG</button>
+    </div>
+
+    <!-- ── BUSINESS INQUIRY ── -->
+    <div id="tab-business">
+      <div class="section-label text-center" style="margin-top:32px;">For Businesses</div>
+      <h2 class="text-center">Get your AI team up and running</h2>
+      <p class="text-center" style="margin-bottom:32px;">Pick your plan, choose where your bot lives, select your setup — we handle the rest.</p>
+
+      <!-- ── WIZARD STEPS ── -->
+      <div class="wizard" id="wizard">
+
+        <!-- Step indicators -->
+        <div class="wizard-steps">
+          <div class="wstep active" id="wstep-1"><span class="wstep-num">1</span><span class="wstep-label">Plan</span></div>
+          <div class="wstep-line"></div>
+          <div class="wstep" id="wstep-2"><span class="wstep-num">2</span><span class="wstep-label">Channel</span></div>
+          <div class="wstep-line"></div>
+          <div class="wstep" id="wstep-3"><span class="wstep-num">3</span><span class="wstep-label">Setup</span></div>
+          <div class="wstep-line"></div>
+          <div class="wstep" id="wstep-4"><span class="wstep-num">4</span><span class="wstep-label">Details</span></div>
+        </div>
+
+        <!-- Step 1: Pick Plan -->
+        <div class="wpanel active" id="wpanel-1">
+          <div class="wpanel-title">Choose your plan</div>
+          <div class="wplan-grid">
+            <div class="wplan-card" data-plan="Starter — $499/mo" onclick="selectPlan(this)">
+              <div class="wplan-name">Starter</div>
+              <div class="wplan-price">$499<span>/mo</span></div>
+              <div class="wplan-desc">Reviews, win-backs, missed call recovery</div>
+            </div>
+            <div class="wplan-card popular" data-plan="Growth — $997/mo" onclick="selectPlan(this)">
+              <div class="wplan-badge">Most Popular</div>
+              <div class="wplan-name">Growth</div>
+              <div class="wplan-price">$997<span>/mo</span></div>
+              <div class="wplan-desc">Everything + appointments, segmentation, priority</div>
+            </div>
+            <div class="wplan-card" data-plan="Pro — $1,997/mo" onclick="selectPlan(this)">
+              <div class="wplan-name">Pro</div>
+              <div class="wplan-price">$1,997<span>/mo</span></div>
+              <div class="wplan-desc">Full AI ops — content, strategy, monthly calls</div>
+            </div>
+          </div>
+          <div class="wizard-note">Need a full setup instead? <a href="#" onclick="selectPlanCustom()" style="color:var(--brand)">View Executive Setup options →</a></div>
+          <div class="wizard-nav" style="margin-top:20px;">
+            <button class="btn btn-primary" onclick="wizardNext(1)" id="wplan-next" disabled>Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Channel -->
+        <div class="wpanel" id="wpanel-2">
+          <div class="wpanel-title">Where should your bot live?</div>
+          <p style="font-size:13px;color:var(--muted);margin:0 0 20px;">Your AI agents will respond to your customers here. You can add more channels later.</p>
+          <div class="wchannel-grid">
+            <div class="wchannel-card active-channel" data-channel="Telegram" onclick="selectChannel(this)">
+              <iconify-icon icon="ph:telegram-logo-duotone" width="28" style="color:#29b6f6"></iconify-icon>
+              <div class="wchannel-name">Telegram</div>
+              <div class="wchannel-status ready">Ready now</div>
+            </div>
+            <div class="wchannel-card disabled" data-channel="WhatsApp">
+              <iconify-icon icon="ph:whatsapp-logo-duotone" width="28" style="color:#4ade80;opacity:.4"></iconify-icon>
+              <div class="wchannel-name" style="opacity:.4">WhatsApp</div>
+              <div class="wchannel-status coming">Coming soon</div>
+            </div>
+            <div class="wchannel-card disabled" data-channel="Discord">
+              <iconify-icon icon="ph:discord-logo-duotone" width="28" style="color:#818cf8;opacity:.4"></iconify-icon>
+              <div class="wchannel-name" style="opacity:.4">Discord</div>
+              <div class="wchannel-status coming">Coming soon</div>
+            </div>
+            <div class="wchannel-card disabled" data-channel="SMS">
+              <iconify-icon icon="ph:chat-circle-text-duotone" width="28" style="color:#fbbf24;opacity:.4"></iconify-icon>
+              <div class="wchannel-name" style="opacity:.4">SMS</div>
+              <div class="wchannel-status coming">Coming soon</div>
+            </div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn btn-ghost" onclick="wizardBack(2)">← Back</button>
+            <button class="btn btn-primary" onclick="wizardNext(2)" id="wchannel-next" disabled>Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Setup Type -->
+        <div class="wpanel" id="wpanel-3">
+          <div class="wpanel-title">How do you want to get set up?</div>
+          <p style="font-size:13px;color:var(--muted);margin:0 0 20px;">We'll configure everything — just pick how hands-on you want us.</p>
+          <div class="wsetup-grid">
+            <div class="wsetup-card" data-setup="Managed Monthly — AAG handles everything" onclick="selectSetup(this)">
+              <iconify-icon icon="ph:rocket-launch-duotone" width="28" style="color:var(--brand)"></iconify-icon>
+              <div class="wsetup-name">Managed Monthly</div>
+              <div class="wsetup-desc">We run everything on our infrastructure. Included with your monthly plan.</div>
+              <div class="wsetup-tag" style="color:var(--brand)">Included in plan</div>
+            </div>
+            <div class="wsetup-card" data-setup="Hosted Setup — $3,000 one-time" onclick="selectSetup(this)">
+              <iconify-icon icon="ph:cloud-duotone" width="28" style="color:var(--brand2)"></iconify-icon>
+              <div class="wsetup-name">Hosted Setup</div>
+              <div class="wsetup-desc">Full AAG stack deployed on dedicated cloud infrastructure.</div>
+              <div class="wsetup-tag" style="color:var(--brand2)">$3,000 one-time</div>
+            </div>
+            <div class="wsetup-card" data-setup="Mac Mini Remote — $5,000 one-time" onclick="selectSetup(this)">
+              <iconify-icon icon="ph:laptop-duotone" width="28" style="color:#a78bff"></iconify-icon>
+              <div class="wsetup-name">Mac Mini Remote</div>
+              <div class="wsetup-desc">Your own hardware, remotely configured by our team.</div>
+              <div class="wsetup-tag" style="color:#a78bff">$5,000 one-time</div>
+            </div>
+            <div class="wsetup-card" data-setup="Mac Mini In-Person LA — $6,000 one-time" onclick="selectSetup(this)">
+              <iconify-icon icon="ph:handshake-duotone" width="28" style="color:#fbbf24"></iconify-icon>
+              <div class="wsetup-name">In-Person LA</div>
+              <div class="wsetup-desc">White-glove setup in Los Angeles. We come to you.</div>
+              <div class="wsetup-tag" style="color:#fbbf24">$6,000 one-time</div>
+            </div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn btn-ghost" onclick="wizardBack(3)">← Back</button>
+            <button class="btn btn-primary" onclick="wizardNext(3)" id="wsetup-next" disabled>Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Details -->
+        <div class="wpanel" id="wpanel-4">
+          <!-- Summary pill -->
+          <div class="wsummary" id="wSummary"></div>
+          <div class="wpanel-title" style="margin-top:16px;">Your details</div>
+          <form class="form-grid" id="inquiryForm" onsubmit="handleSubmit(event, 'business')" style="margin-top:0">
+        <div class="form-row">
+          <div>
+            <label>First Name *</label>
+            <input type="text" name="firstName" placeholder="Jay" required />
+          </div>
+          <div>
+            <label>Last Name</label>
+            <input type="text" name="lastName" placeholder="HuntR" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Email *</label>
+            <input type="email" name="email" placeholder="you@business.com" required />
+          </div>
+          <div>
+            <label>Phone</label>
+            <input type="tel" name="phone" placeholder="+1 (213) 000-0000" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Business Name *</label>
+            <input type="text" name="business" placeholder="Your Business" required />
+          </div>
+          <div>
+            <label>Industry</label>
+            <select name="industry">
+              <option value="">Select industry…</option>
+              <option>Auto Shop</option>
+              <option>Salon / Barber</option>
+              <option>Spa / Medspa</option>
+              <option>Restaurant</option>
+              <option>Gym / Fitness</option>
+              <option>Dental / Medical</option>
+              <option>Real Estate</option>
+              <option>Home Services</option>
+              <option>E-Commerce</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>What's your biggest growth challenge right now?</label>
+          <textarea name="challenge" placeholder="e.g. Customers don't leave reviews, we lose track of follow-ups, hard to get repeat business…"></textarea>
+        </div>
+        <!-- Hidden wizard selections -->
+        <input type="hidden" name="selectedPlan" id="hiddenPlan" />
+        <input type="hidden" name="selectedChannel" id="hiddenChannel" />
+        <input type="hidden" name="selectedSetup" id="hiddenSetup" />
+        <div class="form-submit">
+          <div class="wizard-nav" style="justify-content:space-between;margin-bottom:12px;">
+            <button type="button" class="btn btn-ghost" onclick="wizardBack(4)">← Back</button>
+            <button type="submit" class="btn btn-primary btn-lg">Submit Inquiry →</button>
+          </div>
+          <p class="form-note">No spam. No pressure. We'll reach out within 24 hours.</p>
+        </div>
+      </form>
+        </div><!-- /wpanel-4 -->
+      </div><!-- /wizard -->
+    </div>
+
+    <!-- ── AGENT / SELLER APPLICATION ── -->
+    <div id="tab-agent" style="display:none;">
+      <div class="section-label text-center" style="margin-top:32px;">For Agents</div>
+      <h2 class="text-center">Join the AAG Sales Team</h2>
+      <p class="text-center" style="margin-bottom:36px;">We're building a network of installers and closers. You bring the client, AAG delivers everything else.</p>
+
+      <form class="form-grid" id="agentForm" onsubmit="handleSubmit(event, 'agent')">
+        <div class="form-row">
+          <div>
+            <label>First Name *</label>
+            <input type="text" name="firstName" placeholder="Your name" required />
+          </div>
+          <div>
+            <label>Last Name</label>
+            <input type="text" name="lastName" placeholder="" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Email *</label>
+            <input type="email" name="email" placeholder="you@email.com" required />
+          </div>
+          <div>
+            <label>Phone *</label>
+            <input type="tel" name="phone" placeholder="+1 (213) 000-0000" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>City / Location *</label>
+            <input type="text" name="location" placeholder="Los Angeles, CA" required />
+          </div>
+          <div>
+            <label>Current Occupation</label>
+            <input type="text" name="occupation" placeholder="e.g. Sales rep, agency owner, freelancer" />
+          </div>
+        </div>
+        <div>
+          <label>What's your sales background? *</label>
+          <select name="background" required>
+            <option value="">Select…</option>
+            <option>I've sold B2B services before</option>
+            <option>I run my own agency / business</option>
+            <option>I have a network of local business owners</option>
+            <option>I'm new to sales but motivated to learn</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label>How many clients could you realistically bring in your first 90 days?</label>
+          <select name="pipeline">
+            <option value="">Select…</option>
+            <option>1–2 clients</option>
+            <option>3–5 clients</option>
+            <option>6–10 clients</option>
+            <option>10+ clients</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div>
+          <label>Tell us why you'd be a strong AAG agent</label>
+          <textarea name="pitch" placeholder="Your network, your hustle, what you bring to the table…"></textarea>
+        </div>
+
+        <!-- Partner Terms Block -->
+        <div style="background:rgba(124,92,255,.06);border:1px solid rgba(124,92,255,.2);border-radius:12px;padding:20px;">
+          <div style="font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#a78bff;margin-bottom:12px;">Agent Partner Agreement Summary</div>
+          <ul style="margin:0 0 16px 0;padding-left:18px;font-size:13px;color:var(--dim);line-height:1.9;">
+            <li>You source and close the client — AAG provides the full AI agent infrastructure and handles all ongoing operations and delivery</li>
+            <li><strong style="color:#a78bff">Agent commission: 60% of the client's total first invoice</strong> — this includes the monthly plan + any one-time setup fee, paid once upon client activation</li>
+            <li><strong>Example:</strong> Client signs up for Growth ($997/mo) + Hosted Setup ($3,000) = $3,997 total invoice → <strong style="color:#a78bff">you earn $2,398 upfront</strong></li>
+            <li>AAG retains 100% of all ongoing monthly subscription revenue after the initial commission payout — this funds agent infrastructure, platform operations, and support</li>
+            <li>There are no residuals — you earn by continuing to close. Activity expectations: <strong>50 outbound calls/day</strong> or <strong>25 in-person business visits/day</strong></li>
+            <li>You are responsible for the client relationship, onboarding coordination, and initial setup handoff to AAG</li>
+            <li>Full agent agreement provided upon application approval — all terms subject to AAG Agent Policy</li>
+          </ul>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--text);font-weight:600;">
+            <input type="checkbox" name="agentAgree" style="width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:#7c5cff;" required />
+            I understand this is a commission-only role. I earn 60% of the client's first total invoice (plan + setup), paid once at activation. There are no monthly residuals. I agree to the agent partner terms above.
+          </label>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;max-width:340px;background:linear-gradient(110deg,#7c5cff,#4ea8ff);">Apply to Join →</button>
+          <p class="form-note">Applications reviewed within 48 hours. We'll reach out to schedule a quick call.</p>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── FAQ ── -->
+<section>
+  <div class="wrap" style="max-width:720px;">
+    <div class="section-label">FAQ</div>
+    <h2>Common questions</h2>
+    <div class="faq-list mt-24">
+      <div class="faq-item">
+        <button class="faq-q">Do I need technical skills?</button>
+        <div class="faq-a">None at all. We handle setup, copy, integrations, and ongoing optimisation. You approve and we handle the rest.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How fast can we go live?</button>
+        <div class="faq-a">Most businesses are live within 48–72 hours of onboarding. We move fast.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Will this spam my customers?</button>
+        <div class="faq-a">Never. We use responsible send cadences, opt-out compliance, and only message people who've already done business with you.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Can I cancel anytime?</button>
+        <div class="faq-a">Yes. All plans are month-to-month unless you choose a prepay option. No contracts, no lock-in.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What results should I expect?</button>
+        <div class="faq-a">Most clients see improvement in review volume, repeat booking rates, and follow-up response rates within the first 30 days. Results vary by niche, list quality, and offer.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">I'm an agency owner — can I resell this?</button>
+        <div class="faq-a">Yes. Apply via the inquiry form selecting "Installer Partner Programme" and our team will walk you through the full partner terms during onboarding.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What is OpenClaw / the agent infrastructure?</button>
+        <div class="faq-a">AAG runs on OpenClaw — a proprietary AI agent framework built by DEVHOUSE. Your automation is powered by a coordinated team of specialised AI agents, not just a single chatbot.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ── -->
+<section class="final-cta">
+  <div class="wrap">
+    <div class="section-label text-center" style="margin-bottom:14px;">Ready?</div>
+    <h2>Stop leaving revenue on the table.<br/>Let's build your system.</h2>
+    <p class="text-muted" style="max-width:500px;margin:0 auto 28px;font-size:15px;">Join local businesses in Los Angeles and beyond running on AAG. First strategy call is free.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="#inquiry" class="btn btn-primary btn-lg">Book Free Strategy Call</a>
+      <a href="#pricing" class="btn btn-ghost btn-lg">View Pricing</a>
+    </div>
+    <p class="text-muted mt-16" style="font-size:12px;">Atlas Automation Group · Los Angeles, CA · aag.ai</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-copy">© 2026 Atlas Automation Group — A DEVHOUSE Company</div>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#inquiry">Contact</a>
+      <a href="#client-portal">Client Login</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ── TOAST ── -->
+<div id="toast">✓ Inquiry received — we'll be in touch within 24 hours!</div>
+
+<script>
+  // Counter animation + bar fill on scroll
+  let portalAnimated = false;
+  const portalObserver = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !portalAnimated) {
+      portalAnimated = true;
+
+      // Animate stat counters
+      document.querySelectorAll('.pstat-val[data-target]').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const isK = el.dataset.k === '1';
+        const duration = 1600;
+        const start = performance.now();
+        function tick(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const value = Math.round(target * ease);
+          el.textContent = prefix + (isK ? (value >= 1000 ? '$' + (value/1000).toFixed(1) + 'k' : value) : value) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+
+      // Animate progress bars
+      document.querySelectorAll('.pbar-fill').forEach(bar => {
+        const w = getComputedStyle(bar).getPropertyValue('--target-w').trim();
+        setTimeout(() => { bar.style.width = w; }, 200);
+      });
+    }
+  }, { threshold: 0.3 });
+  const shell = document.getElementById('portalShell');
+  if (shell) portalObserver.observe(shell);
+
+  // FAQ toggle
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Tab switching
+  function switchTab(tab, btn) {
+    document.getElementById('tab-business').style.display = tab === 'business' ? 'block' : 'none';
+    document.getElementById('tab-agent').style.display = tab === 'agent' ? 'block' : 'none';
+    document.querySelectorAll('.form-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── CONFIG ── set your n8n webhook URL here
+  const AAG_WEBHOOK = 'http://localhost:5678/webhook/aag-lead';
+
+  // Form submit
+  function handleSubmit(e, type) {
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form));
+    data._type = type;
+
+    const submitBtn = form.querySelector('[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    fetch(AAG_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(() => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+      form.reset();
+      // Reset wizard state if business form
+      if (type === 'business') {
+        wState = { plan: null, channel: null, setup: null };
+        goToPanel(1);
+        const tg = document.querySelector('.wchannel-card[data-channel="Telegram"]');
+        if (tg) selectChannel(tg);
+      }
+    })
+    .catch(err => {
+      console.error('AAG submission error:', err);
+      alert('Something went wrong — please try again or email us directly.');
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+    });
+  }
+
+  // ── WIZARD ──
+  let wState = { plan: null, channel: null, setup: null };
+
+  function selectPlan(card) {
+    document.querySelectorAll('.wplan-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    wState.plan = card.dataset.plan;
+    document.getElementById('wplan-next').disabled = false;
+  }
+
+  function selectPlanCustom() {
+    // Jump straight to setup step and pre-select hosted
+    wState.plan = 'Executive Setup';
+    document.getElementById('hiddenPlan').value = wState.plan;
+    goToPanel(3);
+  }
+
+  function selectChannel(card) {
+    if (card.classList.contains('disabled')) return;
+    document.querySelectorAll('.wchannel-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    wState.channel = card.dataset.channel;
+    document.getElementById('wchannel-next').disabled = false;
+  }
+
+  function selectSetup(card) {
+    document.querySelectorAll('.wsetup-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    wState.setup = card.dataset.setup;
+    document.getElementById('wsetup-next').disabled = false;
+  }
+
+  function wizardNext(step) {
+    if (step === 1 && !wState.plan) return;
+    if (step === 2 && !wState.channel) return;
+    if (step === 3 && !wState.setup) return;
+    goToPanel(step + 1);
+  }
+
+  function wizardBack(step) {
+    goToPanel(step - 1);
+  }
+
+  function goToPanel(targetStep) {
+    // Update panels
+    document.querySelectorAll('.wpanel').forEach(p => p.classList.remove('active'));
+    document.getElementById('wpanel-' + targetStep).classList.add('active');
+
+    // Update step indicators
+    const steps = document.querySelectorAll('.wstep');
+    const lines = document.querySelectorAll('.wstep-line');
+    steps.forEach((s, i) => {
+      const n = i + 1;
+      s.classList.remove('active', 'done');
+      if (n < targetStep) s.classList.add('done');
+      else if (n === targetStep) s.classList.add('active');
+    });
+    lines.forEach((l, i) => {
+      l.classList.toggle('done', i < targetStep - 1);
+    });
+
+    // If landing on step 4, populate summary and hidden inputs
+    if (targetStep === 4) {
+      document.getElementById('hiddenPlan').value = wState.plan || '';
+      document.getElementById('hiddenChannel').value = wState.channel || '';
+      document.getElementById('hiddenSetup').value = wState.setup || '';
+      buildSummary();
+    }
+
+    // Scroll wizard into view
+    document.getElementById('wizard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function buildSummary() {
+    const chips = [
+      { icon: 'ph:lightning-duotone', label: wState.plan },
+      { icon: 'ph:chat-circle-duotone', label: wState.channel ? wState.channel + ' channel' : null },
+      { icon: 'ph:gear-six-duotone', label: wState.setup },
+    ].filter(c => c.label);
+
+    document.getElementById('wSummary').innerHTML = chips.map(c =>
+      `<span class="wsummary-chip"><iconify-icon icon="${c.icon}" width="14"></iconify-icon>${c.label}</span>`
+    ).join('');
+  }
+
+  // Pre-enable channel next if Telegram auto-selected on first load
+  window.addEventListener('DOMContentLoaded', () => {
+    // Telegram is the only ready channel — auto-select it
+    const tg = document.querySelector('.wchannel-card[data-channel="Telegram"]');
+    if (tg) { selectChannel(tg); }
+    // Nav buttons start disabled until a card is picked
+    const pn = document.getElementById('wplan-next');
+    if (pn) pn.disabled = true;
+    const wn = document.getElementById('wchannel-next');
+    if (wn) wn.disabled = true;
+    const sn = document.getElementById('wsetup-next');
+    if (sn) sn.disabled = true;
+  });
+
+  // Smooth active nav state
+  const sections = document.querySelectorAll('section[id], nav');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = link.getAttribute('href') === `#${entry.target.id}` ? 'var(--brand)' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
