@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AAG.ai — Atlas Automation Group</title>
+  <title>Atlas Automation Group — atlasautomation.tech</title>
   <meta name="description" content="Atlas Automation Group deploys AI-powered automation systems for local businesses — review engines, follow-up flows, AI agents, and full client operations on autopilot." />
   <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
   <style>
@@ -549,7 +549,7 @@
     <a class="logo" href="#">
       <div class="logo-mark">AAG</div>
       <div>
-        <div class="logo-text">AAG.ai</div>
+        <div class="logo-text">AtlasAutomation.tech</div>
         <div class="logo-sub">Atlas Automation Group</div>
       </div>
     </a>
@@ -821,7 +821,7 @@
       <div class="plan-card popular">
         <div class="plan-badge">Most Popular</div>
         <div class="plan-name" style="margin-top:12px;">Growth</div>
-        <div class="plan-price"><sup>$</sup>997<sub>/mo</sub></div>
+        <div class="plan-price"><sup>$</sup>999<sub>/mo</sub></div>
         <div class="plan-desc">For businesses ready to systematically increase repeat revenue and bookings.</div>
         <ul class="plan-features">
           <li>Everything in Starter</li>
@@ -838,7 +838,7 @@
       <!-- Pro -->
       <div class="plan-card">
         <div class="plan-name">Pro</div>
-        <div class="plan-price"><sup>$</sup>1,997<sub>/mo</sub></div>
+        <div class="plan-price"><sup>$</sup>1,499<sub>/mo</sub></div>
         <div class="plan-desc">Full AI ops stack — content, outreach, automations, and monthly strategy.</div>
         <ul class="plan-features">
           <li>Everything in Growth</li>
@@ -980,7 +980,7 @@
         </div>
         <div class="chrome-bar">
           <span class="chrome-lock"><iconify-icon icon="ph:lock-simple-fill" width="11"></iconify-icon></span>
-          client.aag.ai / dashboard
+          portal.atlasautomation.tech / dashboard
         </div>
         <div class="live-badge"><div class="live-dot"></div>LIVE</div>
       </div>
@@ -1504,7 +1504,7 @@
       <a href="#inquiry" class="btn btn-primary btn-lg">Book Free Strategy Call</a>
       <a href="#pricing" class="btn btn-ghost btn-lg">View Pricing</a>
     </div>
-    <p class="text-muted mt-16" style="font-size:12px;">Atlas Automation Group · Los Angeles, CA · aag.ai</p>
+    <p class="text-muted mt-16" style="font-size:12px;">Atlas Automation Group · Los Angeles, CA · atlasautomation.tech · sales@atlasautomation.tech</p>
   </div>
 </section>
 
@@ -1579,7 +1579,7 @@
   }
 
   // ── CONFIG ── set your n8n webhook URL here
-  const AAG_WEBHOOK = 'http://localhost:5678/webhook/aag-lead';
+  const AAG_WEBHOOK = ''; // set your production webhook URL here
 
   // Form submit
   function handleSubmit(e, type) {
@@ -1593,28 +1593,40 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
 
-    fetch(AAG_WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(r => r.ok ? r.json() : Promise.reject(r.status))
-    .then(() => {
+    const onSuccess = () => {
       const toast = document.getElementById('toast');
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 4000);
       form.reset();
-      // Reset wizard state if business form
       if (type === 'business') {
         wState = { plan: null, channel: null, setup: null };
         goToPanel(1);
         const tg = document.querySelector('.wchannel-card[data-channel="Telegram"]');
         if (tg) selectChannel(tg);
       }
+    };
+
+    // Fallback for live site if webhook is not configured yet
+    if (!AAG_WEBHOOK) {
+      const subject = encodeURIComponent('New AAG Lead — ' + (data.business || data.firstName || 'Website Form'));
+      const body = encodeURIComponent(JSON.stringify(data, null, 2));
+      window.location.href = `mailto:sales@atlasautomation.tech?subject=${subject}&body=${body}`;
+      onSuccess();
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+      return;
+    }
+
+    fetch(AAG_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(onSuccess)
     .catch(err => {
       console.error('AAG submission error:', err);
-      alert('Something went wrong — please try again or email us directly.');
+      alert('Something went wrong — please email sales@atlasautomation.tech directly.');
     })
     .finally(() => {
       submitBtn.disabled = false;
