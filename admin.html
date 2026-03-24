@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAG Admin Portal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f5;color:#1a1a1a;min-height:100vh}
+
+/* LOGIN */
+#login-overlay{position:fixed;inset:0;background:#0f0f0f;display:flex;align-items:center;justify-content:center;z-index:1000}
+#login-overlay.hidden{display:none}
+.login-box{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:48px 40px;width:360px;text-align:center}
+.login-box h1{color:#fff;font-size:20px;letter-spacing:2px;margin-bottom:8px}
+.login-box p{color:#888;font-size:13px;margin-bottom:32px}
+.login-box input{width:100%;padding:12px 16px;background:#0f0f0f;border:1px solid #333;border-radius:8px;color:#fff;font-size:15px;margin-bottom:12px;outline:none}
+.login-box input:focus{border-color:#fff}
+.login-box button{width:100%;padding:12px;background:#fff;color:#0f0f0f;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.5px}
+.login-box button:hover{background:#e5e5e5}
+.login-err{color:#f87171;font-size:13px;margin-top:8px;min-height:20px}
+
+/* HEADER */
+header{background:#0f0f0f;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header h1{color:#fff;font-size:15px;font-weight:700;letter-spacing:2px}
+header .hright{display:flex;align-items:center;gap:16px}
+header .hright span{color:#888;font-size:13px}
+.btn-logout{background:transparent;border:1px solid #444;color:#aaa;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer}
+.btn-logout:hover{border-color:#888;color:#fff}
+.refresh-btn{background:transparent;border:1px solid #333;color:#888;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.refresh-btn:hover{border-color:#888;color:#fff}
+.refresh-btn svg{width:12px;height:12px}
+
+/* STATS */
+.stats-bar{background:#fff;border-bottom:1px solid #e5e5e5;padding:16px 24px;display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.stat-card{text-align:center;padding:12px 0}
+.stat-card .val{font-size:28px;font-weight:800;color:#0f0f0f;line-height:1}
+.stat-card .lbl{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.stat-card .sub{font-size:12px;color:#10b981;margin-top:2px}
+
+/* TABS */
+.tabs-nav{background:#fff;border-bottom:1px solid #e5e5e5;padding:0 24px;display:flex;gap:0}
+.tab-btn{padding:14px 20px;font-size:14px;font-weight:600;color:#888;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .15s;margin-bottom:-1px}
+.tab-btn:hover{color:#0f0f0f}
+.tab-btn.active{color:#0f0f0f;border-bottom-color:#0f0f0f}
+.tab-badge{background:#e5e5e5;color:#666;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:6px}
+.tab-badge.red{background:#fee2e2;color:#ef4444}
+
+.main{padding:24px;max-width:1600px;margin:0 auto}
+.panel{display:none}
+.panel.active{display:block}
+
+/* TOOLBAR */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.toolbar h2{font-size:16px;font-weight:700}
+.toolbar-right{display:flex;gap:10px;align-items:center}
+.search-input{padding:8px 12px;border:1px solid #e5e5e5;border-radius:8px;font-size:14px;width:220px;outline:none}
+.search-input:focus{border-color:#0f0f0f}
+
+/* TABLE */
+.table-wrap{background:#fff;border-radius:12px;border:1px solid #e5e5e5;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#fafafa;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#666;border-bottom:1px solid #e5e5e5;white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.cell-name{font-weight:600;color:#0f0f0f}
+.cell-sub{font-size:12px;color:#888;margin-top:2px}
+.cell-email{color:#3b82f6;font-size:12px}
+.cell-ts{color:#aaa;font-size:11px}
+
+/* STATUS BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.badge-new{background:#e0f2fe;color:#0284c7}
+.badge-contacted{background:#fef3c7;color:#d97706}
+.badge-qualified{background:#d1fae5;color:#059669}
+.badge-proposal{background:#ede9fe;color:#7c3aed}
+.badge-won{background:#dcfce7;color:#16a34a}
+.badge-lost{background:#fee2e2;color:#dc2626}
+.badge-pending{background:#fef9c3;color:#ca8a04}
+.badge-reviewing{background:#e0f2fe;color:#0284c7}
+.badge-approved{background:#d1fae5;color:#059669}
+.badge-rejected{background:#fee2e2;color:#dc2626}
+.badge-active{background:#dcfce7;color:#16a34a}
+.badge-inactive{background:#f3f4f6;color:#9ca3af}
+.badge-paused{background:#fef3c7;color:#d97706}
+.badge-cancelled{background:#fee2e2;color:#dc2626}
+
+/* STATUS SELECT */
+.status-sel{border:1px solid #e5e5e5;border-radius:6px;padding:5px 8px;font-size:12px;font-weight:600;background:#fff;cursor:pointer;outline:none;min-width:120px}
+.status-sel:focus{border-color:#0f0f0f}
+
+/* ACTION BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-approve{background:#0f0f0f;color:#fff}
+.btn-approve:hover{background:#333}
+.btn-reject{background:#fff;color:#dc2626;border:1px solid #fecaca}
+.btn-reject:hover{background:#fee2e2}
+.btn-won{background:#16a34a;color:#fff}
+.btn-won:hover{background:#15803d}
+.btn-portal{background:#f4f4f5;color:#0f0f0f;border:1px solid #e5e5e5}
+.btn-portal:hover{background:#e5e5e5}
+.action-cell{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+/* PROGRESS */
+.progress-wrap{display:flex;align-items:center;gap:8px;min-width:140px}
+.progress-bar{flex:1;height:6px;background:#e5e5e5;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:#10b981;border-radius:3px;transition:width .3s}
+.progress-pct{font-size:12px;font-weight:700;color:#0f0f0f;min-width:28px}
+.progress-input{width:60px;padding:4px 6px;border:1px solid #e5e5e5;border-radius:6px;font-size:12px;text-align:center}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:#aaa}
+.empty-icon{font-size:36px;margin-bottom:12px}
+.empty p{font-size:14px}
+
+/* LOADING */
+.loading{text-align:center;padding:60px;color:#aaa;font-size:14px}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#0f0f0f;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;transform:translateY(20px);opacity:0;transition:all .25s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.ok{background:#0f0f0f}
+#toast.err{background:#dc2626}
+
+/* TOKEN CHIP */
+.token-chip{font-family:monospace;background:#f4f4f5;border:1px solid #e5e5e5;border-radius:4px;padding:2px 6px;font-size:11px;color:#666;cursor:pointer;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
+.token-chip:hover{background:#e5e5e5}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center}
+.modal-bg.hidden{display:none}
+.modal{background:#fff;border-radius:12px;padding:32px;width:460px;max-width:95vw}
+.modal h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.modal p{font-size:14px;color:#666;margin-bottom:24px;line-height:1.6}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+  <div class="login-box">
+    <h1>AAG ADMIN</h1>
+    <p>Atlas Automation Group · Operations Portal</p>
+    <input type="password" id="pass-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Enter</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+<header>
+  <h1>AAG ADMIN</h1>
+  <div class="hright">
+    <span id="last-refresh-time"></span>
+    <button class="refresh-btn" onclick="loadAll()" title="Refresh all data">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      Refresh
+    </button>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-card"><div class="val" id="stat-leads">—</div><div class="lbl">Total Leads</div></div>
+  <div class="stat-card"><div class="val" id="stat-pipeline">—</div><div class="lbl">In Pipeline</div></div>
+  <div class="stat-card"><div class="val" id="stat-won">—</div><div class="lbl">Clients Won</div></div>
+  <div class="stat-card"><div class="val" id="stat-agents">—</div><div class="lbl">Active Agents</div></div>
+  <div class="stat-card"><div class="val" id="stat-revenue">—</div><div class="lbl">MRR (Est.)</div></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-nav">
+  <button class="tab-btn active" onclick="switchTab('leads',this)">
+    Leads <span class="tab-badge" id="badge-leads">0</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('agents',this)">
+    Agent Applications <span class="tab-badge red" id="badge-agents">0</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('active-agents',this)">
+    Active Agents <span class="tab-badge" id="badge-aa">0</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('clients',this)">
+    Clients <span class="tab-badge" id="badge-clients">0</span>
+  </button>
+</div>
+
+<div class="main">
+
+  <!-- LEADS PANEL -->
+  <div class="panel active" id="panel-leads">
+    <div class="toolbar">
+      <h2>Business Leads</h2>
+      <div class="toolbar-right">
+        <input type="text" class="search-input" placeholder="Search name, business, email…" oninput="filterTable('leads-table',this.value)">
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div id="leads-loading" class="loading">Loading leads…</div>
+      <table id="leads-table" style="display:none">
+        <thead><tr>
+          <th>Lead</th><th>Business</th><th>Plan</th><th>Channel</th><th>Location</th><th>Status</th><th>Date</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="leads-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- AGENTS PANEL -->
+  <div class="panel" id="panel-agents">
+    <div class="toolbar">
+      <h2>Agent Applications</h2>
+      <div class="toolbar-right">
+        <input type="text" class="search-input" placeholder="Search name, city, email…" oninput="filterTable('agents-table',this.value)">
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div id="agents-loading" class="loading">Loading applications…</div>
+      <table id="agents-table" style="display:none">
+        <thead><tr>
+          <th>Applicant</th><th>City</th><th>Background</th><th>Terms</th><th>Status</th><th>Date</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="agents-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ACTIVE AGENTS PANEL -->
+  <div class="panel" id="panel-active-agents">
+    <div class="toolbar">
+      <h2>Active Agents</h2>
+      <div class="toolbar-right">
+        <input type="text" class="search-input" placeholder="Search name, city, email…" oninput="filterTable('aa-table',this.value)">
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div id="aa-loading" class="loading">Loading agents…</div>
+      <table id="aa-table" style="display:none">
+        <thead><tr>
+          <th>Agent</th><th>City</th><th>Leads Sub.</th><th>Leads Won</th><th>Commission</th><th>Status</th><th>Portal</th>
+        </tr></thead>
+        <tbody id="aa-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CLIENTS PANEL -->
+  <div class="panel" id="panel-clients">
+    <div class="toolbar">
+      <h2>Clients</h2>
+      <div class="toolbar-right">
+        <input type="text" class="search-input" placeholder="Search name, business, email…" oninput="filterTable('clients-table',this.value)">
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div id="clients-loading" class="loading">Loading clients…</div>
+      <table id="clients-table" style="display:none">
+        <thead><tr>
+          <th>Client</th><th>Business</th><th>Plan</th><th>Setup Progress</th><th>Status</th><th>Portal</th>
+        </tr></thead>
+        <tbody id="clients-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- CONFIRM MODAL -->
+<div class="modal-bg hidden" id="confirm-modal">
+  <div class="modal">
+    <h3 id="modal-title">Confirm Action</h3>
+    <p id="modal-body">Are you sure?</p>
+    <div class="modal-btns">
+      <button class="btn btn-portal" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-approve" id="modal-confirm-btn" onclick="runModalAction()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'https://hooks.atlasautomation.tech/webhook';
+const ADMIN_TOKEN = 'aag-admin-2026';
+const PORTAL = 'https://atlasautomation.tech';
+const PASS = 'aag2026';
+
+let data = { leads: [], agents: [], aa: [], clients: [] };
+let modalAction = null;
+
+// ── AUTH ──────────────────────────────────────
+function doLogin() {
+  const v = document.getElementById('pass-input').value;
+  if (v === PASS) {
+    localStorage.setItem('aag-admin', '1');
+    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    loadAll();
+  } else {
+    document.getElementById('login-err').textContent = 'Incorrect password.';
+  }
+}
+function logout() {
+  localStorage.removeItem('aag-admin');
+  location.reload();
+}
+if (localStorage.getItem('aag-admin') === '1') {
+  document.getElementById('login-overlay').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+}
+
+// ── TABS ──────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+// ── DATA FETCH ────────────────────────────────
+async function fetchTab(path) {
+  try {
+    const r = await fetch(`${API}/${path}?token=${ADMIN_TOKEN}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!r.ok) return [];
+    const j = await r.json();
+    return j.rows || [];
+  } catch(e) { return []; }
+}
+
+async function loadAll() {
+  const [leads, agents, aa, clients] = await Promise.all([
+    fetchTab('aag-read-leads'),
+    fetchTab('aag-read-agents'),
+    fetchTab('aag-read-active-agents'),
+    fetchTab('aag-read-clients'),
+  ]);
+  data = { leads, agents, aa, clients };
+  renderAll();
+  updateStats();
+  const now = new Date();
+  document.getElementById('last-refresh-time').textContent =
+    'Updated ' + now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+
+function updateStats() {
+  const { leads, aa, clients } = data;
+  document.getElementById('stat-leads').textContent = leads.length;
+  const pipeline = leads.filter(r => !['Won','Lost'].includes(r.Status)).length;
+  document.getElementById('stat-pipeline').textContent = pipeline;
+  document.getElementById('stat-won').textContent = leads.filter(r=>r.Status==='Won').length;
+  document.getElementById('stat-agents').textContent = aa.filter(r=>r.Status==='Active').length;
+  const plans = {Solo:97, Business:197, Pro:397};
+  const mrr = clients.filter(r=>r.Status==='Active').reduce((s,r)=>s+(plans[r.Plan]||0),0);
+  document.getElementById('stat-revenue').textContent = mrr ? '$'+mrr.toLocaleString() : '$0';
+
+  document.getElementById('badge-leads').textContent = leads.length;
+  const pending = data.agents.filter(r=>['Pending Review','Reviewing'].includes(r.Status)).length;
+  document.getElementById('badge-agents').textContent = pending || data.agents.length;
+  document.getElementById('badge-aa').textContent = aa.length;
+  document.getElementById('badge-clients').textContent = clients.length;
+}
+
+// ── RENDER ────────────────────────────────────
+function renderAll() {
+  renderLeads();
+  renderAgents();
+  renderAA();
+  renderClients();
+}
+
+function badge(status) {
+  const map = {
+    'New':'new','Contacted':'contacted','Qualified':'qualified',
+    'Proposal Sent':'proposal','Won':'won','Lost':'lost',
+    'Pending Review':'pending','Reviewing':'reviewing',
+    'Approved':'approved','Rejected':'rejected',
+    'Active':'active','Inactive':'inactive','Paused':'paused','Cancelled':'cancelled'
+  };
+  const cls = map[status] || 'new';
+  return `<span class="badge badge-${cls}">${status}</span>`;
+}
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  try { return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+  catch(e){ return ts.substring(0,10); }
+}
+
+function statusSelect(email, sheet, current, options) {
+  const opts = options.map(o => `<option${o===current?' selected':''}>${o}</option>`).join('');
+  return `<select class="status-sel" onchange="updateStatus('${sheet}','${email}',this.value)">${opts}</select>`;
+}
+
+// LEADS
+function renderLeads() {
+  const tbody = document.getElementById('leads-body');
+  const tbl = document.getElementById('leads-table');
+  document.getElementById('leads-loading').style.display = 'none';
+  tbl.style.display = '';
+  if (!data.leads.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">📋</div><p>No leads yet</p></div></td></tr>`;
+    return;
+  }
+  const statuses = ['New','Contacted','Qualified','Proposal Sent','Won','Lost'];
+  tbody.innerHTML = data.leads.map((r,i) => `
+    <tr data-search="${(r.Name+r.Business+r.Email+r.Location+r.Plan).toLowerCase()}">
+      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div><div class="cell-sub">${esc(r.Phone||'')}</div></td>
+      <td><div class="cell-name">${esc(r.Business||'—')}</div></td>
+      <td>${esc(r.Plan||'—')}</td>
+      <td>${esc(r.Channel||'—')}</td>
+      <td>${esc(r.Location||'—')}</td>
+      <td>${statusSelect(r.Email,'leads',r.Status||'New',statuses)}</td>
+      <td class="cell-ts">${fmtDate(r.Timestamp)}</td>
+      <td><div class="action-cell">
+        ${r.Status!=='Won' ? `<button class="btn btn-won" onclick="confirmWon('${esc(r.Email)}','${esc(r.Name)}')">Mark Won</button>` : badge('Won')}
+      </div></td>
+    </tr>`).join('');
+}
+
+// AGENTS
+function renderAgents() {
+  const tbody = document.getElementById('agents-body');
+  const tbl = document.getElementById('agents-table');
+  document.getElementById('agents-loading').style.display = 'none';
+  tbl.style.display = '';
+  if (!data.agents.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">🙋</div><p>No applications yet</p></div></td></tr>`;
+    return;
+  }
+  const statuses = ['Pending Review','Reviewing','Approved','Rejected'];
+  tbody.innerHTML = data.agents.map(r => `
+    <tr data-search="${(r.Name+r.Email+r.City+r.Background).toLowerCase()}">
+      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div><div class="cell-sub">${esc(r.Phone||'')}</div></td>
+      <td>${esc(r.City||'—')}</td>
+      <td style="max-width:200px;font-size:12px;color:#666">${esc((r.Background||'').substring(0,80))}${(r.Background||'').length>80?'…':''}</td>
+      <td>${r['Agreed to Terms']==='Yes'?'<span class="badge badge-active">Yes</span>':'<span class="badge badge-lost">No</span>'}</td>
+      <td>${statusSelect(r.Email,'agents',r.Status||'Pending Review',statuses)}</td>
+      <td class="cell-ts">${fmtDate(r.Timestamp)}</td>
+      <td><div class="action-cell">
+        ${!['Approved','Rejected'].includes(r.Status) ? `
+          <button class="btn btn-approve" onclick="confirmApprove('${esc(r.Email)}','${esc(r.Name)}')">Approve</button>
+          <button class="btn btn-reject" onclick="confirmReject('${esc(r.Email)}','${esc(r.Name)}')">Reject</button>
+        ` : badge(r.Status)}
+      </div></td>
+    </tr>`).join('');
+}
+
+// ACTIVE AGENTS
+function renderAA() {
+  const tbody = document.getElementById('aa-body');
+  const tbl = document.getElementById('aa-table');
+  document.getElementById('aa-loading').style.display = 'none';
+  tbl.style.display = '';
+  if (!data.aa.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">🤝</div><p>No active agents yet</p></div></td></tr>`;
+    return;
+  }
+  const statuses = ['Active','Inactive'];
+  tbody.innerHTML = data.aa.map(r => `
+    <tr data-search="${(r.Name+r.Email+r.City).toLowerCase()}">
+      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div></td>
+      <td>${esc(r.City||'—')}</td>
+      <td style="text-align:center;font-weight:700">${r.LeadsSubmitted||'0'}</td>
+      <td style="text-align:center;font-weight:700;color:#16a34a">${r.LeadsWon||'0'}</td>
+      <td style="font-weight:700;color:#0f0f0f">$${Number(r.TotalCommission||0).toLocaleString()}</td>
+      <td>${statusSelect(r.Email,'active-agents',r.Status||'Active',statuses)}</td>
+      <td>
+        ${r.Token ? `<button class="btn btn-portal" onclick="copyPortalLink('agent','${r.Token}')">Copy Link</button>` : '—'}
+      </td>
+    </tr>`).join('');
+}
+
+// CLIENTS
+function renderClients() {
+  const tbody = document.getElementById('clients-body');
+  const tbl = document.getElementById('clients-table');
+  document.getElementById('clients-loading').style.display = 'none';
+  tbl.style.display = '';
+  if (!data.clients.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">🏢</div><p>No clients yet — mark a lead as Won to onboard them</p></div></td></tr>`;
+    return;
+  }
+  const statuses = ['Active','Paused','Cancelled'];
+  tbody.innerHTML = data.clients.map(r => `
+    <tr data-search="${(r.Name+r.Email+r.Business+r.Plan).toLowerCase()}">
+      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div></td>
+      <td><div class="cell-name">${esc(r.Business||'—')}</div></td>
+      <td><span class="badge badge-active">${esc(r.Plan||'—')}</span></td>
+      <td>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" style="width:${r.SetupProgress||0}%"></div></div>
+          <span class="progress-pct">${r.SetupProgress||0}%</span>
+          <input type="number" class="progress-input" min="0" max="100" value="${r.SetupProgress||0}"
+            onchange="updateProgress('${esc(r.Email)}',this.value)"
+            style="margin-left:4px">
+        </div>
+      </td>
+      <td>${statusSelect(r.Email,'clients',r.Status||'Active',statuses)}</td>
+      <td>
+        ${r.Token ? `<button class="btn btn-portal" onclick="copyPortalLink('client','${r.Token}')">Copy Link</button>` : '—'}
+      </td>
+    </tr>`).join('');
+}
+
+// ── ACTIONS ───────────────────────────────────
+async function updateStatus(sheet, email, status) {
+  try {
+    const r = await fetch(`${API}/aag-update-status`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet, email, status, field: 'Status', value: status, adminToken: ADMIN_TOKEN })
+    });
+    if (r.ok) toast('Status updated', 'ok');
+    else toast('Update failed', 'err');
+  } catch(e) { toast('Network error', 'err'); }
+}
+
+async function updateProgress(email, value) {
+  try {
+    await fetch(`${API}/aag-update-status`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet: 'clients', email, field: 'SetupProgress', value, status: value, adminToken: ADMIN_TOKEN })
+    });
+    toast('Progress saved', 'ok');
+  } catch(e) { toast('Network error', 'err'); }
+}
+
+function confirmApprove(email, name) {
+  openModal(
+    'Approve Agent',
+    `Approve <strong>${esc(name)}</strong>? They'll receive an onboarding email with their portal link and commission details.`,
+    async () => {
+      const r = await fetch(`${API}/aag-approve-agent`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email, adminToken: ADMIN_TOKEN })
+      });
+      const j = await r.json().catch(()=>({}));
+      if (r.ok && j.ok) { toast('Agent approved! Onboarding email sent.', 'ok'); await loadAll(); }
+      else toast('Error: ' + (j.error||'unknown'), 'err');
+    }
+  );
+}
+
+function confirmReject(email, name) {
+  openModal(
+    'Reject Application',
+    `Reject <strong>${esc(name)}</strong>'s application? Their status will be updated to Rejected.`,
+    async () => {
+      await updateStatus('agents', email, 'Rejected');
+      await loadAll();
+    },
+    true
+  );
+}
+
+function confirmWon(email, name) {
+  openModal(
+    'Mark as Won 🎉',
+    `Mark <strong>${esc(name)}</strong> as a won client? They'll be onboarded, added to the Clients tab, and sent a welcome email with their portal link.`,
+    async () => {
+      const r = await fetch(`${API}/aag-client-won`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email, adminToken: ADMIN_TOKEN })
+      });
+      const j = await r.json().catch(()=>({}));
+      if (r.ok && j.ok) { toast('Client won! Welcome email sent.', 'ok'); await loadAll(); }
+      else toast('Error: ' + (j.error||'unknown'), 'err');
+    }
+  );
+}
+
+function copyPortalLink(type, token) {
+  const url = `${PORTAL}/${type}-portal.html?token=${token}`;
+  navigator.clipboard.writeText(url).then(() => toast('Link copied!', 'ok'));
+}
+
+// ── MODAL ─────────────────────────────────────
+function openModal(title, body, action, danger=false) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  const btn = document.getElementById('modal-confirm-btn');
+  btn.className = 'btn ' + (danger ? 'btn-reject' : 'btn-approve');
+  btn.textContent = danger ? 'Confirm Reject' : 'Confirm';
+  modalAction = action;
+  document.getElementById('confirm-modal').classList.remove('hidden');
+}
+function closeModal() { document.getElementById('confirm-modal').classList.add('hidden'); modalAction = null; }
+async function runModalAction() {
+  closeModal();
+  if (modalAction) await modalAction();
+}
+
+// ── UTILS ─────────────────────────────────────
+function filterTable(tableId, q) {
+  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+  const lq = q.toLowerCase();
+  rows.forEach(r => {
+    const s = r.dataset.search || '';
+    r.style.display = (!q || s.includes(lq)) ? '' : 'none';
+  });
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+let toastTimer;
+function toast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 3000);
+}
+
+// ── INIT ──────────────────────────────────────
+if (localStorage.getItem('aag-admin') === '1') loadAll();
+setInterval(loadAll, 30000);
+</script>
+</body>
+</html>

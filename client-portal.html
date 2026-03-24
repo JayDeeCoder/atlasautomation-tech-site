@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — Atlas Automation Group</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f5;color:#1a1a1a;min-height:100vh}
+
+#loading-state{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.spinner{width:36px;height:36px;border:3px solid #e5e5e5;border-top-color:#0f0f0f;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+#error-state{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px}
+#error-state.show{display:flex}
+#error-state h2{font-size:20px;margin-bottom:8px}
+#error-state p{color:#888;font-size:14px;line-height:1.7}
+
+header{background:#0f0f0f;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{color:#fff;font-size:14px;font-weight:800;letter-spacing:2px}
+.client-badge{color:#fff;font-size:13px;font-weight:600;background:#1a1a1a;padding:5px 14px;border-radius:20px}
+
+.hero{background:#0f0f0f;padding:40px 24px 32px;text-align:center;color:#fff}
+.hero h1{font-size:26px;font-weight:800;margin-bottom:6px}
+.hero p{color:#888;font-size:14px}
+.plan-badge{display:inline-block;background:#fff;color:#0f0f0f;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-top:12px}
+
+.content{max-width:760px;margin:0 auto;padding:24px}
+
+.section{background:#fff;border-radius:12px;border:1px solid #e5e5e5;margin-bottom:20px;overflow:hidden}
+.section-header{padding:18px 20px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center}
+.section-header h2{font-size:15px;font-weight:700}
+.section-body{padding:24px}
+
+/* SETUP PROGRESS */
+.setup-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.setup-title{font-size:16px;font-weight:700}
+.setup-pct{font-size:28px;font-weight:800;color:#0f0f0f}
+.setup-bar{height:12px;background:#f0f0f0;border-radius:6px;overflow:hidden;margin-bottom:24px}
+.setup-bar-fill{height:100%;background:linear-gradient(90deg,#10b981,#059669);border-radius:6px;transition:width .8s ease}
+
+/* CHECKLIST */
+.checklist{display:flex;flex-direction:column;gap:12px}
+.check-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:10px;border:1px solid #f0f0f0}
+.check-item.done{border-color:#d1fae5;background:#f0fdf4}
+.check-item.active{border-color:#fef3c7;background:#fffbeb}
+.check-item.pending{border-color:#f0f0f0;background:#fafafa;opacity:0.7}
+.check-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.check-item.done .check-icon{background:#dcfce7;color:#16a34a}
+.check-item.active .check-icon{background:#fef9c3;color:#ca8a04}
+.check-item.pending .check-icon{background:#f4f4f5;color:#9ca3af}
+.check-text{flex:1}
+.check-label{font-size:14px;font-weight:600}
+.check-sub{font-size:12px;color:#888;margin-top:2px}
+.check-status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.check-item.done .check-status{color:#16a34a}
+.check-item.active .check-status{color:#d97706}
+.check-item.pending .check-status{color:#9ca3af}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:500px){.stats-row{grid-template-columns:1fr}}
+.stat-mini{text-align:center;padding:16px;border:1px solid #f0f0f0;border-radius:10px}
+.stat-mini .val{font-size:28px;font-weight:800;color:#0f0f0f}
+.stat-mini .lbl{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px}
+
+/* BILLING */
+.billing-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f5f5f5;font-size:14px}
+.billing-row:last-child{border:none}
+.billing-label{color:#666}
+.billing-val{font-weight:700;color:#0f0f0f}
+.billing-badge{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.paid{background:#dcfce7;color:#16a34a}
+.due{background:#fef3c7;color:#d97706}
+
+/* SUPPORT */
+.support-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.support-options{grid-template-columns:1fr}}
+.support-card{border:1px solid #e5e5e5;border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:12px;text-decoration:none;color:#1a1a1a;transition:all .15s}
+.support-card:hover{border-color:#0f0f0f;background:#fafafa}
+.support-card .icon{font-size:22px;flex-shrink:0}
+.support-card .label{font-size:14px;font-weight:600}
+.support-card .sub{font-size:12px;color:#888;margin-top:1px}
+
+/* MESSAGE FORM */
+.msg-form{display:flex;flex-direction:column;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid #f0f0f0}
+.msg-form textarea{padding:12px;border:1px solid #e5e5e5;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;min-height:80px;outline:none}
+.msg-form textarea:focus{border-color:#0f0f0f}
+.btn-msg{align-self:flex-end;padding:10px 20px;background:#0f0f0f;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-msg:hover{background:#333}
+.btn-msg:disabled{opacity:0.5;cursor:not-allowed}
+
+/* STATUS BADGE */
+.status-badge{display:inline-flex;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.status-active{background:#dcfce7;color:#16a34a}
+.status-paused{background:#fef3c7;color:#d97706}
+.status-cancelled{background:#fee2e2;color:#dc2626}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#0f0f0f;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;transform:translateY(20px);opacity:0;transition:all .25s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.err{background:#dc2626}
+</style>
+</head>
+<body>
+
+<div id="loading-state"><div class="spinner"></div></div>
+
+<div id="error-state">
+  <div style="font-size:48px;margin-bottom:16px">🔒</div>
+  <h2>Portal Not Found</h2>
+  <p>This client portal link is invalid or expired.<br>
+  Contact us at <a href="mailto:support@atlasautomation.tech" style="color:#0f0f0f">support@atlasautomation.tech</a></p>
+</div>
+
+<div id="app" style="display:none">
+  <header>
+    <div class="logo">ATLAS AUTOMATION GROUP</div>
+    <div class="client-badge" id="header-plan">—</div>
+  </header>
+
+  <div class="hero">
+    <p>Welcome back</p>
+    <h1 id="hero-name">—</h1>
+    <p id="hero-business" style="color:#555;font-size:15px;margin-top:4px">—</p>
+    <div class="plan-badge" id="hero-plan">—</div>
+  </div>
+
+  <div class="content">
+
+    <!-- SETUP PROGRESS -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🚀 Setup Progress</h2>
+        <span id="status-badge" class="status-badge status-active">Active</span>
+      </div>
+      <div class="section-body">
+        <div class="setup-header">
+          <div class="setup-title">Your automation is being built</div>
+          <div class="setup-pct" id="setup-pct">0%</div>
+        </div>
+        <div class="setup-bar"><div class="setup-bar-fill" id="setup-fill" style="width:0%"></div></div>
+
+        <div class="checklist" id="setup-checklist">
+          <!-- Rendered by JS based on progress -->
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTOMATION STATS -->
+    <div class="section">
+      <div class="section-header"><h2>📊 Your Automation</h2></div>
+      <div class="section-body">
+        <div id="channel-info" style="font-size:14px;color:#666;margin-bottom:16px">
+          Channel: <strong id="channel-display">—</strong>
+        </div>
+        <div class="stats-row">
+          <div class="stat-mini">
+            <div class="val">—</div>
+            <div class="lbl">Responses<br>This Month</div>
+          </div>
+          <div class="stat-mini">
+            <div class="val">—</div>
+            <div class="lbl">Avg Response<br>Time</div>
+          </div>
+          <div class="stat-mini">
+            <div class="val">—</div>
+            <div class="lbl">Reviews<br>Flagged</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:#aaa;text-align:center;margin-top:16px">Live analytics available after go-live</p>
+      </div>
+    </div>
+
+    <!-- BILLING -->
+    <div class="section">
+      <div class="section-header"><h2>💳 Billing</h2></div>
+      <div class="section-body">
+        <div class="billing-row">
+          <div class="billing-label">Monthly Plan</div>
+          <div class="billing-val" id="bill-plan">—</div>
+        </div>
+        <div class="billing-row">
+          <div class="billing-label">Setup Fee</div>
+          <div class="billing-val">$299 <span class="billing-badge paid">Paid</span></div>
+        </div>
+        <div class="billing-row">
+          <div class="billing-label">Next Billing Date</div>
+          <div class="billing-val" id="bill-next">—</div>
+        </div>
+        <div class="billing-row">
+          <div class="billing-label">Account Status</div>
+          <div class="billing-val"><span id="billing-status" class="billing-badge paid">Active</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPORT -->
+    <div class="section">
+      <div class="section-header"><h2>💬 Support</h2></div>
+      <div class="section-body">
+        <div class="support-options">
+          <a href="mailto:support@atlasautomation.tech" class="support-card">
+            <div class="icon">📧</div>
+            <div><div class="label">Email Support</div><div class="sub">support@atlasautomation.tech</div></div>
+          </a>
+          <a href="tel:" class="support-card" id="support-phone-link">
+            <div class="icon">📞</div>
+            <div><div class="label">Call Us</div><div class="sub">Business hours · M–F 9–6</div></div>
+          </a>
+        </div>
+
+        <div class="msg-form">
+          <p style="font-size:14px;font-weight:600">Send a message</p>
+          <textarea id="msg-text" placeholder="Ask a question, request a change, report an issue…"></textarea>
+          <button class="btn-msg" id="msg-btn" onclick="sendMessage()">Send Message</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<div id="toast"></div>
+
+<script>
+const API = 'https://hooks.atlasautomation.tech/webhook';
+const token = new URLSearchParams(location.search).get('token');
+
+const PLANS = { Solo: 97, Business: 197, Pro: 397 };
+
+const CHECKLIST_STEPS = [
+  { label: 'Account Created', sub: 'Your account has been set up', threshold: 0 },
+  { label: 'Intake Completed', sub: 'Business info and goals collected', threshold: 10 },
+  { label: 'Automation Configured', sub: 'AI responses trained for your business', threshold: 40 },
+  { label: 'Integration Testing', sub: 'Testing across your platforms', threshold: 70 },
+  { label: 'Go-Live & Handoff', sub: "You're live — automation is running!", threshold: 100 },
+];
+
+async function init() {
+  if (!token) { showError(); return; }
+  try {
+    const r = await fetch(`${API}/aag-client-data?token=${encodeURIComponent(token)}`);
+    if (!r.ok) { showError(); return; }
+    const j = await r.json();
+    if (!j.client) { showError(); return; }
+    render(j.client);
+  } catch(e) { showError(); }
+}
+
+function showError() {
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('error-state').classList.add('show');
+}
+
+function render(c) {
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  // Header
+  document.getElementById('header-plan').textContent = (c.Plan || '—') + ' Plan';
+  document.title = `${c.Business || c.Name} Portal — AAG`;
+
+  // Hero
+  document.getElementById('hero-name').textContent = c.Name || '—';
+  document.getElementById('hero-business').textContent = c.Business || '';
+  document.getElementById('hero-plan').textContent = (c.Plan || '—') + ' Plan — $' + (PLANS[c.Plan] || '—') + '/mo';
+
+  // Status badge
+  const statusEl = document.getElementById('status-badge');
+  statusEl.textContent = c.Status || 'Active';
+  statusEl.className = 'status-badge status-' + (c.Status||'Active').toLowerCase();
+
+  // Setup progress
+  const progress = parseInt(c.SetupProgress || 0, 10);
+  document.getElementById('setup-pct').textContent = progress + '%';
+  document.getElementById('setup-fill').style.width = progress + '%';
+  renderChecklist(progress);
+
+  // Automation
+  document.getElementById('channel-display').textContent = c.Channel || 'Configured';
+
+  // Billing
+  const price = PLANS[c.Plan];
+  document.getElementById('bill-plan').textContent = c.Plan + (price ? ` — $${price}/mo` : '');
+  const nextBill = new Date();
+  nextBill.setMonth(nextBill.getMonth() + 1);
+  nextBill.setDate(1);
+  document.getElementById('bill-next').textContent = nextBill.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+  const bStatus = document.getElementById('billing-status');
+  bStatus.textContent = c.Status || 'Active';
+  bStatus.className = 'billing-badge ' + (c.Status === 'Active' ? 'paid' : 'due');
+}
+
+function renderChecklist(progress) {
+  const container = document.getElementById('setup-checklist');
+  container.innerHTML = CHECKLIST_STEPS.map((step, i) => {
+    let state = 'pending';
+    if (progress > step.threshold) state = 'done';
+    else if (i > 0 && progress >= CHECKLIST_STEPS[i-1].threshold) state = 'active';
+    else if (i === 0) state = 'done';
+
+    const icons = { done: '✅', active: '🔄', pending: '⬜' };
+    const labels = { done: 'Complete', active: 'In Progress', pending: 'Upcoming' };
+
+    return `<div class="check-item ${state}">
+      <div class="check-icon">${icons[state]}</div>
+      <div class="check-text">
+        <div class="check-label">${step.label}</div>
+        <div class="check-sub">${step.sub}</div>
+      </div>
+      <div class="check-status">${labels[state]}</div>
+    </div>`;
+  }).join('');
+}
+
+async function sendMessage() {
+  const text = document.getElementById('msg-text').value.trim();
+  if (!text) return;
+  const btn = document.getElementById('msg-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  // Send via Telegram to support
+  const TG_BOT = '8496306766:AAG56g-I0F62ypEGwB-1n8fWAOVKpN1qlqg';
+  const TG_CHAT = '-1003652635742';
+  const TG_THREAD = '189';
+
+  try {
+    await fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        chat_id: TG_CHAT,
+        message_thread_id: TG_THREAD,
+        text: `💬 *CLIENT MESSAGE*\n\nFrom portal token: ${token.substring(0,8)}…\n\n${text}`,
+        parse_mode: 'Markdown'
+      })
+    });
+    toast('Message sent! We\'ll respond within 24 hours.', 'ok');
+    document.getElementById('msg-text').value = '';
+  } catch(e) {
+    window.location.href = `mailto:support@atlasautomation.tech?subject=Client Support&body=${encodeURIComponent(text)}`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Send Message';
+}
+
+let toastTimer;
+function toast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 4000);
+}
+
+init();
+</script>
+</body>
+</html>
