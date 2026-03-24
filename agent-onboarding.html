@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas Automation Group Sales Agent Onboarding Guide</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --purple-deep: #1a0533;
+    --purple-mid: #2d0f52;
+    --purple-card: #3a1460;
+    --purple-light: #5a2488;
+    --gold: #f59e0b;
+    --gold-dark: #d97706;
+    --gold-light: #fbbf24;
+    --white: #ffffff;
+    --muted: #c4b5d4;
+    --text-body: #e8dff5;
+    --green: #10b981;
+    --red: #ef4444;
+    --sidebar-width: 260px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--purple-deep);
+    color: var(--white);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ===== TOPBAR ===== */
+  .topbar {
+    background: var(--purple-mid);
+    border-bottom: 2px solid var(--gold);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .topbar-brand {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar-logo {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .topbar-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .topbar-contact {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .topbar-contact strong {
+    color: var(--gold);
+  }
+
+  /* ===== LAYOUT ===== */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 62px);
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--purple-mid);
+    border-right: 1px solid rgba(245, 158, 11, 0.15);
+    padding: 24px 16px;
+    position: sticky;
+    top: 62px;
+    height: calc(100vh - 62px);
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    margin-top: 20px;
+    padding-left: 10px;
+  }
+
+  .sidebar-label:first-child { margin-top: 0; }
+
+  .sidebar-link {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.3;
+  }
+
+  .sidebar-link:hover {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--white);
+  }
+
+  .sidebar-link.active {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ===== CONTENT ===== */
+  .content {
+    flex: 1;
+    max-width: 780px;
+    padding: 40px 36px 80px;
+    overflow-x: hidden;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    margin-bottom: 60px;
+    scroll-margin-top: 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .section-icon {
+    font-size: 28px;
+    min-width: 36px;
+    margin-top: 2px;
+  }
+
+  .section-heading {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .section-subheading {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ===== WELCOME ===== */
+  .welcome-hero {
+    background: linear-gradient(135deg, #2d0f52, #3d1460);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 14px;
+    padding: 36px 32px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 140px;
+    height: 140px;
+    border: 28px solid rgba(245, 158, 11, 0.07);
+    border-radius: 50%;
+  }
+
+  .welcome-hero h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .welcome-hero p {
+    color: var(--text-body);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .commission-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .commission-card {
+    background: var(--purple-card);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .commission-card .plan {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .commission-card .sale-price {
+    font-size: 14px;
+    color: var(--text-body);
+    margin-bottom: 6px;
+  }
+
+  .commission-card .your-cut {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .commission-card .per-mo {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ===== SCRIPT BLOCK ===== */
+  .script-block {
+    background: var(--purple-card);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 20px;
+    margin: 16px 0;
+  }
+
+  .script-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .script-text {
+    color: var(--text-body);
+    font-size: 14px;
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .script-text em {
+    font-style: normal;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .script-note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: normal;
+    padding-top: 8px;
+    border-top: 1px solid rgba(245, 158, 11, 0.15);
+  }
+
+  /* ===== STEP LIST ===== */
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .step-list::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), rgba(245,158,11,0.1));
+  }
+
+  .step-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    position: relative;
+    padding-bottom: 24px;
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--gold);
+    color: var(--purple-deep);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 900;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-body { flex: 1; padding-top: 4px; }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+
+  .code-inline {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--gold-light);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+  }
+
+  /* ===== CHECKLIST ===== */
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.5;
+  }
+
+  .checklist li::before {
+    content: '☐';
+    color: var(--gold);
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+
+  .checklist li strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* ===== VERTICAL SCRIPTS ===== */
+  .vertical-card {
+    background: var(--purple-mid);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .vertical-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .vertical-icon { font-size: 24px; }
+
+  .vertical-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .vertical-context {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ===== FAQ TABLE ===== */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(245, 158, 11, 0.1);
+  }
+
+  .faq-item:last-child { border-bottom: none; }
+
+  .faq-q {
+    background: var(--purple-mid);
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: background 0.15s;
+    user-select: none;
+  }
+
+  .faq-q:hover { background: var(--purple-card); }
+
+  .faq-q-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    flex: 1;
+  }
+
+  .faq-q-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--red);
+    background: rgba(239, 68, 68, 0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .faq-chevron {
+    color: var(--gold);
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+  .faq-a {
+    display: none;
+    padding: 16px 20px;
+    background: var(--purple-card);
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.7;
+    border-top: 1px solid rgba(245, 158, 11, 0.1);
+  }
+
+  .faq-item.open .faq-a { display: block; }
+
+  .faq-a strong {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  /* ===== CONTACT CARD ===== */
+  .contact-card {
+    background: linear-gradient(135deg, #2d0f52, #3d1460);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  .contact-card h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .contact-card .sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--purple-card);
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+
+  .contact-row-icon { font-size: 20px; }
+  .contact-row-label { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; }
+  .contact-row-value { font-size: 15px; font-weight: 700; color: var(--white); }
+
+  /* ===== QUICK REFERENCE BADGE ===== */
+  .info-box {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+
+  .info-box strong { color: var(--gold-light); }
+
+  .tip-box {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+
+  .tip-box::before {
+    content: 'PRO TIP  ';
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 1px;
+    font-size: 10px;
+  }
+
+  /* ===== EARNINGS CALC ===== */
+  .earnings-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .earnings-table th {
+    background: var(--purple-card);
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: left;
+  }
+
+  .earnings-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-body);
+    border-top: 1px solid rgba(245, 158, 11, 0.08);
+  }
+
+  .earnings-table tr:nth-child(even) td { background: rgba(245, 158, 11, 0.03); }
+  .earnings-table tr:last-child td { font-weight: 700; color: var(--gold); font-size: 15px; }
+
+  .earnings-table td:first-child { color: var(--white); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 24px 16px 60px; }
+    .commission-grid { grid-template-columns: 1fr; }
+    .topbar-contact { display: none; }
+    .topbar { padding: 12px 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .welcome-hero { padding: 24px 18px; }
+    .section-heading { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">Atlas Automation Group</div>
+    <div class="topbar-subtitle">Sales Agent Onboarding Guide</div>
+  </div>
+  <div class="topbar-contact">
+    <strong>Jay · (213) 917-4798</strong><br>
+    jayhuntrmanagement@gmail.com
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Getting Started</div>
+    <a class="sidebar-link" href="#welcome">Welcome</a>
+    <a class="sidebar-link" href="#commission">Commission Structure</a>
+
+    <div class="sidebar-label">The Pitch</div>
+    <a class="sidebar-link" href="#pitch-script">Full Pitch Script</a>
+    <a class="sidebar-link" href="#demo-flow">Demo Flow</a>
+    <a class="sidebar-link" href="#close">Closing the Sale</a>
+
+    <div class="sidebar-label">Verticals</div>
+    <a class="sidebar-link" href="#auto">Auto Shop Script</a>
+    <a class="sidebar-link" href="#salon">Salon Script</a>
+    <a class="sidebar-link" href="#spa">Spa Script</a>
+    <a class="sidebar-link" href="#restaurant">Restaurant Script</a>
+
+    <div class="sidebar-label">Operations</div>
+    <a class="sidebar-link" href="#client-onboarding">Onboarding a Client</a>
+    <a class="sidebar-link" href="#daily-routine">Daily Routine</a>
+
+    <div class="sidebar-label">Support</div>
+    <a class="sidebar-link" href="#objections">Objection Handlers</a>
+    <a class="sidebar-link" href="#contact-jay">Contact Jay</a>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- WELCOME -->
+    <div class="section" id="welcome">
+      <div class="section-header">
+        <div class="section-icon">👋</div>
+        <div>
+          <div class="section-heading">Welcome to the Atlas Automation Group Sales Team</div>
+          <div class="section-subheading">Everything you need to close your first deal today</div>
+        </div>
+      </div>
+
+      <div class="welcome-hero">
+        <h2>You're sitting on a gold mine.</h2>
+        <p>Every auto shop, salon, spa, restaurant, and gym in your city has a problem: their customers walk out the door and never come back — not because they had a bad experience, but because nobody followed up. No reminder. No review request. No win-back text. Just silence.</p>
+        <p style="margin-top:12px;">Atlas Automation Group fixes that with automated SMS. You're not selling software — you're selling <strong style="color:var(--gold-light)">more customers, more reviews, and more revenue</strong>. Local business owners understand this immediately. Your job is to show them how it works and get them started today.</p>
+      </div>
+
+      <div class="info-box">
+        <strong>The offer:</strong> 30-day free trial, same-day signup only. No credit card required upfront. Setup is done within 24 hours by the tech team. You close the deal, Jay's team handles the rest.
+      </div>
+    </div>
+
+    <!-- COMMISSION -->
+    <div class="section" id="commission">
+      <div class="section-header">
+        <div class="section-icon">💰</div>
+        <div>
+          <div class="section-heading">Commission Structure</div>
+          <div class="section-subheading">20% recurring — you earn every month they stay</div>
+        </div>
+      </div>
+
+      <p style="color:var(--text-body);margin-bottom:20px;">You earn 20% of every client's monthly subscription for as long as they remain a customer. No cap. No expiration. Sign 10 clients on the Business plan and you're making $394/month — on autopilot.</p>
+
+      <div class="commission-grid">
+        <div class="commission-card">
+          <div class="plan">Solo Plan</div>
+          <div class="sale-price">$97/mo client pays</div>
+          <div class="your-cut">$19.40</div>
+          <div class="per-mo">per month, per client</div>
+        </div>
+        <div class="commission-card" style="border-color:var(--gold);">
+          <div class="plan">Business Plan</div>
+          <div class="sale-price">$197/mo client pays</div>
+          <div class="your-cut">$39.40</div>
+          <div class="per-mo">per month, per client</div>
+        </div>
+        <div class="commission-card">
+          <div class="plan">Pro Plan</div>
+          <div class="sale-price">$397/mo client pays</div>
+          <div class="your-cut">$79.40</div>
+          <div class="per-mo">per month, per client</div>
+        </div>
+      </div>
+
+      <table class="earnings-table" style="margin-top:24px;">
+        <tr>
+          <th>Clients Signed</th>
+          <th>Avg Plan</th>
+          <th>Your Monthly Income</th>
+          <th>Annual</th>
+        </tr>
+        <tr>
+          <td>5 clients</td>
+          <td>Business ($197)</td>
+          <td>$197/mo</td>
+          <td>$2,364/yr</td>
+        </tr>
+        <tr>
+          <td>10 clients</td>
+          <td>Business ($197)</td>
+          <td>$394/mo</td>
+          <td>$4,728/yr</td>
+        </tr>
+        <tr>
+          <td>20 clients</td>
+          <td>Business ($197)</td>
+          <td>$788/mo</td>
+          <td>$9,456/yr</td>
+        </tr>
+        <tr>
+          <td>30 clients</td>
+          <td>Business ($197)</td>
+          <td>$1,182/mo</td>
+          <td>$14,184/yr</td>
+        </tr>
+      </table>
+
+      <div class="tip-box">Push for Business or Pro plans. The difference between $97 and $197 is nothing to a business doing $20K+/month — but it doubles your commission.</div>
+    </div>
+
+    <!-- PITCH SCRIPT -->
+    <div class="section" id="pitch-script">
+      <div class="section-header">
+        <div class="section-icon">🎤</div>
+        <div>
+          <div class="section-heading">The Full Pitch Script</div>
+          <div class="section-subheading">Memorize the opener and 3 qualifying questions — improvise the rest</div>
+        </div>
+      </div>
+
+      <div class="script-block">
+        <div class="script-label">Walk-Up Opener (at the shop/salon/restaurant)</div>
+        <div class="script-text">
+          "Hi! Are you the owner? <em>[Wait for yes]</em> Perfect — I'm Jay with Atlas Automation Group. We help local businesses like yours get way more Google reviews and bring back customers who haven't been in a while — all through automated texts. Takes 2 minutes to show you. Do you have a second?"
+        </div>
+        <div class="script-note">Keep it short. You're not pitching yet — you're getting permission to pitch. If they say no or they're busy, ask: "What time do you have 5 minutes?" and come back.</div>
+      </div>
+
+      <p style="color:var(--text-body);margin:20px 0 12px;font-weight:600;font-size:14px;letter-spacing:0.5px;text-transform:uppercase;color:var(--gold);">3 Qualifying Questions</p>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Ask these in order. They're designed to get the owner to identify their own pain.</p>
+
+      <div class="script-block">
+        <div class="script-label">Question 1 — Google Reviews</div>
+        <div class="script-text">
+          "Quick question — how do most of your new customers find you? <em>[Let them answer]</em> Google, right? How many reviews do you have right now — and when did the last one come in?"
+        </div>
+        <div class="script-note">They almost always say "not enough" or "not lately." This opens the door. If they're doing well with reviews, pivot: "That's amazing. Are you doing any follow-up texts to bring back people who haven't come in a while?"</div>
+      </div>
+
+      <div class="script-block">
+        <div class="script-label">Question 2 — Repeat Customers</div>
+        <div class="script-text">
+          "What percentage of your customers come back on their own, versus you having to do something to remind them? <em>[Let them answer]</em> Right — most businesses lose 60–70% of customers to silence. Not bad service. Just no follow-up."
+        </div>
+      </div>
+
+      <div class="script-block">
+        <div class="script-label">Question 3 — The Setup</div>
+        <div class="script-text">
+          "Are you doing any automated follow-up right now — texts, emails, anything? <em>[Usually: no]</em> That's what we do. Let me show you exactly what it would look like for <em>[BUSINESS NAME]</em>."
+        </div>
+        <div class="script-note">Pull out the laptop or phone and open live-demo.html. Enter their info and let them watch the messages build in real time. This is your demo.</div>
+      </div>
+    </div>
+
+    <!-- DEMO FLOW -->
+    <div class="section" id="demo-flow">
+      <div class="section-header">
+        <div class="section-icon">📱</div>
+        <div>
+          <div class="section-heading">Demo Flow</div>
+          <div class="section-subheading">Show them what their customers will see</div>
+        </div>
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Open the live demo page</div>
+            <div class="step-desc">Open <span class="code-inline">live-demo.html</span> on your phone or laptop. Keep it full screen. Say: "Let me personalize this for you right now."</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Enter their business name and type</div>
+            <div class="step-desc">Have the owner watch as you type their business name and select their industry. Ask: "What's your first name?" Enter theirs, not a fake one — <strong>personalization is the whole point</strong>.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Hit "Generate My Personalized Messages"</div>
+            <div class="step-desc">Three phone frames appear showing exactly what their customers would receive — a review request, win-back text, and appointment reminder — all with their business name. Let them read it silently. Say nothing. Let the demo do the talking.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Offer to text it to their own phone</div>
+            <div class="step-desc">Enter their real phone number and hit "Send Me a Real Text Now." If the server is live, they'll receive actual texts in 30 seconds. If you're in pure offline mode, say: "Once you're signed up, this is exactly what goes to your customers. Let me show you pricing."</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">Transition to pricing</div>
+            <div class="step-desc">Scroll to the bottom of the demo page to the CTA section, or flip to the leave-behind flyer. Present all three plans and ask: "Based on your volume, do you think Solo, Business, or Pro makes more sense for you?"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLOSE -->
+    <div class="section" id="close">
+      <div class="section-header">
+        <div class="section-icon">🤝</div>
+        <div>
+          <div class="section-heading">Closing the Sale</div>
+          <div class="section-subheading">The trial offer is your close — use it hard</div>
+        </div>
+      </div>
+
+      <div class="script-block">
+        <div class="script-label">The Standard Close</div>
+        <div class="script-text">
+          "Here's the deal — we're doing a <em>30-day free trial</em>, but it's a same-day offer only. If you sign up today, we'll have your texts running by tomorrow. You don't pay anything for a month. If you don't get more reviews or bring back any customers, cancel — no hard feelings. But if it works? You'll wonder why you waited. Should we get you started?"
+        </div>
+      </div>
+
+      <div class="script-block">
+        <div class="script-label">If They Hesitate</div>
+        <div class="script-text">
+          "I get it — you've probably been pitched a hundred things that didn't work. What's the one thing that would make this a no-brainer for you today?"
+        </div>
+        <div class="script-note">Let them answer. Usually it's "I just need to think about it" or a real objection (price, time, etc.). Handle the real ones below. "Think about it" means you haven't made the value clear yet — loop back to their pain.</div>
+      </div>
+
+      <div class="script-block">
+        <div class="script-label">Urgency Push (Only Use Once)</div>
+        <div class="script-text">
+          "The 30-day free trial is really a today-only thing — it's how we control our setup queue. I can't guarantee it if you call tomorrow. Do you want to at least get your name in today?"
+        </div>
+      </div>
+
+      <div class="step-list" style="margin-top:24px;">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Collect their info</div>
+            <div class="step-desc">Business name, owner name, phone, email, business type, and their customer contact list format (do they have numbers? CRM? Paper?)</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Text Jay right now</div>
+            <div class="step-desc">Text <span class="code-inline">(213) 917-4798</span> with: "New signup: [BIZ NAME] | [PLAN] | [OWNER NAME] | [PHONE]". Jay will confirm and start onboarding within the hour.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Set the expectation</div>
+            <div class="step-desc">Tell the owner: "You'll get a call from our team within 24 hours to get you set up. They'll walk you through everything — it takes about 15 minutes on your end."</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Leave the flyer</div>
+            <div class="step-desc">Leave a copy of the leave-behind flyer so they have something physical with pricing, your contact info, and the website.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTO SHOP -->
+    <div class="section" id="auto">
+      <div class="section-header">
+        <div class="section-icon">🔧</div>
+        <div>
+          <div class="section-heading">Auto Shop Script</div>
+          <div class="section-subheading">Best time to visit: 8–10am weekdays, before the bay fills up</div>
+        </div>
+      </div>
+
+      <div class="vertical-card">
+        <div class="vertical-header">
+          <div class="vertical-icon">🔧</div>
+          <div>
+            <div class="vertical-title">Auto Shop / Mechanic</div>
+            <div class="vertical-context">Pain point: Google reviews drive nearly 100% of new customers. Win-backs on oil changes = guaranteed repeat business every 90 days.</div>
+          </div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">Opener</div>
+          <div class="script-text">"Hey — you the owner? Quick question: when someone needs a mechanic in [CITY], they Google it, right? How many reviews do you have, and when was the last one?"</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">The Hook</div>
+          <div class="script-text">"The shops at the top of Google with 200+ reviews? They're not necessarily better than you — they just have a system that asks every customer for a review automatically. We build that for you. Text goes out 2 hours after they leave. Most shops 3x their review count in the first 30 days."</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">The Win-Back Angle</div>
+          <div class="script-text">"Also — oil changes every 90 days, tires every year. Your customers have a schedule. We text them automatically right before they're due. 'Hey Mike — time for your next oil change at [SHOP]. We have openings this week.' You get their business back before they go to Jiffy Lube."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALON -->
+    <div class="section" id="salon">
+      <div class="section-header">
+        <div class="section-icon">✂️</div>
+        <div>
+          <div class="section-heading">Salon / Barbershop Script</div>
+          <div class="section-subheading">Best time: Tuesday–Thursday 10am, between clients</div>
+        </div>
+      </div>
+
+      <div class="vertical-card">
+        <div class="vertical-header">
+          <div class="vertical-icon">✂️</div>
+          <div>
+            <div class="vertical-title">Salon / Barbershop</div>
+            <div class="vertical-context">Pain point: High client churn — people try a new stylist once and disappear. Win-backs and personal follow-ups close the gap.</div>
+          </div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">Opener</div>
+          <div class="script-text">"Hi! Are you the owner? I work with salons in the area helping them get more reviews and bring back clients who haven't been in a while — all automatically. Quick question: how often do clients come in once and then you never see them again?"</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">The Hook</div>
+          <div class="script-text">"We send a text 24 hours after their appointment — 'Thanks for coming in, leave us a quick review for $5 off next visit.' Then if they don't come back in 6 weeks, another text: 'We miss you, book this week.' Most salons see 40–50% of lapsed clients rebook within the first text."</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">For Barbershops Specifically</div>
+          <div class="script-text">"For a shop like this, it's about loyalty. Guys come every 2–3 weeks. We send the reminder right on schedule. They don't even have to think about it — they just see the text and come in. Your chair stays full."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPA -->
+    <div class="section" id="spa">
+      <div class="section-header">
+        <div class="section-icon">🧖</div>
+        <div>
+          <div class="section-heading">Spa / Wellness Script</div>
+          <div class="section-subheading">Best time: Wednesday–Friday 11am, early afternoon lull</div>
+        </div>
+      </div>
+
+      <div class="vertical-card">
+        <div class="vertical-header">
+          <div class="vertical-icon">🧖</div>
+          <div>
+            <div class="vertical-title">Spa / Wellness Center</div>
+            <div class="vertical-context">Pain point: High average ticket value means every lost client = hundreds of dollars. Packages and memberships need renewal reminders.</div>
+          </div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">Opener</div>
+          <div class="script-text">"Hi — is the owner in? I help spas and wellness centers automate their client follow-ups so nothing falls through the cracks. Quick question: do you have a system for following up after appointments, or reminding clients when their package is about to run out?"</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">The Hook</div>
+          <div class="script-text">"A client gets a massage and feels amazing — but they don't book again because life gets busy. Three weeks later we text them: 'Ready for your next session? You deserve it.' Gentle, personal, automatic. No one on your staff has to remember. And we do the same for package renewals, memberships, anything."</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">Premium Positioning</div>
+          <div class="script-text">"Your clients aren't price-sensitive — they're experience-sensitive. These texts feel like white-glove service. They feel cared for. That's what brings them back, and that's what gets you 5-star reviews."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESTAURANT -->
+    <div class="section" id="restaurant">
+      <div class="section-header">
+        <div class="section-icon">🍽️</div>
+        <div>
+          <div class="section-heading">Restaurant Script</div>
+          <div class="section-subheading">Best time: 2–4pm between lunch and dinner service</div>
+        </div>
+      </div>
+
+      <div class="vertical-card">
+        <div class="vertical-header">
+          <div class="vertical-icon">🍽️</div>
+          <div>
+            <div class="vertical-title">Restaurant / Cafe</div>
+            <div class="vertical-context">Pain point: Yelp and Google reviews control foot traffic. Win-backs with a small offer (free item) cost less than paid ads and have 10x the conversion.</div>
+          </div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">Opener</div>
+          <div class="script-text">"Hey — you the owner? I'm local, love this place. Quick question: how are people finding you — Google, Yelp? How's your review count? Are you happy with it?"</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">The Hook</div>
+          <div class="script-text">"So the restaurants that show up at the top when someone Googles 'best [cuisine] near me' — they have a system. After every reservation or visit, an automatic text goes out: 'Thanks for dining at [RESTAURANT], would you leave us a quick review?' It takes the customer 30 seconds. Over a month you could get 50–100 new reviews without asking a single person yourself."</div>
+        </div>
+
+        <div class="script-block">
+          <div class="script-label">Win-Back for Restaurants</div>
+          <div class="script-text">"And for regulars who haven't been in a while: 'We miss you, Carlos! Come in this week and get a free dessert on us.' That offer costs you maybe $4. Getting them back in the door is worth $40+. We make that happen automatically."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENT ONBOARDING -->
+    <div class="section" id="client-onboarding">
+      <div class="section-header">
+        <div class="section-icon">⚙️</div>
+        <div>
+          <div class="section-heading">How to Onboard a Client</div>
+          <div class="section-subheading">Using the <span class="code-inline">oc</span> command-line tool</div>
+        </div>
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Text Jay immediately after closing</div>
+            <div class="step-desc">Text <span class="code-inline">(213) 917-4798</span>: "New client: [BIZ NAME] | [PLAN: solo/biz/pro] | [OWNER NAME] | [PHONE] | [EMAIL] | [BUSINESS TYPE]"</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Jay runs: <span class="code-inline">oc add-client</span></div>
+            <div class="step-desc">This creates the client account, assigns a dedicated SMS number, and spins up their automation sequences in the system.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Onboarding call is scheduled (within 24hrs)</div>
+            <div class="step-desc">A member of the setup team calls the client. They collect: their existing customer contact list, preferred message tone, business hours, and any offers they want to include in win-back texts.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Jay runs: <span class="code-inline">oc configure [client-id]</span></div>
+            <div class="step-desc">This loads their customer list, customizes message templates with their business name and offer, and sets up the automation schedule.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">Test texts sent to the owner's phone</div>
+            <div class="step-desc">Owner approves all 3 message templates. Once they say yes, the system goes live. First real texts start going to customers within hours.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">30-day check-in</div>
+            <div class="step-desc">At the end of the trial, Jay's team sends a results summary: new reviews received, texts sent, estimated win-back revenue. This is also when the subscription billing begins — or when you follow up to save a churn risk.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAILY ROUTINE -->
+    <div class="section" id="daily-routine">
+      <div class="section-header">
+        <div class="section-icon">📋</div>
+        <div>
+          <div class="section-heading">Daily Routine Checklist</div>
+          <div class="section-subheading">What a productive sales day looks like</div>
+        </div>
+      </div>
+
+      <p style="color:var(--text-body);margin-bottom:20px;font-size:14px;">Aim for 10 walk-in pitches per day. You'll convert 1–3 of them. That's 5–15 new clients per week with enough hustle.</p>
+
+      <ul class="checklist">
+        <li><strong>8:00am</strong> — Plan your route. Pick a neighborhood with 20+ target businesses (auto shops, salons, gyms, restaurants). Google Maps works great.</li>
+        <li><strong>8:30am</strong> — Charge your phone, make sure the live demo page is saved locally (works offline for previews).</li>
+        <li><strong>9:00am</strong> — First stop. Auto shops and gyms open early — hit those first.</li>
+        <li><strong>9am–12pm</strong> — Morning block: target auto shops, gyms, barbershops (owners are usually free before it gets busy).</li>
+        <li><strong>12–1pm</strong> — Avoid restaurants during lunch rush. Grab food, check messages from Jay.</li>
+        <li><strong>1pm–3pm</strong> — Hit salons, spas, wellness centers (midday is their slow period).</li>
+        <li><strong>3pm–5pm</strong> — Restaurant window (between lunch and dinner service). Best time to get an owner's attention.</li>
+        <li><strong>5pm</strong> — Text Jay with your day's results: pitches made, demos given, signups closed.</li>
+        <li><strong>5:30pm</strong> — Follow up with any "think about it" owners via text. Keep it brief: "Hey [NAME] — just wanted to make sure you have my number if any questions come up about the trial. — [YOUR NAME], Atlas Automation Group"</li>
+        <li><strong>Evening</strong> — Research tomorrow's route. Look up Google review counts for target businesses — low counts = hot prospects.</li>
+      </ul>
+
+      <div class="tip-box">The best leads are businesses with under 50 Google reviews. Search "auto shop near [city]" and sort by review count. The ones with 10–30 reviews are desperate for what you're selling — they just don't know it exists yet.</div>
+    </div>
+
+    <!-- OBJECTIONS -->
+    <div class="section" id="objections">
+      <div class="section-header">
+        <div class="section-icon">🛡️</div>
+        <div>
+          <div class="section-heading">Objection Handlers</div>
+          <div class="section-subheading">Click to expand each one</div>
+        </div>
+      </div>
+
+      <div class="faq-list">
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-text">"I can't afford it right now."</div>
+            <div class="faq-q-label">Price</div>
+            <div class="faq-chevron">▼</div>
+          </div>
+          <div class="faq-a">
+            <strong>"Totally understand — that's exactly why we do the 30-day free trial. You don't pay anything today. Not a dollar. We set it all up, it runs for a month, and then you decide based on what you actually saw happen. If you didn't get more reviews or any customers back, cancel it with a text. No charge. What do you have to lose by trying it for free?"</strong>
+            <br><br>If they're still resistant: "What's one customer worth to you? If we bring back just 3 people in 30 days, does $97 seem expensive?"
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-text">"I need to talk to my partner/spouse first."</div>
+            <div class="faq-q-label">Stall</div>
+            <div class="faq-chevron">▼</div>
+          </div>
+          <div class="faq-a">
+            <strong>"Of course — can I ask, is it more a budget question or a 'let me make sure we want to do this' question?"</strong>
+            <br><br>If budget: run the free trial angle — no money involved today. If approval: "Is there any chance they'd have 5 minutes today? I can walk you both through it together. The trial is same-day only so I don't want you to miss out."
+            <br><br>If truly unavailable: "I totally get it. Let me leave you the flyer. The 30-day trial is today only, but text me after you talk to them — I'll see what I can do." Then follow up tomorrow.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-text">"We already use [Yelp ads / Google ads / Mailchimp]."</div>
+            <div class="faq-q-label">Competition</div>
+            <div class="faq-chevron">▼</div>
+          </div>
+          <div class="faq-a">
+            <strong>"That's great — those bring in new customers. We work on a completely different side of your business: we keep the customers you already have and help them become your best marketers. Text messages have a 98% open rate — higher than any email, higher than any ad. This is the part that most businesses are completely missing."</strong>
+            <br><br>We're not replacing what they have — we're filling the gap they don't even know exists.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-text">"My customers don't want to be texted."</div>
+            <div class="faq-q-label">Concern</div>
+            <div class="faq-chevron">▼</div>
+          </div>
+          <div class="faq-a">
+            <strong>"That's a really common concern, and it's fair. The key is how you text them. These aren't spam blasts — they're personalized messages from a real business they already visited, with a real offer or a genuine thank-you. Studies show 70% of consumers prefer to hear from local businesses via text over email. And every message has an easy opt-out if anyone doesn't want them."</strong>
+            <br><br>Show them a sample message from the demo. It feels human, not robotic.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-text">"I don't have my customers' phone numbers."</div>
+            <div class="faq-q-label">Data</div>
+            <div class="faq-chevron">▼</div>
+          </div>
+          <div class="faq-a">
+            <strong>"You might have more than you think — appointment software, payment processors, even paper sign-in sheets. Our team will help you find what you have. For new customers going forward, we set up a super simple opt-in flow so you start collecting numbers from day one. Within 30 days most shops have a solid list."</strong>
+            <br><br>Don't let this be a blocker. Even 20 customer numbers in the trial is enough to show results.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-text">"I'm too busy to deal with setting something new up."</div>
+            <div class="faq-q-label">Time</div>
+            <div class="faq-chevron">▼</div>
+          </div>
+          <div class="faq-a">
+            <strong>"That's exactly the point — you don't set it up. We do. It takes 15 minutes on a phone call with our team and then it runs itself forever. You don't write any texts, you don't send anything, you don't log in anywhere. The whole idea is that it runs while you're busy."</strong>
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-text">"How do I know it actually works?"</div>
+            <div class="faq-q-label">Trust</div>
+            <div class="faq-chevron">▼</div>
+          </div>
+          <div class="faq-a">
+            <strong>"That's the best question you can ask. Here's my answer: try it for 30 days for free and judge it by results. You'll see review count go up in real time on Google. You'll see customers come back who haven't been in months. If you see none of that, cancel — no charge, no hard feelings. But I've never had a business not see results in the first 30 days."</strong>
+            <br><br>Don't get into data debates. The free trial handles all skepticism — keep redirecting back to it.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CONTACT JAY -->
+    <div class="section" id="contact-jay">
+      <div class="section-header">
+        <div class="section-icon">📞</div>
+        <div>
+          <div class="section-heading">Contact Jay</div>
+          <div class="section-subheading">Questions, signups, problems — Jay is reachable same-day</div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <h3>Jay — Atlas Automation Group Founder</h3>
+        <p class="sub">Text or call for signups, support, and anything else</p>
+
+        <div class="contact-methods">
+          <div class="contact-row">
+            <div class="contact-row-icon">📱</div>
+            <div>
+              <div class="contact-row-label">Call or Text</div>
+              <div class="contact-row-value">(213) 917-4798</div>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-row-icon">✉️</div>
+            <div>
+              <div class="contact-row-label">Email</div>
+              <div class="contact-row-value">jayhuntrmanagement@gmail.com</div>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-row-icon">🌐</div>
+            <div>
+              <div class="contact-row-label">Website</div>
+              <div class="contact-row-value">atlasautomationgroup.com</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box" style="text-align:left;margin-top:24px;max-width:380px;margin-left:auto;margin-right:auto;">
+          <strong>When you close a deal, text Jay:</strong><br>
+          "New client: [BIZ NAME] | [PLAN] | [OWNER NAME] | [PHONE] | [EMAIL]"<br><br>
+          Jay will confirm receipt and begin onboarding within the hour during business hours (9am–7pm PST).
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function toggleFaq(item) {
+    item.classList.toggle('open');
+  }
+
+  // Sidebar active link highlighting on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const links = document.querySelectorAll('.sidebar-link');
+
+  function updateActiveLink() {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    links.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveLink);
+  updateActiveLink();
+</script>
+
+</body>
+</html>
