@@ -1,288 +1,339 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AAG Admin Portal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: { 50:'#f0f4ff', 100:'#e0e9ff', 500:'#4f6ef7', 600:'#3d5be8', 700:'#2e4ad4' },
+        surface: { DEFAULT:'#0d0d12', 1:'#13131a', 2:'#1a1a24', 3:'#22222f' },
+      },
+      fontFamily: { sans: ['-apple-system','BlinkMacSystemFont','Inter','Segoe UI','sans-serif'] }
+    }
+  }
+}
+</script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f5;color:#1a1a1a;min-height:100vh}
-
-/* LOGIN */
-#login-overlay{position:fixed;inset:0;background:#0f0f0f;display:flex;align-items:center;justify-content:center;z-index:1000}
-#login-overlay.hidden{display:none}
-.login-box{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:48px 40px;width:360px;text-align:center}
-.login-box h1{color:#fff;font-size:20px;letter-spacing:2px;margin-bottom:8px}
-.login-box p{color:#888;font-size:13px;margin-bottom:32px}
-.login-box input{width:100%;padding:12px 16px;background:#0f0f0f;border:1px solid #333;border-radius:8px;color:#fff;font-size:15px;margin-bottom:12px;outline:none}
-.login-box input:focus{border-color:#fff}
-.login-box button{width:100%;padding:12px;background:#fff;color:#0f0f0f;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.5px}
-.login-box button:hover{background:#e5e5e5}
-.login-err{color:#f87171;font-size:13px;margin-top:8px;min-height:20px}
-
-/* HEADER */
-header{background:#0f0f0f;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-header h1{color:#fff;font-size:15px;font-weight:700;letter-spacing:2px}
-header .hright{display:flex;align-items:center;gap:16px}
-header .hright span{color:#888;font-size:13px}
-.btn-logout{background:transparent;border:1px solid #444;color:#aaa;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer}
-.btn-logout:hover{border-color:#888;color:#fff}
-.refresh-btn{background:transparent;border:1px solid #333;color:#888;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px}
-.refresh-btn:hover{border-color:#888;color:#fff}
-.refresh-btn svg{width:12px;height:12px}
-
-/* STATS */
-.stats-bar{background:#fff;border-bottom:1px solid #e5e5e5;padding:16px 24px;display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-.stat-card{text-align:center;padding:12px 0}
-.stat-card .val{font-size:28px;font-weight:800;color:#0f0f0f;line-height:1}
-.stat-card .lbl{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
-.stat-card .sub{font-size:12px;color:#10b981;margin-top:2px}
-
-/* TABS */
-.tabs-nav{background:#fff;border-bottom:1px solid #e5e5e5;padding:0 24px;display:flex;gap:0}
-.tab-btn{padding:14px 20px;font-size:14px;font-weight:600;color:#888;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .15s;margin-bottom:-1px}
-.tab-btn:hover{color:#0f0f0f}
-.tab-btn.active{color:#0f0f0f;border-bottom-color:#0f0f0f}
-.tab-badge{background:#e5e5e5;color:#666;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:6px}
-.tab-badge.red{background:#fee2e2;color:#ef4444}
-
-.main{padding:24px;max-width:1600px;margin:0 auto}
-.panel{display:none}
-.panel.active{display:block}
-
-/* TOOLBAR */
-.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.toolbar h2{font-size:16px;font-weight:700}
-.toolbar-right{display:flex;gap:10px;align-items:center}
-.search-input{padding:8px 12px;border:1px solid #e5e5e5;border-radius:8px;font-size:14px;width:220px;outline:none}
-.search-input:focus{border-color:#0f0f0f}
-
-/* TABLE */
-.table-wrap{background:#fff;border-radius:12px;border:1px solid #e5e5e5;overflow:hidden}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#fafafa;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#666;border-bottom:1px solid #e5e5e5;white-space:nowrap}
-td{padding:12px 14px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafafa}
-.cell-name{font-weight:600;color:#0f0f0f}
-.cell-sub{font-size:12px;color:#888;margin-top:2px}
-.cell-email{color:#3b82f6;font-size:12px}
-.cell-ts{color:#aaa;font-size:11px}
-
-/* STATUS BADGES */
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
-.badge-new{background:#e0f2fe;color:#0284c7}
-.badge-contacted{background:#fef3c7;color:#d97706}
-.badge-qualified{background:#d1fae5;color:#059669}
-.badge-proposal{background:#ede9fe;color:#7c3aed}
-.badge-won{background:#dcfce7;color:#16a34a}
-.badge-lost{background:#fee2e2;color:#dc2626}
-.badge-pending{background:#fef9c3;color:#ca8a04}
-.badge-reviewing{background:#e0f2fe;color:#0284c7}
-.badge-approved{background:#d1fae5;color:#059669}
-.badge-rejected{background:#fee2e2;color:#dc2626}
-.badge-active{background:#dcfce7;color:#16a34a}
-.badge-inactive{background:#f3f4f6;color:#9ca3af}
-.badge-paused{background:#fef3c7;color:#d97706}
-.badge-cancelled{background:#fee2e2;color:#dc2626}
-
-/* STATUS SELECT */
-.status-sel{border:1px solid #e5e5e5;border-radius:6px;padding:5px 8px;font-size:12px;font-weight:600;background:#fff;cursor:pointer;outline:none;min-width:120px}
-.status-sel:focus{border-color:#0f0f0f}
-
-/* ACTION BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
-.btn-approve{background:#0f0f0f;color:#fff}
-.btn-approve:hover{background:#333}
-.btn-reject{background:#fff;color:#dc2626;border:1px solid #fecaca}
-.btn-reject:hover{background:#fee2e2}
-.btn-won{background:#16a34a;color:#fff}
-.btn-won:hover{background:#15803d}
-.btn-portal{background:#f4f4f5;color:#0f0f0f;border:1px solid #e5e5e5}
-.btn-portal:hover{background:#e5e5e5}
-.action-cell{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-
-/* PROGRESS */
-.progress-wrap{display:flex;align-items:center;gap:8px;min-width:140px}
-.progress-bar{flex:1;height:6px;background:#e5e5e5;border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;background:#10b981;border-radius:3px;transition:width .3s}
-.progress-pct{font-size:12px;font-weight:700;color:#0f0f0f;min-width:28px}
-.progress-input{width:60px;padding:4px 6px;border:1px solid #e5e5e5;border-radius:6px;font-size:12px;text-align:center}
-
-/* EMPTY */
-.empty{text-align:center;padding:60px 20px;color:#aaa}
-.empty-icon{font-size:36px;margin-bottom:12px}
-.empty p{font-size:14px}
-
-/* LOADING */
-.loading{text-align:center;padding:60px;color:#aaa;font-size:14px}
-
-/* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;background:#0f0f0f;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;transform:translateY(20px);opacity:0;transition:all .25s;pointer-events:none}
-#toast.show{transform:translateY(0);opacity:1}
-#toast.ok{background:#0f0f0f}
-#toast.err{background:#dc2626}
-
-/* TOKEN CHIP */
-.token-chip{font-family:monospace;background:#f4f4f5;border:1px solid #e5e5e5;border-radius:4px;padding:2px 6px;font-size:11px;color:#666;cursor:pointer;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
-.token-chip:hover{background:#e5e5e5}
-
-/* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center}
-.modal-bg.hidden{display:none}
-.modal{background:#fff;border-radius:12px;padding:32px;width:460px;max-width:95vw}
-.modal h3{font-size:18px;font-weight:800;margin-bottom:8px}
-.modal p{font-size:14px;color:#666;margin-bottom:24px;line-height:1.6}
-.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+* { font-family: 'Inter', -apple-system, sans-serif; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+.tab-indicator { transition: transform 0.2s ease, opacity 0.2s ease; }
+.glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); }
+.hover-row:hover td { background: rgba(255,255,255,0.02); }
+select option { background: #1a1a24; color: #e5e5e5; }
 </style>
 </head>
-<body>
+<body class="bg-[#0a0a0f] text-gray-100 min-h-full antialiased">
 
-<!-- LOGIN OVERLAY -->
-<div id="login-overlay">
-  <div class="login-box">
-    <h1>AAG ADMIN</h1>
-    <p>Atlas Automation Group · Operations Portal</p>
-    <input type="password" id="pass-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
-    <button onclick="doLogin()">Enter</button>
-    <div class="login-err" id="login-err"></div>
-  </div>
-</div>
-
-<!-- MAIN APP -->
-<div id="app" class="hidden">
-
-<header>
-  <h1>AAG ADMIN</h1>
-  <div class="hright">
-    <span id="last-refresh-time"></span>
-    <button class="refresh-btn" onclick="loadAll()" title="Refresh all data">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-      Refresh
+<!-- LOGIN SCREEN -->
+<div id="login-overlay" class="fixed inset-0 bg-[#050508] flex items-center justify-center z-50">
+  <div class="w-full max-w-sm px-8 py-10 rounded-2xl glass text-center">
+    <!-- Logo -->
+    <div class="flex items-center justify-center gap-2 mb-8">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-lg tracking-widest text-white">AAG</span>
+    </div>
+    <p class="text-gray-500 text-sm mb-8">Operations Portal · Admin Access</p>
+    <input type="password" id="pass-input" placeholder="Admin password"
+      class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition mb-3"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()"
+      class="w-full py-3 bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-semibold rounded-xl text-sm transition-all duration-200 hover:shadow-lg hover:shadow-brand-600/25">
+      Sign In
     </button>
-    <button class="btn-logout" onclick="logout()">Logout</button>
+    <p class="text-red-400 text-xs mt-3 min-h-4" id="login-err"></p>
   </div>
-</header>
-
-<!-- STATS -->
-<div class="stats-bar">
-  <div class="stat-card"><div class="val" id="stat-leads">—</div><div class="lbl">Total Leads</div></div>
-  <div class="stat-card"><div class="val" id="stat-pipeline">—</div><div class="lbl">In Pipeline</div></div>
-  <div class="stat-card"><div class="val" id="stat-won">—</div><div class="lbl">Clients Won</div></div>
-  <div class="stat-card"><div class="val" id="stat-agents">—</div><div class="lbl">Active Agents</div></div>
-  <div class="stat-card"><div class="val" id="stat-revenue">—</div><div class="lbl">MRR (Est.)</div></div>
 </div>
 
-<!-- TABS -->
-<div class="tabs-nav">
-  <button class="tab-btn active" onclick="switchTab('leads',this)">
-    Leads <span class="tab-badge" id="badge-leads">0</span>
-  </button>
-  <button class="tab-btn" onclick="switchTab('agents',this)">
-    Agent Applications <span class="tab-badge red" id="badge-agents">0</span>
-  </button>
-  <button class="tab-btn" onclick="switchTab('active-agents',this)">
-    Active Agents <span class="tab-badge" id="badge-aa">0</span>
-  </button>
-  <button class="tab-btn" onclick="switchTab('clients',this)">
-    Clients <span class="tab-badge" id="badge-clients">0</span>
-  </button>
+<!-- APP -->
+<div id="app" class="hidden flex flex-col min-h-screen">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 h-14 bg-surface-1 border-b border-white/5 flex items-center justify-between px-6 flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+        <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-sm tracking-widest text-white">AAG ADMIN</span>
+      <span class="text-gray-600 text-xs hidden sm:block">· Atlas Automation Group</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-gray-600 text-xs" id="last-refresh-time"></span>
+      <button onclick="loadAll()"
+        class="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-400 border border-white/10 rounded-lg hover:border-white/20 hover:text-white transition">
+        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+        Refresh
+      </button>
+      <button onclick="logout()"
+        class="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-300 transition">Logout</button>
+    </div>
+  </header>
+
+  <!-- STATS BAR -->
+  <div class="bg-surface-1 border-b border-white/5 px-6 py-4 flex-shrink-0">
+    <div class="grid grid-cols-3 md:grid-cols-6 gap-4 max-w-7xl mx-auto">
+      <div class="text-center">
+        <div class="text-2xl font-black text-white" id="stat-leads">—</div>
+        <div class="text-[10px] uppercase tracking-wider text-gray-600 mt-0.5">Total Leads</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-black text-brand-500" id="stat-pipeline">—</div>
+        <div class="text-[10px] uppercase tracking-wider text-gray-600 mt-0.5">In Pipeline</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-black text-emerald-400" id="stat-won">—</div>
+        <div class="text-[10px] uppercase tracking-wider text-gray-600 mt-0.5">Clients Won</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-black text-violet-400" id="stat-intake">—</div>
+        <div class="text-[10px] uppercase tracking-wider text-gray-600 mt-0.5">Intake Recv'd</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-black text-sky-400" id="stat-agents">—</div>
+        <div class="text-[10px] uppercase tracking-wider text-gray-600 mt-0.5">Active Agents</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-black text-amber-400" id="stat-revenue">—</div>
+        <div class="text-[10px] uppercase tracking-wider text-gray-600 mt-0.5">MRR (Est.)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="bg-surface-1 border-b border-white/5 px-6 flex gap-0 overflow-x-auto flex-shrink-0">
+    <button class="tab-btn active px-5 py-3.5 text-sm font-semibold text-white border-b-2 border-brand-500 whitespace-nowrap transition-colors" onclick="switchTab('leads',this)">
+      Leads <span class="ml-1.5 px-1.5 py-0.5 bg-white/10 text-gray-400 rounded text-[10px] font-bold" id="badge-leads">0</span>
+    </button>
+    <button class="tab-btn px-5 py-3.5 text-sm font-semibold text-gray-500 hover:text-gray-300 border-b-2 border-transparent whitespace-nowrap transition-colors" onclick="switchTab('intake',this)">
+      Intake <span class="ml-1.5 px-1.5 py-0.5 bg-violet-500/20 text-violet-400 rounded text-[10px] font-bold" id="badge-intake">0</span>
+    </button>
+    <button class="tab-btn px-5 py-3.5 text-sm font-semibold text-gray-500 hover:text-gray-300 border-b-2 border-transparent whitespace-nowrap transition-colors" onclick="switchTab('agents',this)">
+      Agent Apps <span class="ml-1.5 px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-[10px] font-bold" id="badge-agents">0</span>
+    </button>
+    <button class="tab-btn px-5 py-3.5 text-sm font-semibold text-gray-500 hover:text-gray-300 border-b-2 border-transparent whitespace-nowrap transition-colors" onclick="switchTab('active-agents',this)">
+      Active Agents <span class="ml-1.5 px-1.5 py-0.5 bg-white/10 text-gray-400 rounded text-[10px] font-bold" id="badge-aa">0</span>
+    </button>
+    <button class="tab-btn px-5 py-3.5 text-sm font-semibold text-gray-500 hover:text-gray-300 border-b-2 border-transparent whitespace-nowrap transition-colors" onclick="switchTab('clients',this)">
+      Clients <span class="ml-1.5 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px] font-bold" id="badge-clients">0</span>
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 p-6 max-w-[1800px] mx-auto w-full">
+
+    <!-- LEADS -->
+    <div class="panel active" id="panel-leads">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-base font-bold text-white">Business Leads</h2>
+        <input type="text" class="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 w-56 transition" placeholder="Search…" oninput="filterTable('leads-table',this.value)">
+      </div>
+      <div class="rounded-xl border border-white/8 overflow-hidden overflow-x-auto bg-surface-1">
+        <div id="leads-loading" class="py-16 text-center text-gray-600 text-sm">Loading leads…</div>
+        <table id="leads-table" class="w-full text-sm hidden">
+          <thead><tr class="border-b border-white/5 text-[10px] font-bold uppercase tracking-wider text-gray-600">
+            <th class="px-4 py-3 text-left">Lead</th>
+            <th class="px-4 py-3 text-left">Business</th>
+            <th class="px-4 py-3 text-left">Plan</th>
+            <th class="px-4 py-3 text-left">Channel</th>
+            <th class="px-4 py-3 text-left">Location</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Date</th>
+            <th class="px-4 py-3 text-left">Action</th>
+          </tr></thead>
+          <tbody id="leads-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INTAKE -->
+    <div class="panel hidden" id="panel-intake">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-base font-bold text-white">Client Intake Submissions</h2>
+        <input type="text" class="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 w-56 transition" placeholder="Search…" oninput="filterTable('intake-table',this.value)">
+      </div>
+      <div class="rounded-xl border border-white/8 overflow-hidden overflow-x-auto bg-surface-1">
+        <div id="intake-loading" class="py-16 text-center text-gray-600 text-sm">Loading intake submissions…</div>
+        <table id="intake-table" class="w-full text-sm hidden">
+          <thead><tr class="border-b border-white/5 text-[10px] font-bold uppercase tracking-wider text-gray-600">
+            <th class="px-4 py-3 text-left">Business</th>
+            <th class="px-4 py-3 text-left">Category</th>
+            <th class="px-4 py-3 text-left">Contact</th>
+            <th class="px-4 py-3 text-left">City</th>
+            <th class="px-4 py-3 text-left">Services Preview</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Date</th>
+            <th class="px-4 py-3 text-left">Actions</th>
+          </tr></thead>
+          <tbody id="intake-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AGENT APPLICATIONS -->
+    <div class="panel hidden" id="panel-agents">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-base font-bold text-white">Agent Applications</h2>
+        <input type="text" class="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 w-56 transition" placeholder="Search…" oninput="filterTable('agents-table',this.value)">
+      </div>
+      <div class="rounded-xl border border-white/8 overflow-hidden overflow-x-auto bg-surface-1">
+        <div id="agents-loading" class="py-16 text-center text-gray-600 text-sm">Loading applications…</div>
+        <table id="agents-table" class="w-full text-sm hidden">
+          <thead><tr class="border-b border-white/5 text-[10px] font-bold uppercase tracking-wider text-gray-600">
+            <th class="px-4 py-3 text-left">Applicant</th>
+            <th class="px-4 py-3 text-left">City</th>
+            <th class="px-4 py-3 text-left">Background</th>
+            <th class="px-4 py-3 text-left">Terms</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Date</th>
+            <th class="px-4 py-3 text-left">Actions</th>
+          </tr></thead>
+          <tbody id="agents-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ACTIVE AGENTS -->
+    <div class="panel hidden" id="panel-active-agents">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-base font-bold text-white">Active Agents</h2>
+        <input type="text" class="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 w-56 transition" placeholder="Search…" oninput="filterTable('aa-table',this.value)">
+      </div>
+      <div class="rounded-xl border border-white/8 overflow-hidden overflow-x-auto bg-surface-1">
+        <div id="aa-loading" class="py-16 text-center text-gray-600 text-sm">Loading agents…</div>
+        <table id="aa-table" class="w-full text-sm hidden">
+          <thead><tr class="border-b border-white/5 text-[10px] font-bold uppercase tracking-wider text-gray-600">
+            <th class="px-4 py-3 text-left">Agent</th>
+            <th class="px-4 py-3 text-left">City</th>
+            <th class="px-4 py-3 text-center">Leads Sub.</th>
+            <th class="px-4 py-3 text-center">Leads Won</th>
+            <th class="px-4 py-3 text-left">Commission</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Portal</th>
+          </tr></thead>
+          <tbody id="aa-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="panel hidden" id="panel-clients">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-base font-bold text-white">Clients</h2>
+        <input type="text" class="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 w-56 transition" placeholder="Search…" oninput="filterTable('clients-table',this.value)">
+      </div>
+      <div class="rounded-xl border border-white/8 overflow-hidden overflow-x-auto bg-surface-1">
+        <div id="clients-loading" class="py-16 text-center text-gray-600 text-sm">Loading clients…</div>
+        <table id="clients-table" class="w-full text-sm hidden">
+          <thead><tr class="border-b border-white/5 text-[10px] font-bold uppercase tracking-wider text-gray-600">
+            <th class="px-4 py-3 text-left">Client</th>
+            <th class="px-4 py-3 text-left">Business</th>
+            <th class="px-4 py-3 text-left">Plan</th>
+            <th class="px-4 py-3 text-left">Setup</th>
+            <th class="px-4 py-3 text-left">AI Agent</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Actions</th>
+          </tr></thead>
+          <tbody id="clients-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
-
-<div class="main">
-
-  <!-- LEADS PANEL -->
-  <div class="panel active" id="panel-leads">
-    <div class="toolbar">
-      <h2>Business Leads</h2>
-      <div class="toolbar-right">
-        <input type="text" class="search-input" placeholder="Search name, business, email…" oninput="filterTable('leads-table',this.value)">
-      </div>
-    </div>
-    <div class="table-wrap">
-      <div id="leads-loading" class="loading">Loading leads…</div>
-      <table id="leads-table" style="display:none">
-        <thead><tr>
-          <th>Lead</th><th>Business</th><th>Plan</th><th>Channel</th><th>Location</th><th>Status</th><th>Date</th><th>Actions</th>
-        </tr></thead>
-        <tbody id="leads-body"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- AGENTS PANEL -->
-  <div class="panel" id="panel-agents">
-    <div class="toolbar">
-      <h2>Agent Applications</h2>
-      <div class="toolbar-right">
-        <input type="text" class="search-input" placeholder="Search name, city, email…" oninput="filterTable('agents-table',this.value)">
-      </div>
-    </div>
-    <div class="table-wrap">
-      <div id="agents-loading" class="loading">Loading applications…</div>
-      <table id="agents-table" style="display:none">
-        <thead><tr>
-          <th>Applicant</th><th>City</th><th>Background</th><th>Terms</th><th>Status</th><th>Date</th><th>Actions</th>
-        </tr></thead>
-        <tbody id="agents-body"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ACTIVE AGENTS PANEL -->
-  <div class="panel" id="panel-active-agents">
-    <div class="toolbar">
-      <h2>Active Agents</h2>
-      <div class="toolbar-right">
-        <input type="text" class="search-input" placeholder="Search name, city, email…" oninput="filterTable('aa-table',this.value)">
-      </div>
-    </div>
-    <div class="table-wrap">
-      <div id="aa-loading" class="loading">Loading agents…</div>
-      <table id="aa-table" style="display:none">
-        <thead><tr>
-          <th>Agent</th><th>City</th><th>Leads Sub.</th><th>Leads Won</th><th>Commission</th><th>Status</th><th>Portal</th>
-        </tr></thead>
-        <tbody id="aa-body"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- CLIENTS PANEL -->
-  <div class="panel" id="panel-clients">
-    <div class="toolbar">
-      <h2>Clients</h2>
-      <div class="toolbar-right">
-        <input type="text" class="search-input" placeholder="Search name, business, email…" oninput="filterTable('clients-table',this.value)">
-      </div>
-    </div>
-    <div class="table-wrap">
-      <div id="clients-loading" class="loading">Loading clients…</div>
-      <table id="clients-table" style="display:none">
-        <thead><tr>
-          <th>Client</th><th>Business</th><th>Plan</th><th>Setup Progress</th><th>Status</th><th>Portal</th>
-        </tr></thead>
-        <tbody id="clients-body"></tbody>
-      </table>
-    </div>
-  </div>
-
-</div><!-- /main -->
-</div><!-- /app -->
 
 <!-- CONFIRM MODAL -->
-<div class="modal-bg hidden" id="confirm-modal">
-  <div class="modal">
-    <h3 id="modal-title">Confirm Action</h3>
-    <p id="modal-body">Are you sure?</p>
-    <div class="modal-btns">
-      <button class="btn btn-portal" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-approve" id="modal-confirm-btn" onclick="runModalAction()">Confirm</button>
+<div class="modal-bg fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" id="confirm-modal">
+  <div class="bg-surface-2 rounded-2xl border border-white/10 p-7 w-full max-w-md shadow-2xl">
+    <h3 class="text-lg font-bold text-white mb-2" id="modal-title">Confirm</h3>
+    <p class="text-gray-400 text-sm leading-relaxed mb-6" id="modal-body"></p>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('confirm-modal')" class="px-4 py-2 text-sm text-gray-400 border border-white/10 rounded-lg hover:border-white/20 hover:text-white transition">Cancel</button>
+      <button id="modal-confirm-btn" onclick="runModalAction()" class="px-5 py-2 text-sm font-semibold rounded-lg transition">Confirm</button>
     </div>
   </div>
 </div>
 
-<div id="toast"></div>
+<!-- PROVISION MODAL -->
+<div class="modal-bg fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" id="provision-modal">
+  <div class="bg-surface-2 rounded-2xl border border-white/10 p-7 w-full max-w-xl shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="w-9 h-9 rounded-xl bg-violet-500/15 flex items-center justify-center">
+        <svg class="w-4.5 h-4.5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-white">Provision AI Agent</h3>
+        <p class="text-xs text-gray-500">Creates an OpenClaw workspace on the server</p>
+      </div>
+    </div>
+    <div id="provision-preview" class="mt-5 mb-4 bg-white/3 border border-white/8 rounded-xl p-4 text-sm space-y-2"></div>
+    <div class="mb-4">
+      <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-2">Intake JSON (editable)</label>
+      <textarea id="provision-json" rows="8" class="w-full px-3 py-3 bg-black/30 border border-white/10 rounded-xl text-xs text-gray-300 font-mono outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500/20 resize-y transition"></textarea>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('provision-modal')" class="px-4 py-2 text-sm text-gray-400 border border-white/10 rounded-lg hover:border-white/20 transition">Cancel</button>
+      <button onclick="runProvision()" class="px-5 py-2 text-sm font-semibold bg-violet-600 hover:bg-violet-500 text-white rounded-lg transition hover:shadow-lg hover:shadow-violet-600/25">
+        ⚙️ Provision Agent
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVATE BOT MODAL -->
+<div class="modal-bg fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" id="activate-modal">
+  <div class="bg-surface-2 rounded-2xl border border-white/10 p-7 w-full max-w-md shadow-2xl">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-9 h-9 rounded-xl bg-sky-500/15 flex items-center justify-center text-lg">🤖</div>
+      <div>
+        <h3 class="text-base font-bold text-white">Activate Telegram Bot</h3>
+        <p class="text-xs text-gray-500">Link BotFather credentials to this client's agent</p>
+      </div>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Client ID</label>
+        <input type="text" id="act-client-id" readonly class="w-full px-3 py-2.5 bg-black/20 border border-white/8 rounded-lg text-sm text-gray-500 font-mono outline-none">
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Bot Token (from BotFather)</label>
+        <input type="text" id="act-bot-token" placeholder="1234567890:AAxxxxxxxxxxxxxxxx"
+          class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 font-mono transition">
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Bot Username (without @)</label>
+        <input type="text" id="act-bot-username" placeholder="myshopaibot"
+          class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end mt-6">
+      <button onclick="closeModal('activate-modal')" class="px-4 py-2 text-sm text-gray-400 border border-white/10 rounded-lg hover:border-white/20 transition">Cancel</button>
+      <button onclick="runActivateBot()" class="px-5 py-2 text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-lg transition hover:shadow-lg hover:shadow-sky-600/25">
+        🤖 Activate Bot
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-6 z-[9999] px-5 py-3 rounded-xl text-sm font-medium shadow-2xl translate-y-4 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2"></div>
 
 <script>
 const API = 'https://hooks.atlasautomation.tech/webhook';
@@ -290,10 +341,10 @@ const ADMIN_TOKEN = 'aag-admin-2026';
 const PORTAL = 'https://atlasautomation.tech';
 const PASS = 'aag2026';
 
-let data = { leads: [], agents: [], aa: [], clients: [] };
+let data = { leads: [], agents: [], aa: [], clients: [], intake: [] };
 let modalAction = null;
 
-// ── AUTH ──────────────────────────────────────
+// ── AUTH ──────────────────────────────────
 function doLogin() {
   const v = document.getElementById('pass-input').value;
   if (v === PASS) {
@@ -305,29 +356,28 @@ function doLogin() {
     document.getElementById('login-err').textContent = 'Incorrect password.';
   }
 }
-function logout() {
-  localStorage.removeItem('aag-admin');
-  location.reload();
-}
+function logout() { localStorage.removeItem('aag-admin'); location.reload(); }
 if (localStorage.getItem('aag-admin') === '1') {
   document.getElementById('login-overlay').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
 }
 
-// ── TABS ──────────────────────────────────────
+// ── TABS ──────────────────────────────────
 function switchTab(id, btn) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active','text-white','border-brand-500');
+    b.classList.add('text-gray-500','border-transparent');
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+  btn.classList.add('active','text-white','border-brand-500');
+  btn.classList.remove('text-gray-500','border-transparent');
+  document.getElementById('panel-' + id).classList.remove('hidden');
 }
 
-// ── DATA FETCH ────────────────────────────────
+// ── FETCH ──────────────────────────────────
 async function fetchTab(path) {
   try {
-    const r = await fetch(`${API}/${path}?token=${ADMIN_TOKEN}`, {
-      headers: { 'Accept': 'application/json' }
-    });
+    const r = await fetch(`${API}/${path}?token=${ADMIN_TOKEN}`);
     if (!r.ok) return [];
     const j = await r.json();
     return j.rows || [];
@@ -335,295 +385,392 @@ async function fetchTab(path) {
 }
 
 async function loadAll() {
-  const [leads, agents, aa, clients] = await Promise.all([
-    fetchTab('aag-read-leads'),
-    fetchTab('aag-read-agents'),
-    fetchTab('aag-read-active-agents'),
-    fetchTab('aag-read-clients'),
+  const [leads, agents, aa, clients, intake] = await Promise.all([
+    fetchTab('aag-read-leads'), fetchTab('aag-read-agents'),
+    fetchTab('aag-read-active-agents'), fetchTab('aag-read-clients'),
+    fetchTab('aag-read-intake'),
   ]);
-  data = { leads, agents, aa, clients };
-  renderAll();
-  updateStats();
+  data = { leads, agents, aa, clients, intake };
+  renderAll(); updateStats();
   const now = new Date();
   document.getElementById('last-refresh-time').textContent =
-    'Updated ' + now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    'Updated ' + now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 }
 
 function updateStats() {
-  const { leads, aa, clients } = data;
+  const { leads, aa, clients, intake } = data;
   document.getElementById('stat-leads').textContent = leads.length;
-  const pipeline = leads.filter(r => !['Won','Lost'].includes(r.Status)).length;
-  document.getElementById('stat-pipeline').textContent = pipeline;
+  document.getElementById('stat-pipeline').textContent = leads.filter(r=>!['Won','Lost'].includes(r.Status)).length;
   document.getElementById('stat-won').textContent = leads.filter(r=>r.Status==='Won').length;
+  document.getElementById('stat-intake').textContent = intake.length;
   document.getElementById('stat-agents').textContent = aa.filter(r=>r.Status==='Active').length;
-  const plans = {Solo:97, Business:197, Pro:397};
+  const plans = {Solo:97,Business:197,Pro:397};
   const mrr = clients.filter(r=>r.Status==='Active').reduce((s,r)=>s+(plans[r.Plan]||0),0);
   document.getElementById('stat-revenue').textContent = mrr ? '$'+mrr.toLocaleString() : '$0';
-
   document.getElementById('badge-leads').textContent = leads.length;
-  const pending = data.agents.filter(r=>['Pending Review','Reviewing'].includes(r.Status)).length;
-  document.getElementById('badge-agents').textContent = pending || data.agents.length;
+  document.getElementById('badge-intake').textContent = intake.filter(r=>r.Status==='Pending Provision').length || intake.length;
+  document.getElementById('badge-agents').textContent = data.agents.filter(r=>['Pending Review','Reviewing'].includes(r.Status)).length || data.agents.length;
   document.getElementById('badge-aa').textContent = aa.length;
   document.getElementById('badge-clients').textContent = clients.length;
 }
 
-// ── RENDER ────────────────────────────────────
-function renderAll() {
-  renderLeads();
-  renderAgents();
-  renderAA();
-  renderClients();
-}
+function renderAll() { renderLeads(); renderIntake(); renderAgents(); renderAA(); renderClients(); }
 
-function badge(status) {
-  const map = {
-    'New':'new','Contacted':'contacted','Qualified':'qualified',
-    'Proposal Sent':'proposal','Won':'won','Lost':'lost',
-    'Pending Review':'pending','Reviewing':'reviewing',
-    'Approved':'approved','Rejected':'rejected',
-    'Active':'active','Inactive':'inactive','Paused':'paused','Cancelled':'cancelled'
-  };
-  const cls = map[status] || 'new';
-  return `<span class="badge badge-${cls}">${status}</span>`;
+// ── BADGE / UTILS ──────────────────────────
+const BADGE_MAP = {
+  'New':'bg-sky-500/15 text-sky-400',
+  'Contacted':'bg-amber-500/15 text-amber-400',
+  'Qualified':'bg-emerald-500/15 text-emerald-400',
+  'Proposal Sent':'bg-violet-500/15 text-violet-400',
+  'Won':'bg-emerald-500/20 text-emerald-300',
+  'Lost':'bg-red-500/15 text-red-400',
+  'Pending Review':'bg-amber-500/15 text-amber-400',
+  'Reviewing':'bg-sky-500/15 text-sky-400',
+  'Approved':'bg-emerald-500/15 text-emerald-400',
+  'Rejected':'bg-red-500/15 text-red-400',
+  'Active':'bg-emerald-500/15 text-emerald-400',
+  'Inactive':'bg-gray-500/15 text-gray-500',
+  'Paused':'bg-amber-500/15 text-amber-400',
+  'Cancelled':'bg-red-500/15 text-red-400',
+  'Pending Provision':'bg-amber-500/15 text-amber-400',
+  'Provisioned':'bg-sky-500/15 text-sky-400',
+  'Bot Active':'bg-emerald-500/15 text-emerald-400',
+};
+function badge(s) {
+  const cls = BADGE_MAP[s] || 'bg-gray-500/15 text-gray-400';
+  return `<span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold ${cls}">${s}</span>`;
 }
-
 function fmtDate(ts) {
-  if (!ts) return '—';
-  try { return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
-  catch(e){ return ts.substring(0,10); }
+  if (!ts) return '<span class="text-gray-600">—</span>';
+  try { return `<span class="text-gray-500">${new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`; }
+  catch(e) { return ts.substring(0,10); }
 }
-
 function statusSelect(email, sheet, current, options) {
-  const opts = options.map(o => `<option${o===current?' selected':''}>${o}</option>`).join('');
-  return `<select class="status-sel" onchange="updateStatus('${sheet}','${email}',this.value)">${opts}</select>`;
+  const opts = options.map(o=>`<option${o===current?' selected':''}>${o}</option>`).join('');
+  return `<select class="bg-white/5 border border-white/10 text-gray-300 text-xs rounded-lg px-2 py-1.5 outline-none hover:border-white/20 focus:border-brand-500 transition min-w-[130px] cursor-pointer" onchange="updateStatus('${sheet}','${email}',this.value)">${opts}</select>`;
 }
+function btn(cls, onclick, label) {
+  const styles = {
+    approve: 'bg-white text-gray-900 hover:bg-gray-100',
+    reject: 'bg-red-500/15 text-red-400 border border-red-500/20 hover:bg-red-500/25',
+    won: 'bg-emerald-600 text-white hover:bg-emerald-500',
+    portal: 'bg-white/5 text-gray-400 border border-white/10 hover:border-white/20 hover:text-white',
+    provision: 'bg-violet-600 text-white hover:bg-violet-500',
+    bot: 'bg-sky-600 text-white hover:bg-sky-500',
+  };
+  return `<button onclick="${onclick}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition whitespace-nowrap ${styles[cls]||styles.portal}">${label}</button>`;
+}
+function emptyRow(cols, icon, msg) {
+  return `<tr><td colspan="${cols}"><div class="py-16 text-center"><div class="text-3xl mb-3">${icon}</div><p class="text-gray-600 text-sm">${msg}</p></div></td></tr>`;
+}
+function filterTable(id, q) {
+  document.querySelectorAll(`#${id} tbody tr`).forEach(r => {
+    r.style.display = (!q || (r.dataset.search||'').includes(q.toLowerCase())) ? '' : 'none';
+  });
+}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
-// LEADS
+// ── RENDERS ────────────────────────────────
 function renderLeads() {
   const tbody = document.getElementById('leads-body');
   const tbl = document.getElementById('leads-table');
-  document.getElementById('leads-loading').style.display = 'none';
-  tbl.style.display = '';
-  if (!data.leads.length) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">📋</div><p>No leads yet</p></div></td></tr>`;
-    return;
-  }
+  document.getElementById('leads-loading').classList.add('hidden');
+  tbl.classList.remove('hidden');
   const statuses = ['New','Contacted','Qualified','Proposal Sent','Won','Lost'];
-  tbody.innerHTML = data.leads.map((r,i) => `
-    <tr data-search="${(r.Name+r.Business+r.Email+r.Location+r.Plan).toLowerCase()}">
-      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div><div class="cell-sub">${esc(r.Phone||'')}</div></td>
-      <td><div class="cell-name">${esc(r.Business||'—')}</div></td>
-      <td>${esc(r.Plan||'—')}</td>
-      <td>${esc(r.Channel||'—')}</td>
-      <td>${esc(r.Location||'—')}</td>
-      <td>${statusSelect(r.Email,'leads',r.Status||'New',statuses)}</td>
-      <td class="cell-ts">${fmtDate(r.Timestamp)}</td>
-      <td><div class="action-cell">
-        ${r.Status!=='Won' ? `<button class="btn btn-won" onclick="confirmWon('${esc(r.Email)}','${esc(r.Name)}')">Mark Won</button>` : badge('Won')}
-      </div></td>
+  if (!data.leads.length) { tbody.innerHTML = emptyRow(8,'📋','No leads yet'); return; }
+  tbody.innerHTML = data.leads.map(r => `
+    <tr class="hover-row border-b border-white/4 transition" data-search="${(r.Name+r.Business+r.Email+r.Location+r.Plan).toLowerCase()}">
+      <td class="px-4 py-3.5">
+        <div class="font-semibold text-white text-sm">${esc(r.Name||'—')}</div>
+        <div class="text-xs text-brand-500 mt-0.5">${esc(r.Email||'')}</div>
+        <div class="text-xs text-gray-600">${esc(r.Phone||'')}</div>
+      </td>
+      <td class="px-4 py-3.5 font-medium text-gray-200">${esc(r.Business||'—')}</td>
+      <td class="px-4 py-3.5 text-gray-400">${esc(r.Plan||'—')}</td>
+      <td class="px-4 py-3.5 text-gray-400">${esc(r.Channel||'—')}</td>
+      <td class="px-4 py-3.5 text-gray-400">${esc(r.Location||'—')}</td>
+      <td class="px-4 py-3.5">${statusSelect(r.Email,'leads',r.Status||'New',statuses)}</td>
+      <td class="px-4 py-3.5">${fmtDate(r.Timestamp)}</td>
+      <td class="px-4 py-3.5">
+        ${r.Status!=='Won' ? btn('won',`confirmWon('${esc(r.Email)}','${esc(r.Name)}')`, '🎉 Mark Won') : badge('Won')}
+      </td>
     </tr>`).join('');
 }
 
-// AGENTS
+function renderIntake() {
+  const tbody = document.getElementById('intake-body');
+  const tbl = document.getElementById('intake-table');
+  document.getElementById('intake-loading').classList.add('hidden');
+  tbl.classList.remove('hidden');
+  if (!data.intake.length) { tbody.innerHTML = emptyRow(8,'📝','No intake submissions yet'); return; }
+  const statuses = ['Pending Provision','Provisioned','Bot Active'];
+  tbody.innerHTML = data.intake.map((r, i) => `
+    <tr class="hover-row border-b border-white/4" data-search="${(r.BusinessName+r.Category+r.City+r.Email).toLowerCase()}">
+      <td class="px-4 py-3.5">
+        <div class="font-semibold text-white text-sm">${esc(r.BusinessName||'—')}</div>
+        <div class="text-xs text-brand-500 mt-0.5">${esc(r.Email||'')}</div>
+      </td>
+      <td class="px-4 py-3.5">${badge(r.Category||'—')}</td>
+      <td class="px-4 py-3.5">
+        <div class="text-sm text-gray-300">${esc(r.OwnerName||'—')}</div>
+        <div class="text-xs text-gray-600">${esc(r.Phone||'')}</div>
+      </td>
+      <td class="px-4 py-3.5 text-gray-400 text-sm">${esc(r.City||'—')}</td>
+      <td class="px-4 py-3.5 text-xs text-gray-500 max-w-[200px] truncate">${esc((r.Services||'').substring(0,80))}${(r.Services||'').length>80?'…':''}</td>
+      <td class="px-4 py-3.5">${statusSelect(r.Email,'intake',r.Status||'Pending Provision',statuses)}</td>
+      <td class="px-4 py-3.5">${fmtDate(r.Timestamp)}</td>
+      <td class="px-4 py-3.5">
+        <div class="flex gap-2 flex-wrap">
+          ${r.Status !== 'Bot Active' ? btn('provision',`openProvision(${i})`,'⚙️ Provision') : ''}
+          ${r.Status === 'Provisioned' ? btn('bot',`openActivate('${esc(r.Email)}')`,'🤖 Activate Bot') : ''}
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
 function renderAgents() {
   const tbody = document.getElementById('agents-body');
   const tbl = document.getElementById('agents-table');
-  document.getElementById('agents-loading').style.display = 'none';
-  tbl.style.display = '';
-  if (!data.agents.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">🙋</div><p>No applications yet</p></div></td></tr>`;
-    return;
-  }
+  document.getElementById('agents-loading').classList.add('hidden');
+  tbl.classList.remove('hidden');
+  if (!data.agents.length) { tbody.innerHTML = emptyRow(7,'🙋','No applications yet'); return; }
   const statuses = ['Pending Review','Reviewing','Approved','Rejected'];
   tbody.innerHTML = data.agents.map(r => `
-    <tr data-search="${(r.Name+r.Email+r.City+r.Background).toLowerCase()}">
-      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div><div class="cell-sub">${esc(r.Phone||'')}</div></td>
-      <td>${esc(r.City||'—')}</td>
-      <td style="max-width:200px;font-size:12px;color:#666">${esc((r.Background||'').substring(0,80))}${(r.Background||'').length>80?'…':''}</td>
-      <td>${r['Agreed to Terms']==='Yes'?'<span class="badge badge-active">Yes</span>':'<span class="badge badge-lost">No</span>'}</td>
-      <td>${statusSelect(r.Email,'agents',r.Status||'Pending Review',statuses)}</td>
-      <td class="cell-ts">${fmtDate(r.Timestamp)}</td>
-      <td><div class="action-cell">
-        ${!['Approved','Rejected'].includes(r.Status) ? `
-          <button class="btn btn-approve" onclick="confirmApprove('${esc(r.Email)}','${esc(r.Name)}')">Approve</button>
-          <button class="btn btn-reject" onclick="confirmReject('${esc(r.Email)}','${esc(r.Name)}')">Reject</button>
-        ` : badge(r.Status)}
-      </div></td>
+    <tr class="hover-row border-b border-white/4" data-search="${(r.Name+r.Email+r.City+r.Background).toLowerCase()}">
+      <td class="px-4 py-3.5">
+        <div class="font-semibold text-white text-sm">${esc(r.Name||'—')}</div>
+        <div class="text-xs text-brand-500 mt-0.5">${esc(r.Email||'')}</div>
+        <div class="text-xs text-gray-600">${esc(r.Phone||'')}</div>
+      </td>
+      <td class="px-4 py-3.5 text-gray-400">${esc(r.City||'—')}</td>
+      <td class="px-4 py-3.5 text-xs text-gray-500 max-w-[200px]">${esc((r.Background||'').substring(0,80))}${(r.Background||'').length>80?'…':''}</td>
+      <td class="px-4 py-3.5">${r['Agreed to Terms']==='Yes' ? badge('Active') : badge('Rejected')}</td>
+      <td class="px-4 py-3.5">${statusSelect(r.Email,'agents',r.Status||'Pending Review',statuses)}</td>
+      <td class="px-4 py-3.5">${fmtDate(r.Timestamp)}</td>
+      <td class="px-4 py-3.5">
+        <div class="flex gap-2">
+          ${!['Approved','Rejected'].includes(r.Status) ? `
+            ${btn('approve',`confirmApprove('${esc(r.Email)}','${esc(r.Name)}')`, 'Approve')}
+            ${btn('reject',`confirmReject('${esc(r.Email)}','${esc(r.Name)}')`, 'Reject')}
+          ` : badge(r.Status)}
+        </div>
+      </td>
     </tr>`).join('');
 }
 
-// ACTIVE AGENTS
 function renderAA() {
   const tbody = document.getElementById('aa-body');
   const tbl = document.getElementById('aa-table');
-  document.getElementById('aa-loading').style.display = 'none';
-  tbl.style.display = '';
-  if (!data.aa.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">🤝</div><p>No active agents yet</p></div></td></tr>`;
-    return;
-  }
+  document.getElementById('aa-loading').classList.add('hidden');
+  tbl.classList.remove('hidden');
+  if (!data.aa.length) { tbody.innerHTML = emptyRow(7,'🤝','No active agents yet'); return; }
   const statuses = ['Active','Inactive'];
   tbody.innerHTML = data.aa.map(r => `
-    <tr data-search="${(r.Name+r.Email+r.City).toLowerCase()}">
-      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div></td>
-      <td>${esc(r.City||'—')}</td>
-      <td style="text-align:center;font-weight:700">${r.LeadsSubmitted||'0'}</td>
-      <td style="text-align:center;font-weight:700;color:#16a34a">${r.LeadsWon||'0'}</td>
-      <td style="font-weight:700;color:#0f0f0f">$${Number(r.TotalCommission||0).toLocaleString()}</td>
-      <td>${statusSelect(r.Email,'active-agents',r.Status||'Active',statuses)}</td>
-      <td>
-        ${r.Token ? `<button class="btn btn-portal" onclick="copyPortalLink('agent','${r.Token}')">Copy Link</button>` : '—'}
+    <tr class="hover-row border-b border-white/4" data-search="${(r.Name+r.Email+r.City).toLowerCase()}">
+      <td class="px-4 py-3.5">
+        <div class="font-semibold text-white text-sm">${esc(r.Name||'—')}</div>
+        <div class="text-xs text-brand-500 mt-0.5">${esc(r.Email||'')}</div>
+      </td>
+      <td class="px-4 py-3.5 text-gray-400">${esc(r.City||'—')}</td>
+      <td class="px-4 py-3.5 text-center font-bold text-white">${r.LeadsSubmitted||'0'}</td>
+      <td class="px-4 py-3.5 text-center font-bold text-emerald-400">${r.LeadsWon||'0'}</td>
+      <td class="px-4 py-3.5 font-bold text-amber-400">$${Number(r.TotalCommission||0).toLocaleString()}</td>
+      <td class="px-4 py-3.5">${statusSelect(r.Email,'active-agents',r.Status||'Active',statuses)}</td>
+      <td class="px-4 py-3.5">
+        ${r.Token ? btn('portal',`copyPortalLink('agent','${r.Token}')`, 'Copy Link') : '<span class="text-gray-600">—</span>'}
       </td>
     </tr>`).join('');
 }
 
-// CLIENTS
 function renderClients() {
   const tbody = document.getElementById('clients-body');
   const tbl = document.getElementById('clients-table');
-  document.getElementById('clients-loading').style.display = 'none';
-  tbl.style.display = '';
-  if (!data.clients.length) {
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">🏢</div><p>No clients yet — mark a lead as Won to onboard them</p></div></td></tr>`;
-    return;
-  }
+  document.getElementById('clients-loading').classList.add('hidden');
+  tbl.classList.remove('hidden');
+  if (!data.clients.length) { tbody.innerHTML = emptyRow(7,'🏢','No clients yet'); return; }
   const statuses = ['Active','Paused','Cancelled'];
   tbody.innerHTML = data.clients.map(r => `
-    <tr data-search="${(r.Name+r.Email+r.Business+r.Plan).toLowerCase()}">
-      <td><div class="cell-name">${esc(r.Name||'—')}</div><div class="cell-email">${esc(r.Email||'')}</div></td>
-      <td><div class="cell-name">${esc(r.Business||'—')}</div></td>
-      <td><span class="badge badge-active">${esc(r.Plan||'—')}</span></td>
-      <td>
-        <div class="progress-wrap">
-          <div class="progress-bar"><div class="progress-fill" style="width:${r.SetupProgress||0}%"></div></div>
-          <span class="progress-pct">${r.SetupProgress||0}%</span>
-          <input type="number" class="progress-input" min="0" max="100" value="${r.SetupProgress||0}"
-            onchange="updateProgress('${esc(r.Email)}',this.value)"
-            style="margin-left:4px">
+    <tr class="hover-row border-b border-white/4" data-search="${(r.Name+r.Email+r.Business+r.Plan).toLowerCase()}">
+      <td class="px-4 py-3.5">
+        <div class="font-semibold text-white text-sm">${esc(r.Name||'—')}</div>
+        <div class="text-xs text-brand-500 mt-0.5">${esc(r.Email||'')}</div>
+      </td>
+      <td class="px-4 py-3.5 font-medium text-gray-200">${esc(r.Business||'—')}</td>
+      <td class="px-4 py-3.5">${badge(r.Plan||'—')}</td>
+      <td class="px-4 py-3.5">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 h-1.5 bg-white/8 rounded-full overflow-hidden min-w-[80px]">
+            <div class="h-full bg-gradient-to-r from-brand-600 to-emerald-500 rounded-full transition-all" style="width:${r.SetupProgress||0}%"></div>
+          </div>
+          <span class="text-xs font-bold text-white min-w-[28px]">${r.SetupProgress||0}%</span>
+          <input type="number" min="0" max="100" value="${r.SetupProgress||0}"
+            class="w-14 px-2 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-white text-center outline-none focus:border-brand-500"
+            onchange="updateProgress('${esc(r.Email)}',this.value)">
         </div>
       </td>
-      <td>${statusSelect(r.Email,'clients',r.Status||'Active',statuses)}</td>
-      <td>
-        ${r.Token ? `<button class="btn btn-portal" onclick="copyPortalLink('client','${r.Token}')">Copy Link</button>` : '—'}
+      <td class="px-4 py-3.5">
+        ${r.AgentId ? `${badge('Provisioned')}<div class="text-[10px] text-gray-600 font-mono mt-1">${esc(r.AgentId)}</div>` : '<span class="text-gray-600 text-xs">Not yet</span>'}
+      </td>
+      <td class="px-4 py-3.5">${statusSelect(r.Email,'clients',r.Status||'Active',statuses)}</td>
+      <td class="px-4 py-3.5">
+        <div class="flex gap-2">
+          ${r.Token ? btn('portal',`copyPortalLink('client','${r.Token}')`, 'Portal Link') : ''}
+        </div>
       </td>
     </tr>`).join('');
 }
 
-// ── ACTIONS ───────────────────────────────────
+// ── ACTIONS ────────────────────────────────
 async function updateStatus(sheet, email, status) {
   try {
     const r = await fetch(`${API}/aag-update-status`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ sheet, email, status, field: 'Status', value: status, adminToken: ADMIN_TOKEN })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet, email, status, field:'Status', value:status, adminToken:ADMIN_TOKEN })
     });
-    if (r.ok) toast('Status updated', 'ok');
-    else toast('Update failed', 'err');
-  } catch(e) { toast('Network error', 'err'); }
+    toast(r.ok ? '✓ Status updated' : '✗ Update failed', r.ok ? 'ok' : 'err');
+  } catch(e) { toast('Network error','err'); }
 }
-
 async function updateProgress(email, value) {
-  try {
-    await fetch(`${API}/aag-update-status`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ sheet: 'clients', email, field: 'SetupProgress', value, status: value, adminToken: ADMIN_TOKEN })
-    });
-    toast('Progress saved', 'ok');
-  } catch(e) { toast('Network error', 'err'); }
+  await fetch(`${API}/aag-update-status`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ sheet:'clients', email, field:'SetupProgress', value, status:value, adminToken:ADMIN_TOKEN })
+  });
+  toast('Progress saved','ok');
 }
-
 function confirmApprove(email, name) {
-  openModal(
-    'Approve Agent',
-    `Approve <strong>${esc(name)}</strong>? They'll receive an onboarding email with their portal link and commission details.`,
+  openConfirm('Approve Agent',`Approve <strong class="text-white">${esc(name)}</strong>? They'll receive an onboarding email with portal access.`,
     async () => {
-      const r = await fetch(`${API}/aag-approve-agent`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ email, adminToken: ADMIN_TOKEN })
-      });
+      const r = await fetch(`${API}/aag-approve-agent`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, adminToken:ADMIN_TOKEN }) });
       const j = await r.json().catch(()=>({}));
-      if (r.ok && j.ok) { toast('Agent approved! Onboarding email sent.', 'ok'); await loadAll(); }
-      else toast('Error: ' + (j.error||'unknown'), 'err');
+      if (j.ok) { toast('Agent approved! Email sent.','ok'); await loadAll(); }
+      else toast('Error: '+(j.error||'unknown'),'err');
     }
   );
 }
-
 function confirmReject(email, name) {
-  openModal(
-    'Reject Application',
-    `Reject <strong>${esc(name)}</strong>'s application? Their status will be updated to Rejected.`,
-    async () => {
-      await updateStatus('agents', email, 'Rejected');
-      await loadAll();
-    },
-    true
+  openConfirm('Reject Application',`Reject <strong class="text-white">${esc(name)}</strong>'s application?`,
+    async () => { await updateStatus('agents', email, 'Rejected'); await loadAll(); }, true
   );
 }
-
 function confirmWon(email, name) {
-  openModal(
-    'Mark as Won 🎉',
-    `Mark <strong>${esc(name)}</strong> as a won client? They'll be onboarded, added to the Clients tab, and sent a welcome email with their portal link.`,
+  openConfirm('Mark as Won 🎉',`Mark <strong class="text-white">${esc(name)}</strong> as a won client? They'll be onboarded and sent a welcome email.`,
     async () => {
-      const r = await fetch(`${API}/aag-client-won`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ email, adminToken: ADMIN_TOKEN })
-      });
+      const r = await fetch(`${API}/aag-client-won`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, adminToken:ADMIN_TOKEN }) });
       const j = await r.json().catch(()=>({}));
-      if (r.ok && j.ok) { toast('Client won! Welcome email sent.', 'ok'); await loadAll(); }
-      else toast('Error: ' + (j.error||'unknown'), 'err');
+      if (j.ok) { toast('Client won! Welcome email sent.','ok'); await loadAll(); }
+      else toast('Error: '+(j.error||'unknown'),'err');
     }
   );
 }
-
 function copyPortalLink(type, token) {
-  const url = `${PORTAL}/${type}-portal.html?token=${token}`;
-  navigator.clipboard.writeText(url).then(() => toast('Link copied!', 'ok'));
+  navigator.clipboard.writeText(`${PORTAL}/${type}-portal.html?token=${token}`).then(() => toast('Link copied!','ok'));
 }
 
-// ── MODAL ─────────────────────────────────────
-function openModal(title, body, action, danger=false) {
+// ── PROVISION ──────────────────────────────
+function openProvision(idx) {
+  const row = data.intake[idx];
+  if (!row) return;
+  let intakeObj = {};
+  try { intakeObj = JSON.parse(row.RawJSON || '{}'); } catch(e) { intakeObj = row; }
+  const preview = document.getElementById('provision-preview');
+  preview.innerHTML = [
+    ['Business', intakeObj.businessName || row.BusinessName],
+    ['Category', intakeObj.category || row.Category],
+    ['Owner', intakeObj.ownerName || row.OwnerName],
+    ['City', intakeObj.city || row.City],
+    ['Phone', intakeObj.phone || row.Phone],
+    ['Email', intakeObj.email || row.Email],
+  ].filter(([,v])=>v).map(([l,v]) =>
+    `<div class="flex gap-3"><span class="text-gray-600 text-xs w-16 flex-shrink-0 pt-0.5">${l}</span><span class="text-gray-200 text-sm font-medium">${esc(v)}</span></div>`
+  ).join('');
+  document.getElementById('provision-json').value = JSON.stringify(intakeObj, null, 2);
+  document.getElementById('provision-modal').classList.remove('hidden');
+}
+async function runProvision() {
+  let intakeJSON;
+  try { intakeJSON = JSON.parse(document.getElementById('provision-json').value); }
+  catch(e) { toast('Invalid JSON','err'); return; }
+  const btn = document.querySelector('#provision-modal button:last-child');
+  const orig = btn.textContent; btn.textContent = 'Provisioning…'; btn.disabled = true;
+  try {
+    const r = await fetch(`${API}/aag-provision`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ intakeJSON, adminToken:ADMIN_TOKEN })
+    });
+    const j = await r.json().catch(()=>({}));
+    if (j.ok) {
+      toast(`✅ Agent provisioned: ${j.client_id}`,'ok');
+      closeModal('provision-modal');
+      if (intakeJSON.email) await updateStatus('intake', intakeJSON.email, 'Provisioned');
+      await loadAll();
+    } else { toast('Provision failed: '+(j.error||JSON.stringify(j)),'err'); }
+  } catch(e) { toast('Network error: '+e.message,'err'); }
+  finally { btn.textContent = orig; btn.disabled = false; }
+}
+
+// ── ACTIVATE BOT ───────────────────────────
+function openActivate(email) {
+  const row = data.intake.find(r=>r.Email===email) || {};
+  const slug = s => s.toLowerCase().trim().replace(/[^\w\s-]/g,'').replace(/[\s_-]+/g,'-').replace(/^-+|-+$/g,'').substring(0,30);
+  const clientId = `client-${slug(row.BusinessName||'')}-${slug((row.City||'').substring(0,10))}`;
+  document.getElementById('act-client-id').value = clientId;
+  document.getElementById('act-bot-token').value = '';
+  document.getElementById('act-bot-username').value = '';
+  document.getElementById('activate-modal').classList.remove('hidden');
+}
+async function runActivateBot() {
+  const clientId = document.getElementById('act-client-id').value;
+  const botToken = document.getElementById('act-bot-token').value.trim();
+  const botUsername = document.getElementById('act-bot-username').value.trim();
+  if (!botToken) { toast('Enter the bot token','err'); return; }
+  const btn = document.querySelector('#activate-modal button:last-child');
+  const orig = btn.textContent; btn.textContent = 'Activating…'; btn.disabled = true;
+  try {
+    const r = await fetch(`${API}/aag-activate-bot`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ clientId, botToken, botUsername, adminToken:ADMIN_TOKEN })
+    });
+    const j = await r.json().catch(()=>({}));
+    if (j.ok) { toast('🤖 Bot activated!','ok'); closeModal('activate-modal'); await loadAll(); }
+    else toast('Activation failed: '+(j.error||'unknown'),'err');
+  } catch(e) { toast('Network error','err'); }
+  finally { btn.textContent = orig; btn.disabled = false; }
+}
+
+// ── MODALS ─────────────────────────────────
+function openConfirm(title, body, action, danger=false) {
   document.getElementById('modal-title').textContent = title;
   document.getElementById('modal-body').innerHTML = body;
   const btn = document.getElementById('modal-confirm-btn');
-  btn.className = 'btn ' + (danger ? 'btn-reject' : 'btn-approve');
-  btn.textContent = danger ? 'Confirm Reject' : 'Confirm';
+  btn.className = `px-5 py-2 text-sm font-semibold rounded-lg transition ${danger ? 'bg-red-600 hover:bg-red-500 text-white' : 'bg-white text-gray-900 hover:bg-gray-100'}`;
+  btn.textContent = danger ? 'Confirm' : 'Confirm';
   modalAction = action;
   document.getElementById('confirm-modal').classList.remove('hidden');
 }
-function closeModal() { document.getElementById('confirm-modal').classList.add('hidden'); modalAction = null; }
-async function runModalAction() {
-  closeModal();
-  if (modalAction) await modalAction();
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+  if (id==='confirm-modal') modalAction = null;
 }
+async function runModalAction() { closeModal('confirm-modal'); if (modalAction) await modalAction(); }
 
-// ── UTILS ─────────────────────────────────────
-function filterTable(tableId, q) {
-  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
-  const lq = q.toLowerCase();
-  rows.forEach(r => {
-    const s = r.dataset.search || '';
-    r.style.display = (!q || s.includes(lq)) ? '' : 'none';
-  });
-}
+// Close modals on backdrop click
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if (e.target === bg) bg.classList.add('hidden'); });
+});
 
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-
+// ── TOAST ──────────────────────────────────
 let toastTimer;
 function toast(msg, type='ok') {
   const el = document.getElementById('toast');
+  const colors = { ok: 'bg-gray-900 border border-white/10 text-white', err: 'bg-red-600 text-white' };
+  el.className = `fixed bottom-6 right-6 z-[9999] px-5 py-3 rounded-xl text-sm font-medium shadow-2xl flex items-center gap-2 ${colors[type]||colors.ok}`;
   el.textContent = msg;
-  el.className = 'show ' + type;
+  el.style.transform = 'translateY(0)'; el.style.opacity = '1';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.className = '', 3000);
+  toastTimer = setTimeout(() => { el.style.transform = 'translateY(8px)'; el.style.opacity = '0'; }, 4000);
 }
 
-// ── INIT ──────────────────────────────────────
+// ── INIT ───────────────────────────────────
 if (localStorage.getItem('aag-admin') === '1') loadAll();
 setInterval(loadAll, 30000);
 </script>

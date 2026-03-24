@@ -1,221 +1,224 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent Portal — Atlas Automation Group</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: { 500:'#4f6ef7', 600:'#3d5be8', 700:'#2e4ad4' },
+        surface: { 1:'#0d0d12', 2:'#13131a', 3:'#1a1a24' },
+      }
+    }
+  }
+}
+</script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f5;color:#1a1a1a;min-height:100vh}
-
-/* ERROR STATE */
-#error-state{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px}
-#error-state.show{display:flex}
-#error-state h2{font-size:20px;margin-bottom:8px}
-#error-state p{color:#888;font-size:14px}
-
-/* LOADING */
-#loading-state{min-height:100vh;display:flex;align-items:center;justify-content:center}
-.spinner{width:36px;height:36px;border:3px solid #e5e5e5;border-top-color:#0f0f0f;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* HEADER */
-header{background:#0f0f0f;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
-.logo{color:#fff;font-size:14px;font-weight:800;letter-spacing:2px}
-.agent-name-badge{color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
-.agent-name-badge span{background:#1a1a1a;padding:4px 12px;border-radius:20px;font-size:13px}
-
-/* STATS GRID */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px;max-width:900px;margin:0 auto}
-@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:#fff;border-radius:12px;border:1px solid #e5e5e5;padding:24px;text-align:center}
-.stat-card .val{font-size:36px;font-weight:800;line-height:1;color:#0f0f0f}
-.stat-card .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:6px}
-.stat-card.green .val{color:#16a34a}
-.stat-card.blue .val{color:#2563eb}
-
-/* MAIN CONTENT */
-.content{max-width:900px;margin:0 auto;padding:0 24px 40px}
-
-/* SECTION */
-.section{background:#fff;border-radius:12px;border:1px solid #e5e5e5;margin-bottom:20px;overflow:hidden}
-.section-header{padding:18px 20px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center}
-.section-header h2{font-size:15px;font-weight:700}
-.section-body{padding:20px}
-
-/* COMMISSIONS */
-.comm-bar-wrap{margin-bottom:16px}
-.comm-bar-label{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
-.comm-bar{height:10px;background:#f0f0f0;border-radius:5px;overflow:hidden}
-.comm-bar-fill{height:100%;background:linear-gradient(90deg,#0f0f0f,#444);border-radius:5px;transition:width .6s}
-.comm-detail{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
-@media(max-width:500px){.comm-detail{grid-template-columns:1fr}}
-.comm-item{background:#f9f9f9;border-radius:8px;padding:12px 16px}
-.comm-item .label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.8px}
-.comm-item .amount{font-size:20px;font-weight:800;margin-top:4px}
-
-/* TABLE */
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{padding:10px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#888;border-bottom:1px solid #f0f0f0}
-td{padding:12px 16px;border-bottom:1px solid #f5f5f5;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-.badge{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase}
-.badge-new{background:#e0f2fe;color:#0284c7}
-.badge-contacted{background:#fef3c7;color:#d97706}
-.badge-qualified{background:#d1fae5;color:#059669}
-.badge-won{background:#dcfce7;color:#16a34a}
-.badge-lost{background:#fee2e2;color:#dc2626}
-.badge-proposal{background:#ede9fe;color:#7c3aed}
-
-/* RESOURCES */
-.resources-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media(max-width:500px){.resources-grid{grid-template-columns:1fr}}
-.resource-card{border:1px solid #e5e5e5;border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s}
-.resource-card:hover{border-color:#0f0f0f;background:#fafafa}
-.resource-icon{font-size:24px;flex-shrink:0}
-.resource-title{font-size:14px;font-weight:600}
-.resource-sub{font-size:12px;color:#888;margin-top:2px}
-
-/* SUBMIT LEAD FORM */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:500px){.form-grid{grid-template-columns:1fr}}
-.form-group{display:flex;flex-direction:column;gap:6px}
-.form-group label{font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px}
-.form-group input,.form-group select,.form-group textarea{padding:10px 12px;border:1px solid #e5e5e5;border-radius:8px;font-size:14px;outline:none;background:#fff;font-family:inherit}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#0f0f0f}
-.form-group textarea{resize:vertical;min-height:70px}
-.form-full{grid-column:1/-1}
-.btn-submit{width:100%;padding:14px;background:#0f0f0f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:0.5px}
-.btn-submit:hover{background:#333}
-.btn-submit:disabled{opacity:0.5;cursor:not-allowed}
-
-/* COMMISSION RATES */
-.rate-table{width:100%}
-.rate-table td{padding:8px 12px;font-size:13px;border-bottom:1px solid #f5f5f5}
-.rate-table tr:last-child td{border:none}
-.rate-amount{font-weight:800;color:#16a34a}
-
-/* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;background:#0f0f0f;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;transform:translateY(20px);opacity:0;transition:all .25s;pointer-events:none}
-#toast.show{transform:translateY(0);opacity:1}
-#toast.err{background:#dc2626}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+* { font-family: 'Inter', -apple-system, sans-serif; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { animation: spin 0.8s linear infinite; }
+select option { background: #1a1a24; color: #e5e5e5; }
 </style>
 </head>
-<body>
+<body class="bg-[#0a0a0f] text-gray-100 min-h-screen antialiased">
 
-<div id="loading-state"><div class="spinner"></div></div>
-
-<div id="error-state">
-  <div style="font-size:48px;margin-bottom:16px">🔒</div>
-  <h2>Invalid Portal Link</h2>
-  <p>Your agent link is invalid or expired.<br>Contact <a href="mailto:sales@atlasautomation.tech">sales@atlasautomation.tech</a></p>
+<!-- LOADING -->
+<div id="loading-state" class="min-h-screen flex items-center justify-center">
+  <div class="text-center">
+    <div class="w-8 h-8 border-2 border-white/10 border-t-brand-500 rounded-full spinner mx-auto mb-4"></div>
+    <p class="text-gray-600 text-sm">Loading your portal…</p>
+  </div>
 </div>
 
-<div id="app" style="display:none">
-  <header>
-    <div class="logo">ATLAS AUTOMATION GROUP</div>
-    <div class="agent-name-badge">Agent Portal <span id="agent-name-display">—</span></div>
+<!-- ERROR -->
+<div id="error-state" class="hidden min-h-screen flex items-center justify-center p-6">
+  <div class="text-center max-w-sm">
+    <div class="text-5xl mb-5">🔒</div>
+    <h2 class="text-xl font-bold text-white mb-2">Invalid Portal Link</h2>
+    <p class="text-gray-500 text-sm leading-relaxed">Your agent link is invalid or has expired.<br>
+    Contact <a href="mailto:sales@atlasautomation.tech" class="text-brand-500 hover:underline">sales@atlasautomation.tech</a></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-surface-1/90 backdrop-blur-xl border-b border-white/5 h-14 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-6 h-6 rounded-md bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+        <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <span class="text-white font-bold text-sm tracking-widest">ATLAS AUTOMATION</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-gray-600 text-xs">Agent Portal</span>
+      <span class="text-xs font-semibold text-gray-300 border border-white/10 px-3 py-1 rounded-full" id="agent-name-badge">—</span>
+    </div>
   </header>
 
-  <div class="stats-grid">
-    <div class="stat-card"><div class="val" id="s-submitted">0</div><div class="lbl">Leads Submitted</div></div>
-    <div class="stat-card green"><div class="val" id="s-won">0</div><div class="lbl">Deals Closed</div></div>
-    <div class="stat-card blue"><div class="val" id="s-earned">$0</div><div class="lbl">Total Earned</div></div>
-    <div class="stat-card"><div class="val" id="s-rate">0%</div><div class="lbl">Close Rate</div></div>
+  <!-- HERO STATS -->
+  <div class="bg-gradient-to-b from-surface-2 to-[#0a0a0f] border-b border-white/5 px-5 pt-8 pb-6">
+    <p class="text-center text-gray-600 text-xs uppercase tracking-widest mb-6">Your Performance</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+      <div class="bg-white/3 border border-white/8 rounded-2xl p-5 text-center">
+        <div class="text-3xl font-black text-white" id="s-submitted">0</div>
+        <div class="text-[10px] uppercase tracking-wider text-gray-600 mt-1">Leads Submitted</div>
+      </div>
+      <div class="bg-emerald-500/8 border border-emerald-500/15 rounded-2xl p-5 text-center">
+        <div class="text-3xl font-black text-emerald-400" id="s-won">0</div>
+        <div class="text-[10px] uppercase tracking-wider text-emerald-700 mt-1">Deals Closed</div>
+      </div>
+      <div class="bg-amber-500/8 border border-amber-500/15 rounded-2xl p-5 text-center">
+        <div class="text-3xl font-black text-amber-400" id="s-earned">$0</div>
+        <div class="text-[10px] uppercase tracking-wider text-amber-700 mt-1">Total Earned</div>
+      </div>
+      <div class="bg-brand-500/8 border border-brand-500/15 rounded-2xl p-5 text-center">
+        <div class="text-3xl font-black text-brand-500" id="s-rate">0%</div>
+        <div class="text-[10px] uppercase tracking-wider text-blue-800 mt-1">Close Rate</div>
+      </div>
+    </div>
   </div>
 
-  <div class="content">
+  <!-- MAIN -->
+  <div class="max-w-3xl mx-auto px-5 py-8 space-y-5">
 
     <!-- COMMISSION TRACKER -->
-    <div class="section">
-      <div class="section-header"><h2>💰 Commission Tracker</h2></div>
-      <div class="section-body">
-        <div class="comm-bar-wrap">
-          <div class="comm-bar-label">
-            <span>Progress toward $1,000</span>
-            <span id="comm-pct-label">0%</span>
-          </div>
-          <div class="comm-bar"><div class="comm-bar-fill" id="comm-bar-fill" style="width:0%"></div></div>
+    <div class="bg-surface-2 rounded-2xl border border-white/8 overflow-hidden">
+      <div class="flex items-center gap-2.5 px-6 py-4 border-b border-white/5">
+        <span class="text-lg">💰</span>
+        <h2 class="font-bold text-white text-sm">Commission Tracker</h2>
+      </div>
+      <div class="px-6 py-5">
+        <!-- Progress bar -->
+        <div class="flex justify-between items-baseline mb-2">
+          <span class="text-sm text-gray-500">Progress toward $1,000 milestone</span>
+          <span class="text-sm font-bold text-white" id="comm-pct-label">0%</span>
         </div>
-        <div class="comm-detail">
-          <div class="comm-item">
-            <div class="label">Total Earned</div>
-            <div class="amount" id="comm-total">$0</div>
+        <div class="h-2.5 bg-white/5 rounded-full overflow-hidden mb-5">
+          <div id="comm-bar-fill" class="h-full bg-gradient-to-r from-brand-600 to-emerald-500 rounded-full transition-all duration-700" style="width:0%"></div>
+        </div>
+
+        <!-- 3 mini stats -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="bg-white/3 rounded-xl p-4 text-center">
+            <div class="text-xs text-gray-600 uppercase tracking-wider mb-1">Total Earned</div>
+            <div class="text-xl font-black text-emerald-400" id="comm-total">$0</div>
           </div>
-          <div class="comm-item">
-            <div class="label">Deals Closed</div>
-            <div class="amount" id="comm-closed">0</div>
+          <div class="bg-white/3 rounded-xl p-4 text-center">
+            <div class="text-xs text-gray-600 uppercase tracking-wider mb-1">Deals Closed</div>
+            <div class="text-xl font-black text-white" id="comm-closed">0</div>
           </div>
-          <div class="comm-item">
-            <div class="label">Avg Per Deal</div>
-            <div class="amount" id="comm-avg">$0</div>
+          <div class="bg-white/3 rounded-xl p-4 text-center">
+            <div class="text-xs text-gray-600 uppercase tracking-wider mb-1">Avg Per Deal</div>
+            <div class="text-xl font-black text-amber-400" id="comm-avg">$0</div>
           </div>
         </div>
-        <div style="margin-top:20px;border-top:1px solid #f0f0f0;padding-top:16px">
-          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">Commission Rates (60% of first invoice)</div>
-          <table class="rate-table">
-            <tr><td>Solo Plan ($97/mo + $299 setup)</td><td class="rate-amount">You earn $236</td></tr>
-            <tr><td>Business Plan ($197/mo + $299 setup)</td><td class="rate-amount">You earn $294</td></tr>
-            <tr><td>Pro Plan ($397/mo + $299 setup)</td><td class="rate-amount">You earn $418</td></tr>
-          </table>
+
+        <!-- Rate table -->
+        <div class="border-t border-white/5 pt-4">
+          <p class="text-[10px] uppercase tracking-wider text-gray-600 font-bold mb-3">Commission Rates — 60% of First Invoice</p>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center py-2.5 px-3 bg-white/2 rounded-xl">
+              <span class="text-sm text-gray-400">Solo Plan <span class="text-gray-600">($97/mo + $299 setup)</span></span>
+              <span class="text-sm font-bold text-emerald-400">You earn $236</span>
+            </div>
+            <div class="flex justify-between items-center py-2.5 px-3 bg-white/2 rounded-xl">
+              <span class="text-sm text-gray-400">Business Plan <span class="text-gray-600">($197/mo + $299 setup)</span></span>
+              <span class="text-sm font-bold text-emerald-400">You earn $294</span>
+            </div>
+            <div class="flex justify-between items-center py-2.5 px-3 bg-white/2 rounded-xl">
+              <span class="text-sm text-gray-400">Pro Plan <span class="text-gray-600">($397/mo + $299 setup)</span></span>
+              <span class="text-sm font-bold text-emerald-400">You earn $418</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- MY LEADS -->
-    <div class="section">
-      <div class="section-header">
-        <h2>📋 My Leads</h2>
-        <span id="lead-count" style="font-size:13px;color:#888">0 leads</span>
+    <div class="bg-surface-2 rounded-2xl border border-white/8 overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
+        <div class="flex items-center gap-2.5">
+          <span class="text-lg">📋</span>
+          <h2 class="font-bold text-white text-sm">My Leads</h2>
+        </div>
+        <span class="text-xs text-gray-600" id="lead-count">0 leads</span>
       </div>
-      <div id="leads-empty" style="padding:40px;text-align:center;color:#aaa;display:none">
-        <div style="font-size:32px;margin-bottom:8px">📭</div>
-        <p>No leads yet — submit your first one below!</p>
+
+      <div id="leads-empty" class="hidden py-14 text-center">
+        <div class="text-3xl mb-3">📭</div>
+        <p class="text-gray-600 text-sm">No leads yet — submit your first one below!</p>
       </div>
-      <table id="leads-table" style="display:none">
-        <thead><tr><th>Business</th><th>Contact</th><th>Plan</th><th>Location</th><th>Status</th><th>Date</th></tr></thead>
-        <tbody id="leads-body"></tbody>
-      </table>
+
+      <div class="overflow-x-auto">
+        <table id="leads-table" class="w-full text-sm hidden">
+          <thead><tr class="border-b border-white/5 text-[10px] font-bold uppercase tracking-wider text-gray-600">
+            <th class="px-5 py-3 text-left">Business</th>
+            <th class="px-5 py-3 text-left">Contact</th>
+            <th class="px-5 py-3 text-left">Plan</th>
+            <th class="px-5 py-3 text-left">Location</th>
+            <th class="px-5 py-3 text-left">Status</th>
+            <th class="px-5 py-3 text-left">Date</th>
+          </tr></thead>
+          <tbody id="leads-body" class="divide-y divide-white/4"></tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- SUBMIT LEAD -->
-    <div class="section">
-      <div class="section-header"><h2>➕ Submit a New Lead</h2></div>
-      <div class="section-body">
-        <form id="lead-form" onsubmit="submitLead(event)">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Business Name *</label>
-              <input type="text" id="f-business" required placeholder="Joe's Pizza">
+    <!-- SUBMIT LEAD FORM -->
+    <div class="bg-surface-2 rounded-2xl border border-white/8 overflow-hidden">
+      <div class="flex items-center gap-2.5 px-6 py-4 border-b border-white/5">
+        <span class="text-lg">➕</span>
+        <h2 class="font-bold text-white text-sm">Submit a New Lead</h2>
+      </div>
+      <div class="px-6 py-5">
+        <form id="lead-form" onsubmit="submitLead(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Business Name *</label>
+              <input type="text" id="f-business" required placeholder="Joe's Pizza"
+                class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 transition">
             </div>
-            <div class="form-group">
-              <label>Owner / Contact Name *</label>
-              <input type="text" id="f-name" required placeholder="Joe Smith">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Owner / Contact Name *</label>
+              <input type="text" id="f-name" required placeholder="Joe Smith"
+                class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 transition">
             </div>
-            <div class="form-group">
-              <label>Phone *</label>
-              <input type="tel" id="f-phone" required placeholder="(555) 000-0000">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Phone *</label>
+              <input type="tel" id="f-phone" required placeholder="(555) 000-0000"
+                class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 transition">
             </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" id="f-email" placeholder="joe@joes.com">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Email</label>
+              <input type="email" id="f-email" placeholder="joe@joes.com"
+                class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 transition">
             </div>
-            <div class="form-group">
-              <label>Location *</label>
-              <input type="text" id="f-location" required placeholder="Atlanta, GA">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Location *</label>
+              <input type="text" id="f-location" required placeholder="Atlanta, GA"
+                class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 transition">
             </div>
-            <div class="form-group">
-              <label>Recommended Plan</label>
-              <select id="f-plan">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Recommended Plan</label>
+              <select id="f-plan" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white outline-none focus:border-brand-500 transition cursor-pointer">
                 <option value="">Not sure yet</option>
                 <option value="Solo">Solo — $97/mo</option>
                 <option value="Business">Business — $197/mo</option>
                 <option value="Pro">Pro — $397/mo</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>Best Channel for This Biz</label>
-              <select id="f-channel">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Best Channel</label>
+              <select id="f-channel" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white outline-none focus:border-brand-500 transition cursor-pointer">
                 <option value="">Not sure</option>
                 <option>Google Reviews</option>
                 <option>Facebook DMs</option>
@@ -225,116 +228,125 @@ tr:last-child td{border-bottom:none}
                 <option>Multiple</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>Their Main Challenge</label>
-              <input type="text" id="f-challenge" placeholder="Not responding to reviews, slow follow-up…">
+            <div>
+              <label class="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Their Main Challenge</label>
+              <input type="text" id="f-challenge" placeholder="Slow follow-up, missing reviews…"
+                class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 transition">
             </div>
           </div>
-          <button type="submit" class="btn-submit" id="submit-btn">Submit Lead</button>
+          <button type="submit" id="submit-btn"
+            class="w-full py-3 bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-bold rounded-xl text-sm transition hover:shadow-lg hover:shadow-brand-600/25 disabled:opacity-50 disabled:cursor-not-allowed">
+            Submit Lead →
+          </button>
         </form>
       </div>
     </div>
 
     <!-- RESOURCES -->
-    <div class="section">
-      <div class="section-header"><h2>📚 Resources & Training</h2></div>
-      <div class="section-body">
-        <div class="resources-grid">
-          <div class="resource-card" onclick="toast('Coming soon — sales script will be available here','ok')">
-            <div class="resource-icon">📄</div>
-            <div><div class="resource-title">Sales Script</div><div class="resource-sub">Door-to-door pitch guide</div></div>
-          </div>
-          <div class="resource-card" onclick="toast('Coming soon','ok')">
-            <div class="resource-icon">💲</div>
-            <div><div class="resource-title">Pricing Sheet</div><div class="resource-sub">Plans, addons & commissions</div></div>
-          </div>
-          <div class="resource-card" onclick="toast('Coming soon','ok')">
-            <div class="resource-icon">🎯</div>
-            <div><div class="resource-title">Objection Guide</div><div class="resource-sub">Handle every pushback</div></div>
-          </div>
-          <div class="resource-card" onclick="window.open('mailto:sales@atlasautomation.tech')">
-            <div class="resource-icon">✉️</div>
-            <div><div class="resource-title">Contact HQ</div><div class="resource-sub">sales@atlasautomation.tech</div></div>
-          </div>
-        </div>
+    <div class="bg-surface-2 rounded-2xl border border-white/8 overflow-hidden">
+      <div class="flex items-center gap-2.5 px-6 py-4 border-b border-white/5">
+        <span class="text-lg">📚</span>
+        <h2 class="font-bold text-white text-sm">Resources & Training</h2>
+      </div>
+      <div class="p-5 grid grid-cols-2 gap-3">
+        <button onclick="toast('Coming soon — sales script dropping soon!','ok')"
+          class="flex items-center gap-3 p-4 bg-white/3 border border-white/8 rounded-xl hover:border-white/15 hover:bg-white/5 transition text-left">
+          <span class="text-2xl">📄</span>
+          <div><div class="text-sm font-semibold text-white">Sales Script</div><div class="text-xs text-gray-600 mt-0.5">Door-to-door pitch guide</div></div>
+        </button>
+        <button onclick="toast('Coming soon','ok')"
+          class="flex items-center gap-3 p-4 bg-white/3 border border-white/8 rounded-xl hover:border-white/15 hover:bg-white/5 transition text-left">
+          <span class="text-2xl">💲</span>
+          <div><div class="text-sm font-semibold text-white">Pricing Sheet</div><div class="text-xs text-gray-600 mt-0.5">Plans, addons & commissions</div></div>
+        </button>
+        <button onclick="toast('Coming soon','ok')"
+          class="flex items-center gap-3 p-4 bg-white/3 border border-white/8 rounded-xl hover:border-white/15 hover:bg-white/5 transition text-left">
+          <span class="text-2xl">🎯</span>
+          <div><div class="text-sm font-semibold text-white">Objection Guide</div><div class="text-xs text-gray-600 mt-0.5">Handle every pushback</div></div>
+        </button>
+        <a href="mailto:sales@atlasautomation.tech"
+          class="flex items-center gap-3 p-4 bg-white/3 border border-white/8 rounded-xl hover:border-white/15 hover:bg-white/5 transition">
+          <span class="text-2xl">✉️</span>
+          <div><div class="text-sm font-semibold text-white">Contact HQ</div><div class="text-xs text-gray-600 mt-0.5">sales@atlasautomation.tech</div></div>
+        </a>
       </div>
     </div>
 
-  </div><!-- /content -->
-</div><!-- /app -->
+    <div class="text-center pb-6">
+      <p class="text-gray-700 text-xs">© 2026 Atlas Automation Group · <a href="https://atlasautomation.tech" class="hover:text-gray-500 transition">atlasautomation.tech</a></p>
+    </div>
 
-<div id="toast"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-6 z-[9999] px-5 py-3 rounded-xl text-sm font-medium shadow-2xl opacity-0 pointer-events-none transition-all duration-300 bg-gray-900 border border-white/10 text-white"></div>
 
 <script>
 const API = 'https://hooks.atlasautomation.tech/webhook';
 const token = new URLSearchParams(location.search).get('token');
 
-let agentData = null;
+const BADGE = {
+  New:'bg-sky-500/15 text-sky-400', Contacted:'bg-amber-500/15 text-amber-400',
+  Qualified:'bg-emerald-500/15 text-emerald-400', Won:'bg-emerald-500/20 text-emerald-300',
+  Lost:'bg-red-500/15 text-red-400', 'Proposal Sent':'bg-violet-500/15 text-violet-400',
+};
 
 async function init() {
   if (!token) { showError(); return; }
   try {
     const r = await fetch(`${API}/aag-agent-data?token=${encodeURIComponent(token)}`);
     if (!r.ok) { showError(); return; }
-    const j = await r.json();
-    agentData = j;
-    render(j);
+    render(await r.json());
   } catch(e) { showError(); }
 }
 
 function showError() {
-  document.getElementById('loading-state').style.display = 'none';
-  document.getElementById('error-state').classList.add('show');
+  document.getElementById('loading-state').classList.add('hidden');
+  document.getElementById('error-state').classList.remove('hidden');
 }
 
 function render(d) {
-  document.getElementById('loading-state').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+  document.getElementById('loading-state').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
 
-  const a = d.agent || {};
-  const s = d.stats || {};
-  const leads = d.leads || [];
-
-  document.getElementById('agent-name-display').textContent = a.Name || 'Agent';
-  document.title = `${a.Name || 'Agent'} Portal — AAG`;
+  const a = d.agent || {}, s = d.stats || {}, leads = d.leads || [];
+  document.getElementById('agent-name-badge').textContent = a.Name || 'Agent';
+  document.title = `${a.Name||'Agent'} Portal — AAG`;
 
   // Stats
   document.getElementById('s-submitted').textContent = s.submitted || 0;
   document.getElementById('s-won').textContent = s.won || 0;
-  document.getElementById('s-earned').textContent = '$' + Number(s.earned || 0).toLocaleString();
-  const rate = s.submitted > 0 ? Math.round((s.won / s.submitted) * 100) : 0;
-  document.getElementById('s-rate').textContent = rate + '%';
+  document.getElementById('s-earned').textContent = '$' + Number(s.earned||0).toLocaleString();
+  document.getElementById('s-rate').textContent = (s.submitted > 0 ? Math.round((s.won/s.submitted)*100) : 0) + '%';
 
   // Commission
   const earned = s.earned || 0;
-  const goal = 1000;
-  const pct = Math.min(100, Math.round((earned / goal) * 100));
+  const pct = Math.min(100, Math.round((earned / 1000) * 100));
   document.getElementById('comm-bar-fill').style.width = pct + '%';
   document.getElementById('comm-pct-label').textContent = pct + '% of $1k goal';
   document.getElementById('comm-total').textContent = '$' + earned.toLocaleString();
   document.getElementById('comm-closed').textContent = s.won || 0;
-  const avg = s.won > 0 ? Math.round(earned / s.won) : 0;
-  document.getElementById('comm-avg').textContent = '$' + avg.toLocaleString();
+  document.getElementById('comm-avg').textContent = '$' + (s.won > 0 ? Math.round(earned/s.won).toLocaleString() : 0);
 
-  // Leads table
+  // Leads
   document.getElementById('lead-count').textContent = leads.length + ' lead' + (leads.length !== 1 ? 's' : '');
-  if (leads.length === 0) {
-    document.getElementById('leads-empty').style.display = 'block';
+  if (!leads.length) {
+    document.getElementById('leads-empty').classList.remove('hidden');
   } else {
     const tbl = document.getElementById('leads-table');
-    tbl.style.display = '';
-    const statusMap = {
-      'New':'new','Contacted':'contacted','Qualified':'qualified',
-      'Won':'won','Lost':'lost','Proposal Sent':'proposal'
-    };
+    tbl.classList.remove('hidden');
     document.getElementById('leads-body').innerHTML = leads.map(r => `
-      <tr>
-        <td style="font-weight:600">${esc(r.Business||'—')}</td>
-        <td>${esc(r.Name||'—')}<br><span style="font-size:11px;color:#888">${esc(r.Phone||'')}</span></td>
-        <td>${esc(r.Plan||'—')}</td>
-        <td>${esc(r.Location||'—')}</td>
-        <td><span class="badge badge-${statusMap[r.Status]||'new'}">${esc(r.Status||'New')}</span></td>
-        <td style="font-size:11px;color:#aaa">${fmtDate(r.Timestamp)}</td>
+      <tr class="hover:bg-white/2 transition">
+        <td class="px-5 py-3.5 font-semibold text-white text-sm">${esc(r.Business||'—')}</td>
+        <td class="px-5 py-3.5">
+          <div class="text-sm text-gray-300">${esc(r.Name||'—')}</div>
+          <div class="text-xs text-gray-600">${esc(r.Phone||'')}</div>
+        </td>
+        <td class="px-5 py-3.5 text-sm text-gray-400">${esc(r.Plan||'—')}</td>
+        <td class="px-5 py-3.5 text-sm text-gray-400">${esc(r.Location||'—')}</td>
+        <td class="px-5 py-3.5"><span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold ${BADGE[r.Status]||'bg-gray-500/15 text-gray-400'}">${esc(r.Status||'New')}</span></td>
+        <td class="px-5 py-3.5 text-xs text-gray-600">${fmtDate(r.Timestamp)}</td>
       </tr>`).join('');
   }
 }
@@ -342,60 +354,50 @@ function render(d) {
 async function submitLead(e) {
   e.preventDefault();
   const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Submitting…';
-
-  const payload = {
-    agentToken: token,
-    name: document.getElementById('f-name').value,
-    phone: document.getElementById('f-phone').value,
-    email: document.getElementById('f-email').value,
-    business: document.getElementById('f-business').value,
-    location: document.getElementById('f-location').value,
-    plan: document.getElementById('f-plan').value,
-    channel: document.getElementById('f-channel').value,
-    challenge: document.getElementById('f-challenge').value,
-  };
-
+  btn.disabled = true; btn.textContent = 'Submitting…';
   try {
     const r = await fetch(`${API}/aag-agent-submit`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        agentToken: token,
+        name: document.getElementById('f-name').value,
+        phone: document.getElementById('f-phone').value,
+        email: document.getElementById('f-email').value,
+        business: document.getElementById('f-business').value,
+        location: document.getElementById('f-location').value,
+        plan: document.getElementById('f-plan').value,
+        channel: document.getElementById('f-channel').value,
+        challenge: document.getElementById('f-challenge').value,
+      })
     });
     if (r.ok) {
-      toast('Lead submitted! ✅', 'ok');
+      toast('Lead submitted! ✅');
       document.getElementById('lead-form').reset();
       setTimeout(init, 1500);
     } else {
       const j = await r.json().catch(()=>({}));
       toast(j.error || 'Submission failed', 'err');
     }
-  } catch(err) {
-    toast('Network error — try again', 'err');
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'Submit Lead';
+  } catch(err) { toast('Network error — try again', 'err'); }
+  btn.disabled = false; btn.textContent = 'Submit Lead →';
 }
 
 function fmtDate(ts) {
   if (!ts) return '—';
   try { return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
-  catch(e){ return ts.substring(0,10); }
+  catch(e) { return ts.substring(0,10); }
 }
-
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 let toastTimer;
 function toast(msg, type='ok') {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.className = 'show ' + type;
+  if (type === 'err') el.className = el.className.replace('bg-gray-900 border border-white/10','bg-red-600 border border-red-500/50');
+  else el.className = el.className.replace('bg-red-600 border border-red-500/50','bg-gray-900 border border-white/10');
+  el.style.opacity = '1';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.className = '', 3500);
+  toastTimer = setTimeout(() => { el.style.opacity = '0'; }, 3500);
 }
 
 init();
