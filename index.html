@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Atlas Automation Group — atlasautomation.tech</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#4f6ef7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AAG">
+  <link rel="apple-touch-icon" href="/icon-192.png">
   <meta name="description" content="Atlas Automation Group deploys AI-powered automation systems for local businesses — review engines, follow-up flows, AI agents, and full client operations on autopilot." />
   <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
   <style>
@@ -1750,5 +1756,6 @@
   }, { threshold: 0.4 });
   document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
 </script>
+<script>if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
