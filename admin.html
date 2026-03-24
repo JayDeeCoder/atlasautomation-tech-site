@@ -577,7 +577,7 @@ function renderAA() {
       <td class="px-4 py-3.5 font-bold text-amber-400">$${Number(r.TotalCommission||0).toLocaleString()}</td>
       <td class="px-4 py-3.5">${statusSelect(r.Email,'active-agents',r.Status||'Active',statuses)}</td>
       <td class="px-4 py-3.5">
-        ${r.Token ? btn('portal',`copyPortalLink('agent','${r.Token}')`, 'Copy Link') : '<span class="text-gray-600">—</span>'}
+        ${r.Token ? btn('portal',`copyPortalLink('agent','${r.Token}')`, 'Copy Link')+' '+btn('portal',`openPortalLink('agent','${r.Token}')`, '↗ Open') : '<span class="text-gray-600">—</span>'}
       </td>
     </tr>`).join('');
 }
@@ -614,7 +614,7 @@ function renderClients() {
       <td class="px-4 py-3.5">${statusSelect(r.Email,'clients',r.Status||'Active',statuses)}</td>
       <td class="px-4 py-3.5">
         <div class="flex gap-2">
-          ${r.Token ? btn('portal',`copyPortalLink('client','${r.Token}')`, 'Portal Link') : ''}
+          ${r.Token ? btn('portal',`copyPortalLink('client','${r.Token}')`, 'Copy Link')+' '+btn('portal',`openPortalLink('client','${r.Token}')`, '↗ Open') : ''}
         </div>
       </td>
     </tr>`).join('');
@@ -662,6 +662,7 @@ function confirmWon(email, name) {
     }
   );
 }
+function openPortalLink(type, token){window.open(PORTAL+'/'+type+'-portal.html?token='+token,'_blank');}
 function copyPortalLink(type, token) {
   navigator.clipboard.writeText(`${PORTAL}/${type}-portal.html?token=${token}`).then(() => toast('Link copied!','ok'));
 }

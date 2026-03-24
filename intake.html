@@ -375,7 +375,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.5); }
         <li class="flex items-start gap-3 text-sm text-gray-400"><span class="text-emerald-500 font-bold flex-shrink-0">4.</span> Share it with customers — it handles them 24/7</li>
       </ol>
     </div>
-    <p class="mt-6 text-xs text-gray-600">Questions? <a href="mailto:support@atlasautomation.tech" class="text-brand-500 hover:underline">support@atlasautomation.tech</a></p>
+    <div id="portal-back-wrap" class="hidden mt-5"><a id="portal-back-link" href="/client-portal" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-bold rounded-xl text-sm transition">Open Your Client Portal →</a></div>
+    <p class="mt-4 text-xs text-gray-600">Questions? <a href="mailto:support@atlasautomation.tech" class="text-brand-500 hover:underline">support@atlasautomation.tech</a></p>
   </div>
 
 </div>
@@ -552,6 +553,7 @@ async function submitIntake() {
       document.querySelectorAll('.form-section, .progress-step, #import-card').forEach(el => el.style.display='none');
       document.getElementById('step-label').textContent = 'Complete!';
       document.getElementById('success-screen').classList.remove('hidden');
+      var pbw=document.getElementById('portal-back-wrap'),pbl=document.getElementById('portal-back-link'); if(pbw&&pbl&&token){pbl.href='/client-portal?token='+encodeURIComponent(token);pbw.classList.remove('hidden');}
     } else { throw new Error('failed'); }
   } catch(e) {
     alert('Submission failed. Please try again or email support@atlasautomation.tech');

@@ -59,7 +59,10 @@ tailwind.config = {
       </div>
       <span class="text-white font-bold text-sm tracking-widest">ATLAS AUTOMATION</span>
     </div>
-    <span id="header-plan" class="text-xs font-semibold text-gray-500 border border-white/10 px-3 py-1 rounded-full">—</span>
+    <div class="flex items-center gap-2">
+      <a id="intake-nav-btn" href="#" class="hidden text-xs font-semibold text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full hover:bg-emerald-500/10 transition">Complete Intake &rarr;</a>
+      <span id="header-plan" class="text-xs font-semibold text-gray-500 border border-white/10 px-3 py-1 rounded-full">&mdash;</span>
+    </div>
   </header>
 
   <!-- HERO -->
@@ -217,6 +220,7 @@ function render(c) {
 
   document.title = `${c.Business||c.Name} Portal — AAG`;
   document.getElementById('header-plan').textContent = (c.Plan||'—') + ' Plan';
+  var inb=document.getElementById('intake-nav-btn'); if(inb&&token){inb.href='/intake?token='+encodeURIComponent(token);inb.classList.remove('hidden');}
   document.getElementById('hero-name').textContent = c.Name || '—';
   document.getElementById('hero-business').textContent = c.Business || '';
   const price = PLANS[c.Plan];
